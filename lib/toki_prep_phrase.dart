@@ -1,9 +1,9 @@
-import 'toki_predicate.dart';
+import 'toki_content_phrase.dart';
 import 'toki_word.dart';
 
 class TokiPrepPhrase {
   final TokiWord prep;
-  final ContentPhrase object;
+  final TokiContentPhrase object;
 
   const TokiPrepPhrase(this.prep, this.object);
 

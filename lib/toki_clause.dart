@@ -1,8 +1,10 @@
+import 'toki_content_phrase.dart';
+import 'toki_context_phrase.dart';
 import 'toki_predicate.dart';
 
-class TokiClause {
+class TokiClause implements TokiContextPhrase {
   final PredicateType type;
-  final List<ContentPhrase> subjects;
+  final List<TokiContentPhrase> subjects;
   final List<TokiPredicate> predicates;
 
   const TokiClause(

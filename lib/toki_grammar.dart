@@ -1,5 +1,6 @@
 import 'package:petitparser/petitparser.dart';
 import 'nimi.dart';
+import 'toki_content_phrase.dart';
 import 'toki_predicate.dart';
 import 'toki_prep_phrase.dart';
 import 'toki_clause.dart';
@@ -7,8 +8,6 @@ import 'toki_word.dart';
 
 typedef Seq<T> = SequenceParser<T>;
 typedef Or<T> = ChoiceParser<T>;
-
-typedef ContentPhrase = List<List<TokiWord>>;
 
 extension ListWrap<T> on Parser<T> {
   Parser<List<T>> listWrap() => map((x) => [x]);
@@ -20,6 +19,12 @@ extension InterleavedRepeat<T> on Parser<T> {
           [int minRepeats = 0, int maxRepeats = unbounded]) =>
       Seq([listWrap(), skip(before: p).repeat(minRepeats, maxRepeats)])
           .map((x) => x[0] + x[1]);
+}
+
+extension CastToList on Parser {
+  Parser<List<T>> castToList<T>() {
+    return map((x) => List<T>.from(x as Iterable));
+  }
 }
 
 class TokiGrammar extends GrammarDefinition {
@@ -58,7 +63,7 @@ class TokiGrammar extends GrammarDefinition {
   Parser<List<TokiWord>> multiOrSingleGroup([Parser<void>? limit]) =>
       Or([ref1(multiWordGroup, limit), ref0(singleWordGroup)]);
 
-  Parser<ContentPhrase> piString([Parser<void>? limit]) => Seq([
+  Parser<List<List<TokiWord>>> piString([Parser<void>? limit]) => Seq([
         ref1(multiOrSingleGroup, limit).skip(after: string(' pi ')).listWrap(),
         Or([
           ref1(piString, limit),
@@ -69,21 +74,23 @@ class TokiGrammar extends GrammarDefinition {
         ])
       ]).map((x) => x[0] + x[1]);
 
-  Parser<ContentPhrase> contentGroup([Parser<void>? limit]) => Or([
+  Parser<TokiContentPhrase> contentGroup([Parser<void>? limit]) => Or([
         ref1(piString, limit),
         ref1(multiWordGroup, limit).listWrap(),
+      ]).map((x) => TokiContentPhrase(x));
+
+  Parser<TokiContentPhrase> content([Parser<void>? limit]) => Or([
+        ref1(contentGroup, limit),
+        ref0(singleWordGroup).listWrap().map((x) => TokiContentPhrase(x))
       ]);
 
-  Parser<ContentPhrase> content([Parser<void>? limit]) =>
-      Or([ref1(contentGroup, limit), ref0(singleWordGroup).listWrap()]);
-
-  Parser<List<ContentPhrase>> subjects() =>
+  Parser<List<TokiContentPhrase>> subjects() =>
       ref0(content).interleavedRepeat(string(' en '));
 
   Parser<String> miSina() => Or([string('mi'), string('sina')]);
 
   // naively assumes a "mi" or "sina" at the start must be a lone subject
-  Parser<List<ContentPhrase>> prePredicate(PredicateType type) {
+  Parser<List<TokiContentPhrase>> prePredicate(PredicateType type) {
     switch (type) {
       case PredicateType.li:
         return Or([
@@ -91,6 +98,7 @@ class TokiGrammar extends GrammarDefinition {
               .skip(after: Or([string(' li '), string(' en ')]).not())
               .listWrap()
               .listWrap()
+              .map((x) => TokiContentPhrase(x))
               .listWrap(),
           ref0(subjects).skip(after: string(' li') & char(' ').and())
         ]);
@@ -99,7 +107,7 @@ class TokiGrammar extends GrammarDefinition {
             .skip(after: char(' '))
             .optional()
             .skip(after: char('o'))
-            .map((x) => x ?? List<ContentPhrase>.empty());
+            .map((x) => x ?? List<TokiContentPhrase>.empty());
     }
   }
 
@@ -123,20 +131,21 @@ class TokiGrammar extends GrammarDefinition {
   Parser<TokiPrepPhrase> prepPhrase() => Seq([
         ref0(preposition).skip(after: char(' ')),
         ref1(content, ref0(contentLimit))
-      ]).map((x) => TokiPrepPhrase(x[0] as TokiWord, x[1] as ContentPhrase));
+      ]).map(
+          (x) => TokiPrepPhrase(x[0] as TokiWord, x[1] as TokiContentPhrase));
 
   // like content(), but yields to prep phrases
-  Parser<ContentPhrase> prePrepContent() => Or([
+  Parser<TokiContentPhrase> prePrepContent() => Or([
         Seq([ref0(singleWordGroup), char(' ').seq(ref0(prepPhrase)).and()])
             .pick(0)
             .listWrap()
-            .map((x) => ContentPhrase.from(x)),
+            .map((x) => TokiContentPhrase(List<List<TokiWord>>.from(x))),
         ref1(content, ref0(contentLimit))
       ]);
 
   Parser<TokiPredicate> predicate(PredicateType type) => Or([
         Seq([
-          epsilon().map((x) => []),
+          epsilon().map((x) => const TokiContentPhrase([])),
           epsilon().map((x) => []),
           ref0(prepPhrase).interleavedRepeat(string(' '))
         ]),
@@ -151,13 +160,13 @@ class TokiGrammar extends GrammarDefinition {
           ref0(prepPhrase).skip(before: char(' ')).star()
         ])
       ]).map((x) => TokiPredicate(
-          verb: ContentPhrase.from(x[0]),
-          objects: List<ContentPhrase>.from(x[1]),
-          prepPhrases: List<TokiPrepPhrase>.from(x[2])));
+          verb: x[0] as TokiContentPhrase,
+          objects: List<TokiContentPhrase>.from(x[1] as List),
+          prepPhrases: List<TokiPrepPhrase>.from(x[2] as List)));
 
   // TODO: la
   Parser<TokiClause> clause(PredicateType type) {
-    var marker;
+    String marker;
     switch (type) {
       case PredicateType.li:
         marker = 'li';
@@ -173,19 +182,22 @@ class TokiGrammar extends GrammarDefinition {
           .interleavedRepeat(char(' ') & string(marker) & char(' ')),
     ]).map((x) => TokiClause(
         type: type,
-        subjects: List<ContentPhrase>.from(x[0]),
-        predicates: x[1] as List<TokiPredicate>));
+        subjects: List<TokiContentPhrase>.from(x[0]),
+        predicates: List<TokiPredicate>.from(x[1])));
   }
 
-  Parser<List<TokiClause>> sentences() {
-    Parser<List<TokiClause>> predRepeat(Parser<TokiClause> p) {
+  Parser<List<TokiClause>> sentence(PredicateType type) =>
+      ref1(clause, type).interleavedRepeat(string(' la '));
+
+  Parser<List<List<TokiClause>>> sentences() {
+    Parser<List<List<TokiClause>>> sentenceRepeat(Parser<List<TokiClause>> p) {
       return p.interleavedRepeat(Seq([ref0(sepPunctuation), char(' ')]));
     }
 
     // may cause a problem. maybe.
     return Or([
-      predRepeat(ref1(clause, PredicateType.o)),
-      predRepeat(ref1(clause, PredicateType.li))
+      sentenceRepeat(ref1(sentence, PredicateType.o)),
+      sentenceRepeat(ref1(sentence, PredicateType.li))
     ]).skip(after: char('.').optional());
   }
 }
