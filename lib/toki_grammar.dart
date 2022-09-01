@@ -87,7 +87,7 @@ class TokiGrammar extends GrammarDefinition {
     switch (type) {
       case PredicateType.li:
         return Or([
-          ref1(aString, ref0(miSina))
+          ref1(aString, ref0(miSina).skip(after: char(' ').and()))
               .skip(after: Or([string(' li '), string(' en ')]).not())
               .listWrap()
               .listWrap()

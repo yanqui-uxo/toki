@@ -117,7 +117,6 @@ final List<String> contentWords = [
   'wile'
 ];
 
-/*
 Parser<String> _createWordParser() {
   var sorted = List<String>.from(contentWords);
   sorted.sort((a, b) => b.length.compareTo(a.length));
@@ -125,6 +124,5 @@ Parser<String> _createWordParser() {
 }
 
 final Parser<String> contentWord = _createWordParser();
-*/
 
-final Parser<String> contentWord = contentWords.map(string).toChoiceParser();
+//final Parser<String> contentWord = contentWords.map(string).toChoiceParser();
