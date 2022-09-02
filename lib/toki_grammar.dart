@@ -48,8 +48,6 @@ class TokiGrammar extends GrammarDefinition {
   Parser<List<TokiWord>> multiWordGroup([Parser<void>? limit]) {
     var tmp = ref0(modifier).skip(before: char(' '));
     var modifiers = limit != null ? tmp.plusLazy(limit) : tmp.plus();
-    modifiers = modifiers.skip(
-        after: Or([char(' '), ref0(sepPunctuation), endOfInput()]).and());
 
     return Seq([
       ref0(singleWordGroup).skip(after: (limit ?? failure()).not()),
