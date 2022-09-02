@@ -47,9 +47,13 @@ class TokiGrammar extends GrammarDefinition {
   Parser<TokiWord> name() {
     Parser<String> consonant() => patternIgnoreCase('jklmnpstw');
     Parser<String> vowel() => patternIgnoreCase('aeiou');
+
+    List<String> forbidden = ['wu', 'wo', 'ji', 'ti'];
     Parser<String> syllable() =>
         Seq([ref0(consonant).optional(), ref0(vowel), char('n').optional()])
-            .flatten();
+            .flatten()
+            .where((x) => !forbidden.contains(x.toLowerCase()));
+
     Parser<String> capSyllable() =>
         ref0(syllable).where((x) => x.isCapitalized);
     Parser<String> lowerSyllable() => ref0(syllable).where((x) => x.isLower);
