@@ -24,7 +24,6 @@ final List<String> contentWords = [
   'ken',
   'kepeken',
   'kili',
-  'kin',
   'kiwen',
   'ko',
   'kon',

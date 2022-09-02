@@ -23,6 +23,15 @@ extension InterleavedRepeat<T> on Parser<T> {
           .map((x) => x[0] + x[1]);
 }
 
+extension CaseCheck on String {
+  bool get isUpper => this == toUpperCase();
+  bool get isLower => this == toLowerCase();
+
+  // fails on empty strings
+  bool get isCapitalized =>
+      this[0].isUpper && (length < 2 || substring(1).isLower);
+}
+
 class TokiGrammar extends GrammarDefinition {
   @override
   Parser start() => ref0(sentences).end();
@@ -35,9 +44,19 @@ class TokiGrammar extends GrammarDefinition {
 
   Parser<TokiWord> aContentWord() => ref1(aString, contentWord);
 
-  // TODO: ensure proper name syllables
-  Parser<TokiWord> name() =>
-      ref2(aString, Seq([uppercase(), lowercase().plus()]).flatten(), true);
+  Parser<TokiWord> name() {
+    Parser<String> consonant() => patternIgnoreCase('jklmnpstw');
+    Parser<String> vowel() => patternIgnoreCase('aeiou');
+    Parser<String> syllable() =>
+        Seq([ref0(consonant).optional(), ref0(vowel), char('n').optional()])
+            .flatten();
+    Parser<String> capSyllable() =>
+        ref0(syllable).where((x) => x.isCapitalized);
+    Parser<String> lowerSyllable() => ref0(syllable).where((x) => x.isLower);
+
+    return ref2(aString,
+        Seq([ref0(capSyllable), ref0(lowerSyllable).star()]).flatten(), true);
+  }
 
   Parser<TokiWord> modifier() => Or([ref0(aContentWord), ref0(name)]);
 
