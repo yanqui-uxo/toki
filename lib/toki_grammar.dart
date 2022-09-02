@@ -4,6 +4,8 @@ import 'toki_content_phrase.dart';
 import 'toki_predicate.dart';
 import 'toki_prep_phrase.dart';
 import 'toki_clause.dart';
+import 'toki_context_phrase.dart';
+import 'toki_sentence.dart';
 import 'toki_word.dart';
 
 typedef Seq<T> = SequenceParser<T>;
@@ -19,12 +21,6 @@ extension InterleavedRepeat<T> on Parser<T> {
           [int minRepeats = 0, int maxRepeats = unbounded]) =>
       Seq([listWrap(), skip(before: p).repeat(minRepeats, maxRepeats)])
           .map((x) => x[0] + x[1]);
-}
-
-extension CastToList on Parser {
-  Parser<List<T>> castToList<T>() {
-    return map((x) => List<T>.from(x as Iterable));
-  }
 }
 
 class TokiGrammar extends GrammarDefinition {
@@ -52,7 +48,8 @@ class TokiGrammar extends GrammarDefinition {
   Parser<List<TokiWord>> multiWordGroup([Parser<void>? limit]) {
     var tmp = ref0(modifier).skip(before: char(' '));
     var modifiers = limit != null ? tmp.plusLazy(limit) : tmp.plus();
-    modifiers = modifiers.skip(after: Or([char(' '), endOfInput()]).and());
+    modifiers = modifiers.skip(
+        after: Or([char(' '), ref0(sepPunctuation), endOfInput()]).and());
 
     return Seq([
       ref0(singleWordGroup).skip(after: (limit ?? failure()).not()),
@@ -87,19 +84,22 @@ class TokiGrammar extends GrammarDefinition {
   Parser<List<TokiContentPhrase>> subjects() =>
       ref0(content).interleavedRepeat(string(' en '));
 
-  Parser<String> miSina() => Or([string('mi'), string('sina')]);
+  // detects unmodified mi/sina
+  Parser<String> loneMiSina() => Or([string('mi'), string('sina')])
+      .skip(after: char(' ').and() & string(' pi ').not());
 
   // naively assumes a "mi" or "sina" at the start must be a lone subject
   Parser<List<TokiContentPhrase>> prePredicate(PredicateType type) {
     switch (type) {
       case PredicateType.li:
         return Or([
-          ref1(aString, ref0(miSina).skip(after: char(' ').and()))
+          ref1(aString, ref0(loneMiSina))
               .skip(after: Or([string(' li '), string(' en ')]).not())
-              .listWrap()
-              .listWrap()
-              .map((x) => TokiContentPhrase(x))
-              .listWrap(),
+              .map((x) => [
+                    TokiContentPhrase([
+                      [x]
+                    ])
+                  ]),
           ref0(subjects).skip(after: string(' li') & char(' ').and())
         ]);
       case PredicateType.o:
@@ -107,7 +107,7 @@ class TokiGrammar extends GrammarDefinition {
             .skip(after: char(' '))
             .optional()
             .skip(after: char('o'))
-            .map((x) => x ?? List<TokiContentPhrase>.empty());
+            .map((x) => x ?? []);
     }
   }
 
@@ -164,7 +164,6 @@ class TokiGrammar extends GrammarDefinition {
           objects: List<TokiContentPhrase>.from(x[1] as List),
           prepPhrases: List<TokiPrepPhrase>.from(x[2] as List)));
 
-  // TODO: la
   Parser<TokiClause> clause(PredicateType type) {
     String marker;
     switch (type) {
@@ -186,18 +185,16 @@ class TokiGrammar extends GrammarDefinition {
         predicates: List<TokiPredicate>.from(x[1])));
   }
 
-  Parser<List<TokiClause>> sentence(PredicateType type) =>
-      ref1(clause, type).interleavedRepeat(string(' la '));
+  Parser<TokiClause> anyClause() =>
+      Or([ref1(clause, PredicateType.o), ref1(clause, PredicateType.li)]);
 
-  Parser<List<List<TokiClause>>> sentences() {
-    Parser<List<List<TokiClause>>> sentenceRepeat(Parser<List<TokiClause>> p) {
-      return p.interleavedRepeat(Seq([ref0(sepPunctuation), char(' ')]));
-    }
+  Parser<TokiSentence> sentence() => Seq([
+        Or([ref0(anyClause), ref0(content)]).skip(after: string(' la ')).star(),
+        ref0(anyClause)
+      ]).map((x) => TokiSentence(
+          x[1] as TokiClause, List<TokiContextPhrase>.from(x[0] as List)));
 
-    // may cause a problem. maybe.
-    return Or([
-      sentenceRepeat(ref1(sentence, PredicateType.o)),
-      sentenceRepeat(ref1(sentence, PredicateType.li))
-    ]).skip(after: char('.').optional());
-  }
+  Parser<List<TokiSentence>> sentences() => ref0(sentence)
+      .interleavedRepeat(ref0(sepPunctuation) & char(' '))
+      .skip(after: char('.').optional());
 }
