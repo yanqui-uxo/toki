@@ -1,6 +1,6 @@
 import 'package:petitparser/petitparser.dart';
 
-final List<String> contentWords = [
+final Set<String> contentWords = {
   'akesi',
   'ala',
   'alasa',
@@ -114,7 +114,18 @@ final List<String> contentWords = [
   'wawa',
   'weka',
   'wile'
-];
+};
+
+Set<String> prepositions = {'kepeken', 'lon', 'sama', 'tan', 'tawa'};
+Set<String> preverbs = {
+  'alasa',
+  'awen',
+  'kama',
+  'ken',
+  'lukin',
+  'sona',
+  'wile',
+};
 
 Parser<String> _createWordParser() {
   var sorted = List<String>.from(contentWords);

@@ -132,10 +132,7 @@ class TokiGrammar extends GrammarDefinition {
     }
   }
 
-  Parser<TokiWord> preposition() => ref1(
-      aString,
-      Or(['alasa', 'kepeken', 'lon', 'lukin', 'sama', 'tan', 'tawa']
-          .map(string)));
+  Parser<TokiWord> preposition() => ref1(aString, Or(prepositions.map(string)));
 
   // separates sentences
   Parser<String> sepPunctuation() => pattern('.:;');

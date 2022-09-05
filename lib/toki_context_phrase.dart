@@ -1,2 +1,3 @@
-// TODO: actually do something with this interface
-abstract class TokiContextPhrase {}
+import 'rebuildable.dart';
+
+abstract class TokiContextPhrase extends Rebuildable {}

@@ -1,15 +1,18 @@
 import 'toki_content_phrase.dart';
 import 'toki_prep_phrase.dart';
+import 'toki_word.dart';
 
 enum PredicateType { li, o }
 
 class TokiPredicate {
+  final List<TokiWord> preverbs;
   final TokiContentPhrase verb;
   final List<TokiContentPhrase> objects;
   final List<TokiPrepPhrase> prepPhrases;
 
   const TokiPredicate(
-      {required this.verb,
+      {this.preverbs = const [],
+      required this.verb,
       this.objects = const [],
       this.prepPhrases = const []});
 
