@@ -18,6 +18,6 @@ class TokiPredicate {
 
   @override
   String toString() {
-    return "Predicate(verb: $verb, objects: $objects, prep phrases: $prepPhrases)";
+    return "Predicate(preverbs: $preverbs, verb: $verb, objects: $objects, prep phrases: $prepPhrases)";
   }
 }
