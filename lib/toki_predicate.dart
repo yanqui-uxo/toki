@@ -1,10 +1,11 @@
+import 'representable.dart';
 import 'toki_content_phrase.dart';
 import 'toki_prep_phrase.dart';
 import 'toki_word.dart';
 
 enum PredicateType { li, o }
 
-class TokiPredicate {
+class TokiPredicate implements Representable {
   final List<TokiWord> preverbs;
   final TokiContentPhrase verb;
   final List<TokiContentPhrase> objects;

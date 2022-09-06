@@ -1,3 +1,3 @@
-import 'rebuildable.dart';
+import 'representable.dart';
 
-abstract class TokiContextPhrase extends Rebuildable {}
+abstract class TokiContextPhrase extends Representable {}
