@@ -1,4 +1,7 @@
-class TokiWord {
+import 'representation/basic_representation.dart';
+import 'representation/represent.dart';
+
+class TokiWord implements Representable {
   final String word;
   final bool aAttached;
   final bool isName;
@@ -12,4 +15,8 @@ class TokiWord {
     if (isName) ret += " (name)";
     return ret;
   }
+
+  @override
+  Representation get representation =>
+      BasicRepresentation(text: word + (aAttached ? ' a' : ''));
 }

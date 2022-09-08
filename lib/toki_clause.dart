@@ -1,3 +1,5 @@
+import 'representation/complex_representation.dart';
+import 'representation/represent.dart';
 import 'toki_content_phrase.dart';
 import 'toki_context_phrase.dart';
 import 'toki_predicate.dart';
@@ -14,4 +16,10 @@ class TokiClause implements TokiContextPhrase {
   String toString() {
     return "Clause(type: ${type.name}, subjects: $subjects, predicates: $predicates)";
   }
+
+  // TODO: add proper particles
+  @override
+  Representation get representation => ComplexRepresentation(
+      baseReps:
+          subjects.toRepresentationList() + predicates.toRepresentationList());
 }

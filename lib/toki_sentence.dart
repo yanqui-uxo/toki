@@ -1,4 +1,5 @@
-import 'representable.dart';
+import 'representation/complex_representation.dart';
+import 'representation/represent.dart';
 import 'toki_clause.dart';
 import 'toki_context_phrase.dart';
 
@@ -12,4 +13,11 @@ class TokiSentence implements Representable {
   String toString() {
     return "Sentence(contextPhrases: $contextPhrases, rootClause: $rootClause)";
   }
+
+  // TODO: add proper particles
+  @override
+  Representation get representation => ComplexRepresentation(baseReps: [
+        ...contextPhrases.toRepresentationList(),
+        rootClause.representation
+      ]);
 }

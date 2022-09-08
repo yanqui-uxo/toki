@@ -44,15 +44,26 @@ class TokiGrammar extends GrammarDefinition {
 
   Parser<TokiWord> aContentWord() => ref1(aWord, contentWord);
 
+  // TODO: test if name restrictions work properly
   Parser<TokiWord> name() {
     Parser<String> consonant() => patternIgnoreCase('jklmnpstw');
     Parser<String> vowel() => patternIgnoreCase('aeiou');
 
-    List<String> forbidden = ['wu', 'wo', 'ji', 'ti'];
-    Parser<String> syllable() =>
-        Seq([ref0(consonant).optional(), ref0(vowel), char('n').optional()])
-            .flatten()
-            .where((x) => !forbidden.contains(x.toLowerCase()));
+    Set<String> forbidden = {
+      'wu',
+      'wo',
+      'ji',
+      'ti',
+      'wun',
+      'won',
+      'jin',
+      'tin'
+    };
+    Parser<String> syllable() => Seq([
+          ref0(consonant).optional(),
+          ref0(vowel).skip(after: ref0(vowel).not()),
+          char('n').skip(after: pattern('mn').not()).optional()
+        ]).flatten().where((x) => !forbidden.contains(x.toLowerCase()));
 
     Parser<String> capSyllable() =>
         ref0(syllable).where((x) => x.isCapitalized);
@@ -102,15 +113,18 @@ class TokiGrammar extends GrammarDefinition {
         ref0(singleWordGroup).listWrap().map((x) => TokiContentPhrase(x))
       ]);
 
-  Parser<List<TokiContentPhrase>> subjects() =>
-      ref0(content).interleavedRepeat(string(' en '));
-
-  // detects unmodified mi/sina
-  Parser<String> loneMiSina() => Or([string('mi'), string('sina')])
-      .skip(after: char(' ').and() & string(' pi ').not());
-
   // naively assumes a "mi" or "sina" at the start must be a lone subject
   Parser<List<TokiContentPhrase>> prePredicate(PredicateType type) {
+    Parser<List<TokiContentPhrase>> subjects() =>
+        ref0(content).interleavedRepeat(string(' en '));
+
+    // detects unmodified mi/sina
+    Parser<String> loneMiSina() => Or([string('mi'), string('sina')])
+        .skip(after: char(' ').and() & string(' pi ').not());
+
+    Parser<void> miSinaLi() =>
+        Or([string('mi'), string('sina')]) & (string(' li '));
+
     switch (type) {
       case PredicateType.li:
         return Or([
@@ -121,7 +135,9 @@ class TokiGrammar extends GrammarDefinition {
                       [x]
                     ])
                   ]),
-          ref0(subjects).skip(after: string(' li') & char(' ').and())
+          ref0(subjects).skip(
+              before: ref0(miSinaLi).not(),
+              after: string(' li') & char(' ').and())
         ]);
       case PredicateType.o:
         return ref0(subjects)
@@ -191,15 +207,7 @@ class TokiGrammar extends GrammarDefinition {
           prepPhrases: List<TokiPrepPhrase>.from(x[3] as List)));
 
   Parser<TokiClause> clause(PredicateType type) {
-    String marker;
-    switch (type) {
-      case PredicateType.li:
-        marker = 'li';
-        break;
-      case PredicateType.o:
-        marker = 'o';
-        break;
-    }
+    var marker = type.name;
 
     return Seq([
       ref1(prePredicate, type).skip(after: char(' ')),
