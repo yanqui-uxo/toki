@@ -18,7 +18,7 @@ class TokiContentPhrase implements TokiContextPhrase {
   }
 
   @override
-  Representation get representation {
+  Representation toRepresentation() {
     List<Representation> reps = contentGroups
         .map((x) => ComplexRepresentation(baseReps: x.toRepresentationList()))
         .toList();

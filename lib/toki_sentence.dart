@@ -16,8 +16,8 @@ class TokiSentence implements Representable {
 
   // TODO: add proper particles
   @override
-  Representation get representation => ComplexRepresentation(baseReps: [
+  Representation toRepresentation() => ComplexRepresentation(baseReps: [
         ...contextPhrases.toRepresentationList(),
-        rootClause.representation
+        rootClause.toRepresentation()
       ]);
 }

@@ -17,6 +17,6 @@ class TokiWord implements Representable {
   }
 
   @override
-  Representation get representation =>
+  Representation toRepresentation() =>
       BasicRepresentation(text: word + (aAttached ? ' a' : ''));
 }

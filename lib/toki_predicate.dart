@@ -25,13 +25,13 @@ class TokiPredicate implements Representable {
   }
 
   @override
-  Representation get representation {
+  Representation toRepresentation() {
     List<Representation> reps = [];
 
     reps.add(ComplexRepresentation(
         baseReps: preverbs.toRepresentationList(), description: 'preverbs'));
     reps.add(BasicRepresentation.fromRep(
-        rep: verb.representation, description: 'verb'));
+        rep: verb.toRepresentation(), description: 'verb'));
 
     // TODO: add e's
     if (objects.isNotEmpty) {

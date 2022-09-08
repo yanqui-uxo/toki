@@ -16,10 +16,10 @@ class TokiPrepPhrase implements Representable {
   }
 
   @override
-  Representation get representation => ComplexRepresentation(baseReps: [
+  Representation toRepresentation() => ComplexRepresentation(baseReps: [
         BasicRepresentation.fromRep(
-            rep: prep.representation, description: 'preposition'),
+            rep: prep.toRepresentation(), description: 'preposition'),
         BasicRepresentation.fromRep(
-            rep: object.representation, description: 'prepositional object')
+            rep: object.toRepresentation(), description: 'prepositional object')
       ]);
 }

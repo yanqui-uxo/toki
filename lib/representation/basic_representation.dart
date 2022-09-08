@@ -22,4 +22,10 @@ class BasicRepresentation implements Representation {
       : text = rep.text,
         description = description ?? rep.description,
         color = color ?? rep.color;
+
+  // TODO: proper toString()
+  @override
+  String toString() {
+    return 'foo';
+  }
 }

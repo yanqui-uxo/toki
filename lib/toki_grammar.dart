@@ -222,6 +222,7 @@ class TokiGrammar extends GrammarDefinition {
   Parser<TokiClause> anyClause() =>
       Or([ref1(clause, PredicateType.o), ref1(clause, PredicateType.li)]);
 
+  // TODO: do something with punctuation
   Parser<TokiSentence> sentence() => Seq([
         Or([ref0(anyClause), ref0(content)]).skip(after: string(' la ')).star(),
         ref0(anyClause)

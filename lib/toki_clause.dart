@@ -19,7 +19,7 @@ class TokiClause implements TokiContextPhrase {
 
   // TODO: add proper particles
   @override
-  Representation get representation => ComplexRepresentation(
+  Representation toRepresentation() => ComplexRepresentation(
       baseReps:
           subjects.toRepresentationList() + predicates.toRepresentationList());
 }

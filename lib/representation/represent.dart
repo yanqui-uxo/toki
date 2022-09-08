@@ -8,10 +8,10 @@ abstract class Representation {
 }
 
 abstract class Representable {
-  Representation get representation;
+  Representation toRepresentation();
 }
 
 extension ToRepresentationList on List<Representable> {
   List<Representation> toRepresentationList() =>
-      map((x) => x.representation).toList();
+      map((x) => x.toRepresentation()).toList();
 }
