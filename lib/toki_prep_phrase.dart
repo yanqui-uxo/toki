@@ -1,12 +1,12 @@
 import 'representation/basic_representation.dart';
 import 'representation/complex_representation.dart';
-import 'representation/represent.dart';
-import 'toki_content_phrase.dart';
+import 'toki_content_phrase_choice.dart';
+import 'toki_context_phrase.dart';
 import 'toki_word.dart';
 
-class TokiPrepPhrase implements Representable {
+class TokiPrepPhrase implements TokiContextPhrase {
   final TokiWord prep;
-  final TokiContentPhrase object;
+  final TokiContentPhraseChoice object;
 
   const TokiPrepPhrase(this.prep, this.object);
 
@@ -16,10 +16,11 @@ class TokiPrepPhrase implements Representable {
   }
 
   @override
-  Representation toRepresentation() => ComplexRepresentation(baseReps: [
+  ComplexRepresentation toRepresentation() => ComplexRepresentation(baseReps: [
         BasicRepresentation.fromRep(
             rep: prep.toRepresentation(), description: 'preposition'),
-        BasicRepresentation.fromRep(
-            rep: object.toRepresentation(), description: 'prepositional object')
+        ComplexRepresentation.wrap(
+            baseRep: object.toRepresentation(),
+            description: 'prepositional object')
       ]);
 }

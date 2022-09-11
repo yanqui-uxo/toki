@@ -18,14 +18,12 @@ class BasicRepresentation implements Representation {
       {required this.text, this.description, this.color = Colors.black});
 
   BasicRepresentation.fromRep(
-      {required Representation rep, String? description, Color? color})
+      {required BasicRepresentation rep, String? description, Color? color})
       : text = rep.text,
         description = description ?? rep.description,
         color = color ?? rep.color;
 
-  // TODO: proper toString()
   @override
-  String toString() {
-    return 'foo';
-  }
+  String toString() =>
+      'BasicRepresentation(text: $text, description: $description, color: $color)';
 }

@@ -10,9 +10,8 @@ class TokiSentence implements Representable {
   const TokiSentence(this.rootClause, [this.contextPhrases = const []]);
 
   @override
-  String toString() {
-    return "Sentence(contextPhrases: $contextPhrases, rootClause: $rootClause)";
-  }
+  String toString() =>
+      'Sentence(contextPhrases: $contextPhrases, rootClause: $rootClause)';
 
   // TODO: add proper particles
   @override

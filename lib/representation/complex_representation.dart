@@ -16,4 +16,11 @@ class ComplexRepresentation implements Representation {
   final String? description;
 
   const ComplexRepresentation({required this.baseReps, this.description});
+  ComplexRepresentation.wrap(
+      {required Representation baseRep, String? description})
+      : this(baseReps: [baseRep], description: description);
+
+  @override
+  String toString() =>
+      'ComplexRepresentation(baseReps: $baseReps, description: $description)';
 }

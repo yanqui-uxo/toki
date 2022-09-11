@@ -2,6 +2,7 @@ import 'representation/basic_representation.dart';
 import 'representation/complex_representation.dart';
 import 'representation/represent.dart';
 import 'toki_content_phrase.dart';
+import 'toki_content_phrase_choice.dart';
 import 'toki_prep_phrase.dart';
 import 'toki_word.dart';
 
@@ -9,13 +10,13 @@ enum PredicateType { li, o }
 
 class TokiPredicate implements Representable {
   final List<TokiWord> preverbs;
-  final TokiContentPhrase verb;
-  final List<TokiContentPhrase> objects;
+  final TokiContentPhraseChoice? verb;
+  final List<TokiContentPhraseChoice> objects;
   final List<TokiPrepPhrase> prepPhrases;
 
   const TokiPredicate(
       {this.preverbs = const [],
-      required this.verb,
+      this.verb,
       this.objects = const [],
       this.prepPhrases = const []});
 
@@ -28,10 +29,15 @@ class TokiPredicate implements Representable {
   Representation toRepresentation() {
     List<Representation> reps = [];
 
-    reps.add(ComplexRepresentation(
-        baseReps: preverbs.toRepresentationList(), description: 'preverbs'));
-    reps.add(BasicRepresentation.fromRep(
-        rep: verb.toRepresentation(), description: 'verb'));
+    if (preverbs.isNotEmpty) {
+      reps.add(ComplexRepresentation(
+          baseReps: preverbs.toRepresentationList(), description: 'preverbs'));
+    }
+
+    if (verb != null) {
+      reps.add(ComplexRepresentation.wrap(
+          baseRep: verb!.toRepresentation(), description: 'verb'));
+    }
 
     // TODO: add e's
     if (objects.isNotEmpty) {

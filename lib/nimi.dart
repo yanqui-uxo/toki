@@ -116,8 +116,8 @@ final Set<String> contentWords = {
   'wile'
 };
 
-Set<String> prepositions = {'kepeken', 'lon', 'sama', 'tan', 'tawa'};
-Set<String> preverbs = {
+const Set<String> prepositions = {'kepeken', 'lon', 'sama', 'tan', 'tawa'};
+const Set<String> preverbs = {
   'alasa',
   'awen',
   'kama',

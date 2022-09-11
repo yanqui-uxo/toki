@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:petitparser/petitparser.dart';
 
+import 'toki_punctuated_sentence.dart';
+
 class TokiParserView extends StatefulWidget {
-  final Parser parser;
+  final Parser<List<TokiPunctuatedSentence>> parser;
 
   const TokiParserView(this.parser, {Key? key}) : super(key: key);
 
@@ -17,7 +19,9 @@ class _TokiParserViewState extends State<TokiParserView> {
     var result = widget.parser.parse(x);
 
     if (result.isSuccess) {
-      text = result.value.toString();
+      List<TokiPunctuatedSentence> value = result.value;
+      text = value.toString();
+      //text = value.toRepresentationList().toString();
     } else {
       text = "${result.toPositionString()}, ${result.message}";
     }

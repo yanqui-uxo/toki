@@ -10,15 +10,14 @@ typedef ContentList = List<List<TokiWord>>;
 
 class TokiContentPhrase implements TokiContextPhrase {
   final List<List<TokiWord>> contentGroups;
+
   const TokiContentPhrase(this.contentGroups);
 
   @override
-  String toString() {
-    return contentGroups.toString();
-  }
+  String toString() => contentGroups.toString();
 
   @override
-  Representation toRepresentation() {
+  ComplexRepresentation toRepresentation() {
     List<Representation> reps = contentGroups
         .map((x) => ComplexRepresentation(baseReps: x.toRepresentationList()))
         .toList();

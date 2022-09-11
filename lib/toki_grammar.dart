@@ -1,10 +1,13 @@
 import 'package:petitparser/petitparser.dart';
+
 import 'nimi.dart';
+import 'toki_clause.dart';
 import 'toki_content_phrase.dart';
+import 'toki_content_phrase_choice.dart';
+import 'toki_context_phrase.dart';
 import 'toki_predicate.dart';
 import 'toki_prep_phrase.dart';
-import 'toki_clause.dart';
-import 'toki_context_phrase.dart';
+import 'toki_punctuated_sentence.dart';
 import 'toki_sentence.dart';
 import 'toki_word.dart';
 
@@ -29,12 +32,13 @@ extension CaseCheck on String {
 
   // fails on empty strings
   bool get isCapitalized =>
-      this[0].isUpper && (length < 2 || substring(1).isLower);
+      this[0].isUpper && (length == 1 || substring(1).isLower);
 }
 
+// TODO: support commas
 class TokiGrammar extends GrammarDefinition {
   @override
-  Parser start() => ref0(sentences).end();
+  Parser<List<TokiPunctuatedSentence>> start() => ref0(sentences).end();
 
   Parser<void> spaceOrEnd() => Or([char(' '), endOfInput()]);
 
@@ -44,7 +48,6 @@ class TokiGrammar extends GrammarDefinition {
 
   Parser<TokiWord> aContentWord() => ref1(aWord, contentWord);
 
-  // TODO: test if name restrictions work properly
   Parser<TokiWord> name() {
     Parser<String> consonant() => patternIgnoreCase('jklmnpstw');
     Parser<String> vowel() => patternIgnoreCase('aeiou');
@@ -113,14 +116,22 @@ class TokiGrammar extends GrammarDefinition {
         ref0(singleWordGroup).listWrap().map((x) => TokiContentPhrase(x))
       ]);
 
+  Parser<TokiContentPhraseChoice> anuContent([Parser<void>? limit]) =>
+      ref1(content, limit)
+          .interleavedRepeat(string(' anu '))
+          .map((x) => TokiContentPhraseChoice(x));
+
   // naively assumes a "mi" or "sina" at the start must be a lone subject
-  Parser<List<TokiContentPhrase>> prePredicate(PredicateType type) {
-    Parser<List<TokiContentPhrase>> subjects() =>
-        ref0(content).interleavedRepeat(string(' en '));
+  Parser<List<TokiContentPhraseChoice>> prePredicate(PredicateType type) {
+    Parser<List<TokiContentPhraseChoice>> subjects() =>
+        ref0(anuContent).interleavedRepeat(string(' en '));
 
     // detects unmodified mi/sina
-    Parser<String> loneMiSina() => Or([string('mi'), string('sina')])
-        .skip(after: char(' ').and() & string(' pi ').not());
+    Parser<String> loneMiSina() => Or([string('mi'), string('sina')]).skip(
+        after: char(' ').and() &
+            string(' pi ').not() &
+            string(' en ').not() &
+            string(' anu ').not());
 
     Parser<void> miSinaLi() =>
         Or([string('mi'), string('sina')]) & (string(' li '));
@@ -129,10 +140,12 @@ class TokiGrammar extends GrammarDefinition {
       case PredicateType.li:
         return Or([
           ref1(aWord, ref0(loneMiSina))
-              .skip(after: Or([string(' li '), string(' en ')]).not())
+              .skip(after: string(' li ').not())
               .map((x) => [
-                    TokiContentPhrase([
-                      [x]
+                    TokiContentPhraseChoice([
+                      TokiContentPhrase([
+                        [x]
+                      ])
                     ])
                   ]),
           ref0(subjects).skip(
@@ -152,30 +165,32 @@ class TokiGrammar extends GrammarDefinition {
   Parser<TokiWord> preverb() => ref1(aWord, Or(preverbs.map(string)));
 
   // separates sentences
-  Parser<String> sepPunctuation() => pattern('.:;');
+  static final Parser<String> sepPunctuation = pattern('.:;!?');
+  static final Parser<String> endPunctuation = pattern('.!?');
 
   // for content word groups, guarantees that prep phrases are not infringed upon
   Parser<void> contentLimit() => Or([
         char(' ') & ref0(prepPhrase),
         char(' ') & contentWord.not(),
-        ref0(sepPunctuation),
+        sepPunctuation,
         endOfInput()
       ]);
 
-  // yields to other prep phrases
-  Parser<TokiPrepPhrase> prepPhrase() => Seq([
+  // yields to other prep phrases if yield is true
+  Parser<TokiPrepPhrase> prepPhrase([bool yield = true]) => Seq([
         ref0(preposition).skip(after: char(' ')),
-        ref1(content, ref0(contentLimit))
-      ]).map(
-          (x) => TokiPrepPhrase(x[0] as TokiWord, x[1] as TokiContentPhrase));
+        ref1(anuContent, yield ? ref0(contentLimit) : null)
+      ]).map((x) =>
+          TokiPrepPhrase(x[0] as TokiWord, x[1] as TokiContentPhraseChoice));
 
   // like content(), but yields to prep phrases
-  Parser<TokiContentPhrase> prePrepContent() => Or([
+  Parser<TokiContentPhraseChoice> prePrepContent() => Or([
         Seq([ref0(singleWordGroup), char(' ').seq(ref0(prepPhrase)).and()])
             .pick(0)
             .listWrap()
-            .map((x) => TokiContentPhrase(List<List<TokiWord>>.from(x))),
-        ref1(content, ref0(contentLimit))
+            .map((x) => TokiContentPhraseChoice(
+                [TokiContentPhrase(List<List<TokiWord>>.from(x))])),
+        ref1(anuContent, ref0(contentLimit))
       ]);
 
   Parser<List<TokiWord>> predicatePreverbs() =>
@@ -184,13 +199,14 @@ class TokiGrammar extends GrammarDefinition {
   Parser<TokiPredicate> predicate(PredicateType type) => Or([
         Seq([
           ref0(predicatePreverbs),
-          epsilon().map((x) => const TokiContentPhrase([])),
+          // ignore: prefer_void_to_null
+          epsilon().cast<Null>(),
           epsilon().map((x) => []),
           ref0(prepPhrase).interleavedRepeat(string(' '))
         ]),
         Seq([
           ref0(predicatePreverbs),
-          ref0(content),
+          ref0(anuContent),
           ref0(prePrepContent).skip(before: string(' e ')).plus(),
           ref0(prepPhrase).skip(before: char(' ')).star()
         ]),
@@ -202,8 +218,8 @@ class TokiGrammar extends GrammarDefinition {
         ])
       ]).map((x) => TokiPredicate(
           preverbs: List<TokiWord>.from(x[0] as List),
-          verb: x[1] as TokiContentPhrase,
-          objects: List<TokiContentPhrase>.from(x[2] as List),
+          verb: x[1] as TokiContentPhraseChoice?,
+          objects: List<TokiContentPhraseChoice>.from(x[2] as List),
           prepPhrases: List<TokiPrepPhrase>.from(x[3] as List)));
 
   Parser<TokiClause> clause(PredicateType type) {
@@ -215,21 +231,29 @@ class TokiGrammar extends GrammarDefinition {
           .interleavedRepeat(char(' ') & string(marker) & char(' ')),
     ]).map((x) => TokiClause(
         type: type,
-        subjects: List<TokiContentPhrase>.from(x[0]),
+        subjects: List<TokiContentPhraseChoice>.from(x[0]),
         predicates: List<TokiPredicate>.from(x[1])));
   }
 
   Parser<TokiClause> anyClause() =>
       Or([ref1(clause, PredicateType.o), ref1(clause, PredicateType.li)]);
 
-  // TODO: do something with punctuation
   Parser<TokiSentence> sentence() => Seq([
-        Or([ref0(anyClause), ref0(content)]).skip(after: string(' la ')).star(),
+        Or([ref0(anyClause), ref1(prepPhrase, false), ref0(content)])
+            .skip(after: string(' la '))
+            .star(),
         ref0(anyClause)
       ]).map((x) => TokiSentence(
           x[1] as TokiClause, List<TokiContextPhrase>.from(x[0] as List)));
 
-  Parser<List<TokiSentence>> sentences() => ref0(sentence)
-      .interleavedRepeat(ref0(sepPunctuation) & char(' '))
-      .skip(after: char('.').optional());
+  Parser<List<TokiPunctuatedSentence>> sentences() => Seq([
+        Seq([ref0(sentence), sepPunctuation.skip(after: char(' '))])
+            .map((x) => TokiPunctuatedSentence.fromSentence(
+                x[0] as TokiSentence, x[1] as String))
+            .star(),
+        Seq([ref0(sentence), endPunctuation.optional()])
+            .map((x) => TokiPunctuatedSentence.fromSentence(
+                x[0] as TokiSentence, x[1] as String?))
+            .listWrap()
+      ]).map((x) => x[0] + x[1]);
 }
