@@ -20,5 +20,6 @@ class TokiPunctuatedSentence extends TokiSentence {
 
   @override
   String toString() =>
-      'TokiPunctuatedSentence(contextPhrases: $contextPhrases, rootClause: $rootClause, punctuation: $punctuation)';
+      'TokiPunctuatedSentence(contextPhrases: $contextPhrases, '
+      'rootClause: $rootClause, punctuation: $punctuation)';
 }

@@ -22,7 +22,8 @@ class TokiPredicate implements Representable {
 
   @override
   String toString() =>
-      'Predicate(preverbs: $preverbs, verb: $verb, objects: $objects, prep phrases: $prepPhrases)';
+      'Predicate(preverbs: $preverbs, verb: $verb, objects: $objects, '
+      'prep phrases: $prepPhrases)';
 
   @override
   Representation toRepresentation() {

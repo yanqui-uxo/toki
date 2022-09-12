@@ -110,22 +110,22 @@ class TokiGrammar extends GrammarDefinition {
   Parser<TokiContentPhrase> contentGroup([Parser<void>? limit]) => Or([
         ref1(piString, limit),
         ref1(multiWordGroup, limit).listWrap(),
-      ]).map((x) => TokiContentPhrase(x));
+      ]).map(TokiContentPhrase.new);
 
   Parser<TokiContentPhrase> content([Parser<void>? limit]) => Or([
         ref1(contentGroup, limit),
-        ref0(singleWordGroup).listWrap().map((x) => TokiContentPhrase(x))
+        ref0(singleWordGroup).listWrap().map(TokiContentPhrase.new)
       ]);
 
   Parser<TokiContentPhraseChoice> anuContent([Parser<void>? limit]) =>
       ref1(content, limit)
           .interleavedRepeat(string(' anu '))
-          .map((x) => TokiContentPhraseChoice(x));
+          .map(TokiContentPhraseChoice.new);
 
   // naively assumes a "mi" or "sina" at the start must be a lone subject
   Parser<List<TokiSubject>> prePredicate(PredicateType type) {
     Parser<List<TokiSubject>> subjects() => ref0(anuContent)
-        .map((x) => TokiSubject.fromContentPhraseChoice(x))
+        .map(TokiSubject.fromContentPhraseChoice)
         .interleavedRepeat(string(' en '));
 
     // detects unmodified mi/sina
@@ -172,7 +172,8 @@ class TokiGrammar extends GrammarDefinition {
   // can end final sentence
   static final Parser<String> endPunctuation = pattern('.!?');
 
-  // for content word groups, guarantees that prep phrases are not infringed upon
+  // for content word groups
+  // guarantees that prep phrases are not infringed upon
   Parser<void> contentLimit() => Or([
         char(' ') & ref0(prepPhrase),
         char(' ') & contentWord.not(),

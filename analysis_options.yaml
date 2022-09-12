@@ -23,7 +23,10 @@ linter:
   # producing the lint.
   rules:
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
+    directives_ordering: true
+    lines_longer_than_80_chars: true
     prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    unnecessary_lambdas: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

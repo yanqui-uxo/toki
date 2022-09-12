@@ -3,8 +3,8 @@ import 'package:intersperse/intersperse.dart';
 import '../representation/particle_representation.dart';
 import '../representation/represent.dart';
 import 'toki_context_phrase.dart';
-import 'toki_subject.dart';
 import 'toki_predicate.dart';
+import 'toki_subject.dart';
 
 class TokiClause implements TokiContextPhrase {
   final PredicateType type;
@@ -19,8 +19,8 @@ class TokiClause implements TokiContextPhrase {
       required this.predicates});
 
   @override
-  String toString() =>
-      'Clause(type: ${type.name}, subjects: $subjects, predicates: $predicates)';
+  String toString() => 'Clause(type: ${type.name}, subjects: $subjects, '
+      'predicates: $predicates)';
 
   @override
   Representation toRepresentation() {
