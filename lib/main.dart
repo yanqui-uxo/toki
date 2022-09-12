@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'grammar/toki_grammar.dart';
-import 'toki_parser_view.dart';
+import 'parser_view.dart';
 
 void main() {
   runApp(const App());
