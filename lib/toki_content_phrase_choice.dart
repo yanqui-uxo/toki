@@ -5,17 +5,17 @@ import 'toki_content_phrase.dart';
 import 'toki_context_phrase.dart';
 
 class TokiContentPhraseChoice implements TokiContextPhrase {
-  final List<TokiContentPhrase> phrases;
+  final List<TokiContentPhrase> choices;
 
-  const TokiContentPhraseChoice(this.phrases);
+  const TokiContentPhraseChoice(this.choices);
 
   @override
   Representation toRepresentation() => Representation(
-      baseRepresentations: phrases
+      baseRepresentations: choices
           .toRepresentationList()
           .intersperse(const ParticleRepresentation('pi'))
           .toList());
 
   @override
-  String toString() => 'TokiContentPhraseChoice(phrases: $phrases)';
+  String toString() => 'TokiContentPhraseChoice(phrases: $choices)';
 }

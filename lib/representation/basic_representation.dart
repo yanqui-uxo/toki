@@ -28,6 +28,5 @@ class BasicRepresentation implements Representation {
       BasicRepresentation(text: text, description: description, color: color);
 
   @override
-  String toString() =>
-      'BasicRepresentation(text: $text, description: $description, color: $color)';
+  String toString() => '$description(text: $text, color: $color)';
 }

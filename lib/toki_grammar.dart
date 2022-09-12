@@ -9,6 +9,7 @@ import 'toki_predicate.dart';
 import 'toki_prep_phrase.dart';
 import 'toki_punctuated_sentence.dart';
 import 'toki_sentence.dart';
+import 'toki_subject.dart';
 import 'toki_word.dart';
 
 typedef Seq<T> = SequenceParser<T>;
@@ -38,7 +39,7 @@ extension CaseCheck on String {
 // TODO: support commas
 class TokiGrammar extends GrammarDefinition {
   @override
-  Parser start() => ref1(predicate, PredicateType.li).end();
+  Parser start() => ref0(sentences).end();
 
   Parser<void> spaceOrEnd() => Or([char(' '), endOfInput()]);
 
@@ -122,9 +123,10 @@ class TokiGrammar extends GrammarDefinition {
           .map((x) => TokiContentPhraseChoice(x));
 
   // naively assumes a "mi" or "sina" at the start must be a lone subject
-  Parser<List<TokiContentPhraseChoice>> prePredicate(PredicateType type) {
-    Parser<List<TokiContentPhraseChoice>> subjects() =>
-        ref0(anuContent).interleavedRepeat(string(' en '));
+  Parser<List<TokiSubject>> prePredicate(PredicateType type) {
+    Parser<List<TokiSubject>> subjects() => ref0(anuContent)
+        .map((x) => TokiSubject.fromContentPhraseChoice(x))
+        .interleavedRepeat(string(' en '));
 
     // detects unmodified mi/sina
     Parser<String> loneMiSina() => Or([string('mi'), string('sina')]).skip(
@@ -142,11 +144,11 @@ class TokiGrammar extends GrammarDefinition {
           ref1(aWord, ref0(loneMiSina))
               .skip(after: string(' li ').not())
               .map((x) => [
-                    TokiContentPhraseChoice([
+                    TokiSubject([
                       TokiContentPhrase([
                         [x]
                       ])
-                    ])
+                    ], true)
                   ]),
           ref0(subjects).skip(
               before: ref0(miSinaLi).not(),
@@ -233,7 +235,7 @@ class TokiGrammar extends GrammarDefinition {
           .interleavedRepeat(char(' ') & string(marker) & char(' ')),
     ]).map((x) => TokiClause(
         type: type,
-        subjects: List<TokiContentPhraseChoice>.from(x[0]),
+        subjects: List<TokiSubject>.from(x[0]),
         predicates: List<TokiPredicate>.from(x[1])));
   }
 

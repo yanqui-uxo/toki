@@ -43,13 +43,13 @@ class TokiPredicate implements Representable {
     if (objects.isNotEmpty) {
       List<Representation> baseRepresentations = objects
           .toRepresentationList()
+          .map((x) => x.withDescription('object'))
           .intersperseOuter(const ParticleRepresentation('e'))
           .toList();
       baseRepresentations =
           baseRepresentations.sublist(0, baseRepresentations.length - 1);
 
-      reps.add(Representation(
-          baseRepresentations: baseRepresentations, description: 'objects'));
+      reps.add(Representation(baseRepresentations: baseRepresentations));
     }
 
     if (prepPhrases.isNotEmpty) {

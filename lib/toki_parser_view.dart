@@ -19,9 +19,8 @@ class _TokiParserViewState extends State<TokiParserView> {
     var result = widget.parser.parse(x);
 
     if (result.isSuccess) {
-      Representable value = result.value;
-      text = '$value\n\n${value.toRepresentation()}';
-      //text = value.toRepresentationList().toString();
+      List<Representable> value = result.value;
+      text = '$value\n\n${value.toRepresentationList()}';
     } else {
       text = "${result.toPositionString()}, ${result.message}";
     }

@@ -24,6 +24,5 @@ class ComplexRepresentation implements Representation {
           baseRepresentations: baseRepresentations, description: description);
 
   @override
-  String toString() =>
-      'ComplexRepresentation(baseReps: $baseRepresentations, description: $description)';
+  String toString() => '$description(baseReps: $baseRepresentations)';
 }
