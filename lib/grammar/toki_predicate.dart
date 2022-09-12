@@ -46,8 +46,7 @@ class TokiPredicate implements Representable {
           .map((x) => x.withDescription('object'))
           .intersperseOuter(const ParticleRepresentation('e'))
           .toList();
-      baseRepresentations =
-          baseRepresentations.sublist(0, baseRepresentations.length - 1);
+      baseRepresentations.removeLast();
 
       reps.add(Representation(baseRepresentations: baseRepresentations));
     }

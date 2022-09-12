@@ -28,8 +28,7 @@ class TokiClause implements TokiContextPhrase {
         .toRepresentationList()
         .intersperseOuter(ParticleRepresentation(type.name))
         .toList();
-    predicateRepresentations = predicateRepresentations.sublist(
-        0, predicateRepresentations.length - 1);
+    predicateRepresentations.removeLast();
 
     return Representation(
         baseRepresentations: subjects
