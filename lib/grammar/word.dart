@@ -3,12 +3,12 @@ import '../representation/complex_representation.dart';
 import '../representation/particle_representation.dart';
 import '../representation/represent.dart';
 
-class TokiWord implements Representable {
+class Word implements Representable {
   final String word;
   final bool aAttached;
   final bool isName;
 
-  const TokiWord(this.word, {this.aAttached = false, this.isName = false});
+  const Word(this.word, {this.aAttached = false, this.isName = false});
 
   @override
   String toString() {

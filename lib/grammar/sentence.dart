@@ -2,14 +2,14 @@ import 'package:intersperse/intersperse.dart';
 
 import '../representation/particle_representation.dart';
 import '../representation/represent.dart';
-import 'toki_clause.dart';
-import 'toki_context_phrase.dart';
+import 'clause.dart';
+import 'context_phrase.dart';
 
-class TokiSentence implements Representable {
-  final List<TokiContextPhrase> contextPhrases;
-  final TokiClause rootClause;
+class Sentence implements Representable {
+  final List<ContextPhrase> contextPhrases;
+  final Clause rootClause;
 
-  const TokiSentence(this.rootClause, [this.contextPhrases = const []]);
+  const Sentence(this.rootClause, [this.contextPhrases = const []]);
 
   @override
   String toString() =>

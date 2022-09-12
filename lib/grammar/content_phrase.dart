@@ -2,19 +2,19 @@ import 'package:intersperse/intersperse.dart';
 
 import '../representation/particle_representation.dart';
 import '../representation/represent.dart';
-import 'toki_context_phrase.dart';
-import 'toki_word.dart';
+import 'context_phrase.dart';
+import 'word.dart';
 
-typedef ContentList = List<List<TokiWord>>;
+typedef ContentList = List<List<Word>>;
 
-class TokiContentPhrase implements TokiContextPhrase {
-  final List<List<TokiWord>> contentGroups;
+class ContentPhrase implements ContextPhrase {
+  final List<List<Word>> contentGroups;
 
-  const TokiContentPhrase(this.contentGroups);
+  const ContentPhrase(this.contentGroups);
 
   @override
   String toString() =>
-      'TokiContentPhrase(contentGroups: ${contentGroups.toString()})';
+      'ContentPhrase(contentGroups: ${contentGroups.toString()})';
 
   @override
   Representation toRepresentation() {

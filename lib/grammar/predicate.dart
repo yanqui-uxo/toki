@@ -2,19 +2,19 @@ import 'package:intersperse/intersperse.dart';
 
 import '../representation/particle_representation.dart';
 import '../representation/represent.dart';
-import 'toki_content_phrase_choice.dart';
-import 'toki_prep_phrase.dart';
-import 'toki_word.dart';
+import 'content_phrase_choice.dart';
+import 'prep_phrase.dart';
+import 'word.dart';
 
 enum PredicateType { li, o }
 
-class TokiPredicate implements Representable {
-  final List<TokiWord> preverbs;
-  final TokiContentPhraseChoice? verb;
-  final List<TokiContentPhraseChoice> objects;
-  final List<TokiPrepPhrase> prepPhrases;
+class Predicate implements Representable {
+  final List<Word> preverbs;
+  final ContentPhraseChoice? verb;
+  final List<ContentPhraseChoice> objects;
+  final List<PrepPhrase> prepPhrases;
 
-  const TokiPredicate(
+  const Predicate(
       {this.preverbs = const [],
       this.verb,
       this.objects = const [],

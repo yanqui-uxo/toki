@@ -14,6 +14,6 @@ class App extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(title: const Text('toki!')),
-            body: TokiParserView(TokiGrammar().build())));
+            body: ParserView(TokiGrammar().build())));
   }
 }

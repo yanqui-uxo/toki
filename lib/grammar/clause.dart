@@ -2,17 +2,17 @@ import 'package:intersperse/intersperse.dart';
 
 import '../representation/particle_representation.dart';
 import '../representation/represent.dart';
-import 'toki_context_phrase.dart';
-import 'toki_predicate.dart';
-import 'toki_subject.dart';
+import 'context_phrase.dart';
+import 'predicate.dart';
+import 'subject.dart';
 
-class TokiClause implements TokiContextPhrase {
+class Clause implements ContextPhrase {
   final PredicateType type;
-  final List<TokiSubject> subjects;
+  final List<Subject> subjects;
   final bool loneMiSinaSubject;
-  final List<TokiPredicate> predicates;
+  final List<Predicate> predicates;
 
-  const TokiClause(
+  const Clause(
       {required this.type,
       required this.subjects,
       this.loneMiSinaSubject = false,

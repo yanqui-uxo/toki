@@ -1,13 +1,13 @@
 import 'package:intersperse/intersperse.dart';
 import '../representation/particle_representation.dart';
 import '../representation/represent.dart';
-import 'toki_content_phrase.dart';
-import 'toki_context_phrase.dart';
+import 'content_phrase.dart';
+import 'context_phrase.dart';
 
-class TokiContentPhraseChoice implements TokiContextPhrase {
-  final List<TokiContentPhrase> choices;
+class ContentPhraseChoice implements ContextPhrase {
+  final List<ContentPhrase> choices;
 
-  const TokiContentPhraseChoice(this.choices);
+  const ContentPhraseChoice(this.choices);
 
   @override
   Representation toRepresentation() => Representation(
@@ -17,5 +17,5 @@ class TokiContentPhraseChoice implements TokiContextPhrase {
           .toList());
 
   @override
-  String toString() => 'TokiContentPhraseChoice(phrases: $choices)';
+  String toString() => 'ContentPhraseChoice(phrases: $choices)';
 }

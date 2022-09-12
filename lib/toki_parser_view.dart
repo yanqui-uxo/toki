@@ -3,16 +3,16 @@ import 'package:petitparser/petitparser.dart';
 
 import 'representation/represent.dart';
 
-class TokiParserView extends StatefulWidget {
+class ParserView extends StatefulWidget {
   final Parser parser;
 
-  const TokiParserView(this.parser, {Key? key}) : super(key: key);
+  const ParserView(this.parser, {Key? key}) : super(key: key);
 
   @override
-  State<TokiParserView> createState() => _TokiParserViewState();
+  State<ParserView> createState() => _ParserViewState();
 }
 
-class _TokiParserViewState extends State<TokiParserView> {
+class _ParserViewState extends State<ParserView> {
   String text = '';
 
   void _parse(String x) {

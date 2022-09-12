@@ -1,14 +1,14 @@
 import '../representation/complex_representation.dart';
 import '../representation/represent.dart';
-import 'toki_content_phrase_choice.dart';
-import 'toki_context_phrase.dart';
-import 'toki_word.dart';
+import 'content_phrase_choice.dart';
+import 'context_phrase.dart';
+import 'word.dart';
 
-class TokiPrepPhrase implements TokiContextPhrase {
-  final TokiWord prep;
-  final TokiContentPhraseChoice object;
+class PrepPhrase implements ContextPhrase {
+  final Word prep;
+  final ContentPhraseChoice object;
 
-  const TokiPrepPhrase(this.prep, this.object);
+  const PrepPhrase(this.prep, this.object);
 
   @override
   String toString() {
