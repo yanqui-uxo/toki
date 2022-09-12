@@ -2,7 +2,7 @@ import 'represent.dart';
 
 class ComplexRepresentation implements Representation {
   @override
-  final List<Representation> baseReps;
+  final List<Representation> baseRepresentations;
 
   @override
   Never get text =>
@@ -15,12 +15,15 @@ class ComplexRepresentation implements Representation {
   @override
   final String? description;
 
-  const ComplexRepresentation({required this.baseReps, this.description});
-  ComplexRepresentation.wrap(
-      {required Representation baseRep, String? description})
-      : this(baseReps: [baseRep], description: description);
+  const ComplexRepresentation(
+      {required this.baseRepresentations, this.description});
+
+  @override
+  ComplexRepresentation withDescription(String description) =>
+      ComplexRepresentation(
+          baseRepresentations: baseRepresentations, description: description);
 
   @override
   String toString() =>
-      'ComplexRepresentation(baseReps: $baseReps, description: $description)';
+      'ComplexRepresentation(baseReps: $baseRepresentations, description: $description)';
 }

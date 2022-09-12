@@ -38,7 +38,7 @@ extension CaseCheck on String {
 // TODO: support commas
 class TokiGrammar extends GrammarDefinition {
   @override
-  Parser<List<TokiPunctuatedSentence>> start() => ref0(sentences).end();
+  Parser start() => ref1(predicate, PredicateType.li).end();
 
   Parser<void> spaceOrEnd() => Or([char(' '), endOfInput()]);
 
@@ -166,6 +166,8 @@ class TokiGrammar extends GrammarDefinition {
 
   // separates sentences
   static final Parser<String> sepPunctuation = pattern('.:;!?');
+
+  // can end final sentence
   static final Parser<String> endPunctuation = pattern('.!?');
 
   // for content word groups, guarantees that prep phrases are not infringed upon

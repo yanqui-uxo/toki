@@ -1,10 +1,36 @@
 import 'package:flutter/material.dart' show Color;
 
+import 'complex_representation.dart';
+
 abstract class Representation {
-  List<Representation> get baseReps;
+  List<Representation> get baseRepresentations;
   String get text;
   String? get description;
   Color get color;
+
+  factory Representation(
+      {required List<Representation> baseRepresentations,
+      String? description}) {
+    if (baseRepresentations.length > 1 || description != null) {
+      return ComplexRepresentation(
+          baseRepresentations: baseRepresentations, description: description);
+    } else {
+      return baseRepresentations[0];
+    }
+  }
+
+  factory Representation.wrap(
+      {required Representation baseRepresentation,
+      required String description}) {
+    if (baseRepresentation.description == null) {
+      return baseRepresentation.withDescription(description);
+    } else {
+      return ComplexRepresentation(
+          baseRepresentations: [baseRepresentation], description: description);
+    }
+  }
+
+  Representation withDescription(String description);
 }
 
 abstract class Representable {

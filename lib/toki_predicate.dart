@@ -1,4 +1,6 @@
-import 'representation/complex_representation.dart';
+import 'package:intersperse/intersperse.dart';
+
+import 'representation/particle_representation.dart';
 import 'representation/represent.dart';
 import 'toki_content_phrase_choice.dart';
 import 'toki_prep_phrase.dart';
@@ -28,27 +30,34 @@ class TokiPredicate implements Representable {
     List<Representation> reps = [];
 
     if (preverbs.isNotEmpty) {
-      reps.add(ComplexRepresentation(
-          baseReps: preverbs.toRepresentationList(), description: 'preverbs'));
+      reps.add(Representation(
+          baseRepresentations: preverbs.toRepresentationList(),
+          description: 'preverbs'));
     }
 
     if (verb != null) {
-      reps.add(ComplexRepresentation.wrap(
-          baseRep: verb!.toRepresentation(), description: 'verb'));
+      reps.add(Representation.wrap(
+          baseRepresentation: verb!.toRepresentation(), description: 'verb'));
     }
 
-    // TODO: add e's
     if (objects.isNotEmpty) {
-      reps.add(ComplexRepresentation(
-          baseReps: objects.toRepresentationList(), description: 'objects'));
+      List<Representation> baseRepresentations = objects
+          .toRepresentationList()
+          .intersperseOuter(const ParticleRepresentation('e'))
+          .toList();
+      baseRepresentations =
+          baseRepresentations.sublist(0, baseRepresentations.length - 1);
+
+      reps.add(Representation(
+          baseRepresentations: baseRepresentations, description: 'objects'));
     }
 
     if (prepPhrases.isNotEmpty) {
-      reps.add(ComplexRepresentation(
-          baseReps: prepPhrases.toRepresentationList(),
+      reps.add(Representation(
+          baseRepresentations: prepPhrases.toRepresentationList(),
           description: 'prepositional phrases'));
     }
 
-    return ComplexRepresentation(baseReps: reps, description: 'predicate');
+    return Representation(baseRepresentations: reps, description: 'predicate');
   }
 }

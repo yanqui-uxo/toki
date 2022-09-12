@@ -1,7 +1,6 @@
 import 'package:intersperse/intersperse.dart';
 
-import 'representation/basic_representation.dart';
-import 'representation/complex_representation.dart';
+import 'representation/particle_representation.dart';
 import 'representation/represent.dart';
 import 'toki_context_phrase.dart';
 import 'toki_word.dart';
@@ -14,17 +13,17 @@ class TokiContentPhrase implements TokiContextPhrase {
   const TokiContentPhrase(this.contentGroups);
 
   @override
-  String toString() => contentGroups.toString();
+  String toString() =>
+      'TokiContentPhrase(contentGroups: ${contentGroups.toString()})';
 
   @override
-  ComplexRepresentation toRepresentation() {
+  Representation toRepresentation() {
     List<Representation> reps = contentGroups
-        .map((x) => ComplexRepresentation(baseReps: x.toRepresentationList()))
+        .map((x) =>
+            Representation(baseRepresentations: x.toRepresentationList()))
         .toList();
-    reps = reps
-        .intersperse(
-            const BasicRepresentation(text: 'pi', description: 'particle'))
-        .toList();
-    return ComplexRepresentation(baseReps: reps);
+    reps = reps.intersperse(const ParticleRepresentation('pi')).toList();
+
+    return Representation(baseRepresentations: reps);
   }
 }

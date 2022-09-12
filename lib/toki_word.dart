@@ -1,4 +1,6 @@
 import 'representation/basic_representation.dart';
+import 'representation/complex_representation.dart';
+import 'representation/particle_representation.dart';
 import 'representation/represent.dart';
 
 class TokiWord implements Representable {
@@ -17,6 +19,21 @@ class TokiWord implements Representable {
   }
 
   @override
-  BasicRepresentation toRepresentation() =>
-      BasicRepresentation(text: word + (aAttached ? ' a' : ''));
+  Representation toRepresentation() {
+    if (isName) {
+      var nameRepresentation =
+          BasicRepresentation(text: word, description: 'name');
+
+      if (aAttached) {
+        return ComplexRepresentation(baseRepresentations: [
+          nameRepresentation,
+          const ParticleRepresentation('a')
+        ]);
+      } else {
+        return nameRepresentation;
+      }
+    } else {
+      return BasicRepresentation(text: word);
+    }
+  }
 }

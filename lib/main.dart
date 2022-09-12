@@ -11,17 +11,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var style = const TextStyle(fontSize: 50);
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(title: const Text('toki!')),
-            body: Column(children: [
-              TokiParserView(TokiGrammar().build()),
-              Row(children: [
-                Text('testing ', style: style),
-                Text('one two', style: style),
-                Text(' three', style: style)
-              ])
-            ])));
+            body: TokiParserView(TokiGrammar().build())));
   }
 }

@@ -3,7 +3,7 @@ import 'represent.dart';
 
 class BasicRepresentation implements Representation {
   @override
-  final List<Representation> baseReps = const [];
+  final List<Representation> baseRepresentations = const [];
 
   @override
   final String text;
@@ -22,6 +22,10 @@ class BasicRepresentation implements Representation {
       : text = rep.text,
         description = description ?? rep.description,
         color = color ?? rep.color;
+
+  @override
+  BasicRepresentation withDescription(String description) =>
+      BasicRepresentation(text: text, description: description, color: color);
 
   @override
   String toString() =>

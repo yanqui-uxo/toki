@@ -1,5 +1,5 @@
-import 'representation/basic_representation.dart';
 import 'representation/complex_representation.dart';
+import 'representation/represent.dart';
 import 'toki_content_phrase_choice.dart';
 import 'toki_context_phrase.dart';
 import 'toki_word.dart';
@@ -16,11 +16,13 @@ class TokiPrepPhrase implements TokiContextPhrase {
   }
 
   @override
-  ComplexRepresentation toRepresentation() => ComplexRepresentation(baseReps: [
-        BasicRepresentation.fromRep(
-            rep: prep.toRepresentation(), description: 'preposition'),
-        ComplexRepresentation.wrap(
-            baseRep: object.toRepresentation(),
+  ComplexRepresentation toRepresentation() =>
+      ComplexRepresentation(baseRepresentations: [
+        Representation.wrap(
+            baseRepresentation: prep.toRepresentation(),
+            description: 'preposition'),
+        Representation.wrap(
+            baseRepresentation: object.toRepresentation(),
             description: 'prepositional object')
       ]);
 }

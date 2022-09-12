@@ -1,4 +1,6 @@
-import 'representation/complex_representation.dart';
+import 'package:intersperse/intersperse.dart';
+
+import 'representation/particle_representation.dart';
 import 'representation/represent.dart';
 import 'toki_content_phrase_choice.dart';
 import 'toki_context_phrase.dart';
@@ -16,9 +18,18 @@ class TokiClause implements TokiContextPhrase {
   String toString() =>
       'Clause(type: ${type.name}, subjects: $subjects, predicates: $predicates)';
 
-  // TODO: add proper particles
   @override
-  Representation toRepresentation() => ComplexRepresentation(
-      baseReps:
-          subjects.toRepresentationList() + predicates.toRepresentationList());
+  Representation toRepresentation() {
+    List<Representation> predicateRepresentations = predicates
+        .toRepresentationList()
+        .intersperseOuter(ParticleRepresentation(type.name))
+        .toList();
+    predicateRepresentations = predicateRepresentations.sublist(
+        0, predicateRepresentations.length - 1);
+
+    return Representation(
+        baseRepresentations:
+            subjects.toRepresentationList() + predicateRepresentations,
+        description: 'clause');
+  }
 }
