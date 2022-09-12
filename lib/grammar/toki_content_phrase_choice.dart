@@ -1,6 +1,6 @@
 import 'package:intersperse/intersperse.dart';
-import 'representation/particle_representation.dart';
-import 'representation/represent.dart';
+import '../representation/particle_representation.dart';
+import '../representation/represent.dart';
 import 'toki_content_phrase.dart';
 import 'toki_context_phrase.dart';
 

@@ -1,7 +1,7 @@
-import 'representation/basic_representation.dart';
-import 'representation/complex_representation.dart';
-import 'representation/particle_representation.dart';
-import 'representation/represent.dart';
+import '../representation/basic_representation.dart';
+import '../representation/complex_representation.dart';
+import '../representation/particle_representation.dart';
+import '../representation/represent.dart';
 
 class TokiWord implements Representable {
   final String word;
@@ -13,8 +13,8 @@ class TokiWord implements Representable {
   @override
   String toString() {
     var ret = word;
-    if (aAttached) ret += "+a";
-    if (isName) ret += " (name)";
+    if (aAttached) ret += '+a';
+    if (isName) ret += ' (name)';
     return ret;
   }
 

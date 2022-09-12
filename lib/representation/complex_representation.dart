@@ -6,11 +6,11 @@ class ComplexRepresentation implements Representation {
 
   @override
   Never get text =>
-      throw UnsupportedError("Cannot get text from CombinedRepresentation");
+      throw UnsupportedError('Cannot get text from CombinedRepresentation');
 
   @override
   Never get color =>
-      throw UnsupportedError("Cannot get color from CombinedRepresentation");
+      throw UnsupportedError('Cannot get color from CombinedRepresentation');
 
   @override
   final String? description;

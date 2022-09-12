@@ -1,7 +1,7 @@
 import 'package:intersperse/intersperse.dart';
 
-import 'representation/particle_representation.dart';
-import 'representation/represent.dart';
+import '../representation/particle_representation.dart';
+import '../representation/represent.dart';
 import 'toki_content_phrase_choice.dart';
 import 'toki_prep_phrase.dart';
 import 'toki_word.dart';
@@ -21,9 +21,8 @@ class TokiPredicate implements Representable {
       this.prepPhrases = const []});
 
   @override
-  String toString() {
-    return "Predicate(preverbs: $preverbs, verb: $verb, objects: $objects, prep phrases: $prepPhrases)";
-  }
+  String toString() =>
+      'Predicate(preverbs: $preverbs, verb: $verb, objects: $objects, prep phrases: $prepPhrases)';
 
   @override
   Representation toRepresentation() {

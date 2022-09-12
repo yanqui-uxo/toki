@@ -1,3 +1,3 @@
-import 'representation/represent.dart';
+import '../representation/represent.dart';
 
 abstract class TokiContextPhrase extends Representable {}

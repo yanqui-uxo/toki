@@ -13,7 +13,7 @@ class TokiParserView extends StatefulWidget {
 }
 
 class _TokiParserViewState extends State<TokiParserView> {
-  String text = "";
+  String text = '';
 
   void _parse(String x) {
     var result = widget.parser.parse(x);
@@ -22,7 +22,7 @@ class _TokiParserViewState extends State<TokiParserView> {
       List<Representable> value = result.value;
       text = '$value\n\n${value.toRepresentationList()}';
     } else {
-      text = "${result.toPositionString()}, ${result.message}";
+      text = '${result.toPositionString()}, ${result.message}';
     }
   }
 

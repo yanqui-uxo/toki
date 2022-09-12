@@ -1,5 +1,5 @@
-import 'representation/complex_representation.dart';
-import 'representation/represent.dart';
+import '../representation/complex_representation.dart';
+import '../representation/represent.dart';
 import 'toki_content_phrase_choice.dart';
 import 'toki_context_phrase.dart';
 import 'toki_word.dart';
@@ -12,7 +12,7 @@ class TokiPrepPhrase implements TokiContextPhrase {
 
   @override
   String toString() {
-    return "PrepPhrase(prep: $prep, object: $object)";
+    return 'PrepPhrase(prep: $prep, object: $object)';
   }
 
   @override

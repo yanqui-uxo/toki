@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'toki_grammar.dart';
+import 'grammar/toki_grammar.dart';
 import 'toki_parser_view.dart';
 
 void main() {

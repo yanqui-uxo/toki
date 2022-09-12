@@ -1,7 +1,7 @@
 import 'package:intersperse/intersperse.dart';
 
-import 'representation/particle_representation.dart';
-import 'representation/represent.dart';
+import '../representation/particle_representation.dart';
+import '../representation/represent.dart';
 import 'toki_clause.dart';
 import 'toki_context_phrase.dart';
 
