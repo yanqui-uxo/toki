@@ -16,10 +16,20 @@ class Sentence implements Representable {
       'Sentence(contextPhrases: $contextPhrases, rootClause: $rootClause)';
 
   @override
-  Representation toRepresentation() => Representation(baseRepresentations: [
-        ...contextPhrases
-            .toRepresentationList()
-            .intersperse(const ParticleRepresentation('la')),
-        rootClause.toRepresentation()
-      ]);
+  Representation toRepresentation() {
+    List<Representation> contextRepresentations = contextPhrases
+        .toRepresentationList()
+        .map((x) => Representation.wrap(
+            baseRepresentation: x, description: 'context phrase'))
+        .intersperseOuter(const ParticleRepresentation('la'))
+        .toList();
+    if (contextRepresentations.isNotEmpty) {
+      contextRepresentations.removeAt(0);
+    }
+
+    return Representation(baseRepresentations: [
+      ...contextRepresentations,
+      rootClause.toRepresentation()
+    ]);
+  }
 }

@@ -38,8 +38,9 @@ class _ParserViewState extends State<ParserView> {
               })),
       Text(text),
       if (value != null)
-        RepresentationView(
-            Representation(baseRepresentations: value!.toRepresentationList()))
+        FittedBox(
+            child: RepresentationView(Representation(
+                baseRepresentations: value!.toRepresentationList())))
     ]);
   }
 }

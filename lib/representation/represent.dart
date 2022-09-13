@@ -11,11 +11,15 @@ abstract class Representation {
   factory Representation(
       {required List<Representation> baseRepresentations,
       String? description}) {
-    if (baseRepresentations.length > 1 || description != null) {
+    if (baseRepresentations.length == 1) {
+      if (description == null) {
+        return baseRepresentations[0];
+      } else {
+        return baseRepresentations[0].withDescription(description);
+      }
+    } else {
       return ComplexRepresentation(
           baseRepresentations: baseRepresentations, description: description);
-    } else {
-      return baseRepresentations[0];
     }
   }
 

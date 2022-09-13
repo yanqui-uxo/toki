@@ -43,7 +43,8 @@ class Predicate implements Representable {
     if (objects.isNotEmpty) {
       List<Representation> baseRepresentations = objects
           .toRepresentationList()
-          .map((x) => x.withDescription('object'))
+          .map((x) =>
+              Representation.wrap(baseRepresentation: x, description: 'object'))
           .intersperseOuter(const ParticleRepresentation('e'))
           .toList();
       baseRepresentations.removeLast();
@@ -53,8 +54,7 @@ class Predicate implements Representable {
 
     if (prepPhrases.isNotEmpty) {
       reps.add(Representation(
-          baseRepresentations: prepPhrases.toRepresentationList(),
-          description: 'prepositional phrases'));
+          baseRepresentations: prepPhrases.toRepresentationList()));
     }
 
     return Representation(baseRepresentations: reps, description: 'predicate');

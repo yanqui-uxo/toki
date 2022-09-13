@@ -10,11 +10,18 @@ class ContentPhraseChoice implements ContextPhrase {
   const ContentPhraseChoice(this.choices);
 
   @override
-  Representation toRepresentation() => Representation(
-      baseRepresentations: choices
-          .toRepresentationList()
-          .intersperse(const ParticleRepresentation('pi'))
-          .toList());
+  Representation toRepresentation() {
+    List<Representation> choiceRepresentations = choices.toRepresentationList();
+    if (choiceRepresentations.length > 1) {
+      choiceRepresentations = choiceRepresentations
+          .map((x) =>
+              Representation.wrap(baseRepresentation: x, description: 'choice'))
+          .intersperse(const ParticleRepresentation('anu'))
+          .toList();
+    }
+
+    return Representation(baseRepresentations: choiceRepresentations);
+  }
 
   @override
   String toString() => 'ContentPhraseChoice(phrases: $choices)';

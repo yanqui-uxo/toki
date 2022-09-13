@@ -20,20 +20,18 @@ class Word implements Representable {
 
   @override
   Representation toRepresentation() {
+    BasicRepresentation rep;
     if (isName) {
-      var nameRepresentation =
-          BasicRepresentation(text: word, description: 'name');
-
-      if (aAttached) {
-        return ComplexRepresentation(baseRepresentations: [
-          nameRepresentation,
-          const ParticleRepresentation('a')
-        ]);
-      } else {
-        return nameRepresentation;
-      }
+      rep = BasicRepresentation(text: word, description: 'name');
     } else {
-      return BasicRepresentation(text: word);
+      rep = BasicRepresentation(text: word);
+    }
+
+    if (aAttached) {
+      return ComplexRepresentation(
+          baseRepresentations: [rep, const ParticleRepresentation('a')]);
+    } else {
+      return rep;
     }
   }
 }

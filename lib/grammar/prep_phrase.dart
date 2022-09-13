@@ -24,5 +24,5 @@ class PrepPhrase implements ContextPhrase {
         Representation.wrap(
             baseRepresentation: object.toRepresentation(),
             description: 'prepositional object')
-      ]);
+      ], description: 'prepositional phrase');
 }
