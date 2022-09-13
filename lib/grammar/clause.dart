@@ -4,18 +4,18 @@ import '../representation/particle_representation.dart';
 import '../representation/represent.dart';
 import 'context_phrase.dart';
 import 'predicate.dart';
-import 'subject.dart';
+import 'subjects.dart';
 
 class Clause implements ContextPhrase {
   final PredicateType type;
-  final List<Subject> subjects;
-  final bool loneMiSinaSubject;
+  final bool tasoAtStart;
+  final Subjects subjects;
   final List<Predicate> predicates;
 
   const Clause(
       {required this.type,
+      this.tasoAtStart = false,
       required this.subjects,
-      this.loneMiSinaSubject = false,
       required this.predicates});
 
   @override
@@ -30,12 +30,14 @@ class Clause implements ContextPhrase {
         .toList();
     predicateRepresentations.removeLast();
 
-    return Representation(
-        baseRepresentations: subjects
-                .toRepresentationList()
-                .map((x) => x.withDescription('subject'))
-                .toList() +
-            predicateRepresentations,
-        description: 'clause');
+    if (subjects.isLoneMiSina && type == PredicateType.li) {
+      predicateRepresentations.removeAt(0); // remove first li
+    }
+
+    return Representation(baseRepresentations: [
+      if (tasoAtStart) const ParticleRepresentation('taso'),
+      subjects.toRepresentation(),
+      ...predicateRepresentations
+    ], description: 'clause');
   }
 }

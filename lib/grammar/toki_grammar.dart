@@ -1,15 +1,15 @@
 import 'package:petitparser/petitparser.dart';
 
-import 'nimi.dart';
 import 'clause.dart';
 import 'content_phrase.dart';
 import 'content_phrase_choice.dart';
 import 'context_phrase.dart';
+import 'nimi.dart';
 import 'predicate.dart';
 import 'prep_phrase.dart';
 import 'punctuated_sentence.dart';
 import 'sentence.dart';
-import 'subject.dart';
+import 'subjects.dart';
 import 'word.dart';
 
 typedef Seq<T> = SequenceParser<T>;
@@ -123,17 +123,25 @@ class TokiGrammar extends GrammarDefinition {
           .map(ContentPhraseChoice.new);
 
   // naively assumes a "mi" or "sina" at the start must be a lone subject
-  Parser<List<Subject>> prePredicate(PredicateType type) {
-    Parser<List<Subject>> subjects() => ref0(anuContent)
-        .map(Subject.fromContentPhraseChoice)
-        .interleavedRepeat(string(' en '));
-
+  Parser<Subjects> prePredicate(PredicateType type) {
     // detects unmodified mi/sina
-    Parser<String> loneMiSina() => Or([string('mi'), string('sina')]).skip(
-        after: char(' ').and() &
-            string(' pi ').not() &
-            string(' en ').not() &
-            string(' anu ').not());
+    Parser<Subjects> loneMiSina() => ref1(
+            aWord,
+            Or([string('mi'), string('sina')]).skip(
+                after: char(' ').and() &
+                    string(' pi ').not() &
+                    string(' en ').not() &
+                    string(' anu ').not()))
+        .map((x) => Subjects([
+              ContentPhraseChoice([
+                ContentPhrase([
+                  [x]
+                ])
+              ]),
+            ], true));
+
+    Parser<Subjects> subjects() =>
+        ref0(anuContent).interleavedRepeat(string(' en ')).map(Subjects.new);
 
     Parser<void> miSinaLi() =>
         Or([string('mi'), string('sina')]) & (string(' li '));
@@ -141,15 +149,7 @@ class TokiGrammar extends GrammarDefinition {
     switch (type) {
       case PredicateType.li:
         return Or([
-          ref1(aWord, ref0(loneMiSina))
-              .skip(after: string(' li ').not())
-              .map((x) => [
-                    Subject([
-                      ContentPhrase([
-                        [x]
-                      ])
-                    ], true)
-                  ]),
+          ref0(loneMiSina).skip(after: string(' li ').not()),
           ref0(subjects).skip(
               before: ref0(miSinaLi).not(),
               after: string(' li') & char(' ').and())
@@ -159,7 +159,7 @@ class TokiGrammar extends GrammarDefinition {
             .skip(after: char(' '))
             .optional()
             .skip(after: char('o'))
-            .map((x) => x ?? []);
+            .map((x) => x ?? const Subjects([]));
     }
   }
 
@@ -230,13 +230,15 @@ class TokiGrammar extends GrammarDefinition {
     var marker = type.name;
 
     return Seq([
+      string('taso ').optional(),
       ref1(prePredicate, type).skip(after: char(' ')),
       ref1(predicate, type)
           .interleavedRepeat(char(' ') & string(marker) & char(' ')),
     ]).map((x) => Clause(
         type: type,
-        subjects: List<Subject>.from(x[0]),
-        predicates: List<Predicate>.from(x[1])));
+        tasoAtStart: x[0] != null,
+        subjects: x[1] as Subjects,
+        predicates: List<Predicate>.from(x[2] as List)));
   }
 
   Parser<Clause> anyClause() =>

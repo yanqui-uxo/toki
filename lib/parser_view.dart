@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petitparser/petitparser.dart';
 
 import 'representation/represent.dart';
+import 'representation_view.dart';
 
 class ParserView extends StatefulWidget {
   final Parser parser;
@@ -13,14 +14,15 @@ class ParserView extends StatefulWidget {
 }
 
 class _ParserViewState extends State<ParserView> {
+  List<Representable>? value;
   String text = '';
 
   void _parse(String x) {
     var result = widget.parser.parse(x);
 
     if (result.isSuccess) {
-      List<Representable> value = result.value;
-      text = '$value\n\n${value.toRepresentationList()}';
+      value = result.value;
+      text = '$value\n${value!.toRepresentationList()}';
     } else {
       text = '${result.toPositionString()}, ${result.message}';
     }
@@ -33,7 +35,10 @@ class _ParserViewState extends State<ParserView> {
           onChanged: (x) => setState(() {
                 _parse(x);
               })),
-      Text(text)
+      Text(text),
+      if (value != null)
+        RepresentationView(
+            Representation(baseRepresentations: value!.toRepresentationList()))
     ]);
   }
 }
