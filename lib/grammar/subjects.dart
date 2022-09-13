@@ -5,16 +5,15 @@ import '../representation/represent.dart';
 import 'content_phrase_choice.dart';
 
 class Subjects implements Representable {
-  final List<ContentPhraseChoice> _subjects;
-  List<ContentPhraseChoice> get subjects => List.unmodifiable(_subjects);
+  final List<ContentPhraseChoice> subjects;
 
   final bool isLoneMiSina;
 
-  const Subjects(this._subjects, [this.isLoneMiSina = false]);
+  const Subjects(this.subjects, [this.isLoneMiSina = false]);
 
   @override
   Representation toRepresentation() => Representation(
-      baseRepresentations: _subjects
+      baseRepresentations: subjects
           .toRepresentationList()
           .map((x) => x.withDescription('subject'))
           .intersperse(const ParticleRepresentation('en'))
@@ -23,5 +22,5 @@ class Subjects implements Representable {
 
   @override
   String toString() =>
-      'Subjects(subjects: $_subjects, isLoneMiSina: $isLoneMiSina)';
+      'Subjects(subjects: $subjects, isLoneMiSina: $isLoneMiSina)';
 }
