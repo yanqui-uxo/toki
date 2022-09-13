@@ -17,7 +17,7 @@ class Subjects implements Representable {
           .toRepresentationList()
           .intersperse(const ParticleRepresentation('en'))
           .toList(),
-      description: 'subjects');
+      description: 'subject(s)');
 
   @override
   String toString() =>

@@ -9,24 +9,44 @@ class BasicRepresentation implements Representation {
   final String text;
 
   @override
+  final String? punctuation;
+
+  @override
   final String? description;
 
   @override
   final Color color;
 
   const BasicRepresentation(
-      {required this.text, this.description, this.color = Colors.black});
+      {required this.text,
+      this.punctuation,
+      this.description,
+      this.color = Colors.black});
 
   BasicRepresentation.fromRep(
       {required BasicRepresentation rep, String? description, Color? color})
       : text = rep.text,
+        punctuation = rep.punctuation,
         description = description ?? rep.description,
         color = color ?? rep.color;
 
   @override
-  BasicRepresentation withDescription(String description) =>
-      BasicRepresentation(text: text, description: description, color: color);
+  BasicRepresentation withPunctuation(String punctuation) =>
+      BasicRepresentation(
+          text: text,
+          punctuation: punctuation,
+          description: description,
+          color: color);
 
   @override
-  String toString() => '$description(text: $text, color: $color)';
+  BasicRepresentation withDescription(String description) =>
+      BasicRepresentation(
+          text: text,
+          punctuation: punctuation,
+          description: description,
+          color: color);
+
+  @override
+  String toString() =>
+      '$description(text: $text, punctuation: $punctuation, color: $color)';
 }

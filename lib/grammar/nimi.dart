@@ -1,6 +1,6 @@
 import 'package:petitparser/petitparser.dart';
 
-final Set<String> contentWords = {
+const Set<String> contentWords = {
   'akesi',
   'ala',
   'alasa',

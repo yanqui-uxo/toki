@@ -41,7 +41,8 @@ class TokiGrammar extends GrammarDefinition {
   @override
   Parser start() => ref0(sentences).end();
 
-  Parser<void> spaceOrEnd() => Or([char(' '), endOfInput()]);
+  Parser<void> spaceOrEnd() =>
+      Or([char(' '), sepPunctuation, endPunctuation, endOfInput()]);
 
   Parser<Word> aWord(Parser<String> x, [isName = false]) =>
       Seq([x, string(' a').skip(after: ref0(spaceOrEnd).and()).optional()])

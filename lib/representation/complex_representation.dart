@@ -5,6 +5,9 @@ class ComplexRepresentation implements Representation {
   final List<Representation> baseRepresentations;
 
   @override
+  final String? punctuation;
+
+  @override
   Never get text =>
       throw UnsupportedError('Cannot get text from CombinedRepresentation');
 
@@ -16,13 +19,23 @@ class ComplexRepresentation implements Representation {
   final String? description;
 
   const ComplexRepresentation(
-      {required this.baseRepresentations, this.description});
+      {required this.baseRepresentations, this.punctuation, this.description});
+
+  @override
+  ComplexRepresentation withPunctuation(String punctuation) =>
+      ComplexRepresentation(
+          baseRepresentations: baseRepresentations,
+          punctuation: punctuation,
+          description: description);
 
   @override
   ComplexRepresentation withDescription(String description) =>
       ComplexRepresentation(
-          baseRepresentations: baseRepresentations, description: description);
+          baseRepresentations: baseRepresentations,
+          punctuation: punctuation,
+          description: description);
 
   @override
-  String toString() => '$description(baseReps: $baseRepresentations)';
+  String toString() =>
+      '$description(baseReps: $baseRepresentations, punctuation: $punctuation)';
 }

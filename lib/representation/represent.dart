@@ -5,23 +5,38 @@ import 'complex_representation.dart';
 abstract class Representation {
   List<Representation> get baseRepresentations;
   String get text;
+  String? get punctuation;
   String? get description;
   Color get color;
 
+  Representation withPunctuation(String punctuation);
   Representation withDescription(String description);
 
   factory Representation(
       {required List<Representation> baseRepresentations,
+      String? punctuation,
       String? description}) {
     if (baseRepresentations.length == 1) {
-      if (description == null) {
-        return baseRepresentations[0];
+      Representation rep = baseRepresentations[0];
+
+      if (description == null && punctuation == null) {
+        return rep;
       } else {
-        return baseRepresentations[0].withDescription(description);
+        if (punctuation != null) {
+          rep = rep.withPunctuation(punctuation);
+        }
+
+        if (description != null) {
+          rep = rep.withDescription(description);
+        }
       }
+
+      return rep;
     } else {
       return ComplexRepresentation(
-          baseRepresentations: baseRepresentations, description: description);
+          baseRepresentations: baseRepresentations,
+          punctuation: punctuation,
+          description: description);
     }
   }
 
@@ -32,7 +47,9 @@ abstract class Representation {
       return baseRepresentation.withDescription(description);
     } else {
       return ComplexRepresentation(
-          baseRepresentations: [baseRepresentation], description: description);
+          baseRepresentations: [baseRepresentation],
+          punctuation: baseRepresentation.punctuation,
+          description: description);
     }
   }
 }

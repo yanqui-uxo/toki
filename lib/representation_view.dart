@@ -5,26 +5,17 @@ import 'representation/represent.dart';
 
 class RepresentationView extends StatelessWidget {
   final Representation representation;
-  final bool firstPass;
 
-  const RepresentationView(this.representation,
-      {this.firstPass = true, Key? key})
-      : super(key: key);
+  const RepresentationView(this.representation, {Key? key}) : super(key: key);
 
-  static String textFromRepresentation(Representation representation) {
-    if (representation.baseRepresentations.isNotEmpty) {
-      return representation.baseRepresentations
-          .map(textFromRepresentation)
-          .join(' ');
-    } else {
-      return representation.text;
-    }
-  }
-
+  // TODO: refactor
   @override
   Widget build(BuildContext context) {
+    const double fontSize = 50;
+
     if (representation.baseRepresentations.isEmpty) {
-      final textStyle = TextStyle(color: representation.color, fontSize: 50);
+      final textStyle =
+          TextStyle(color: representation.color, fontSize: fontSize);
       final descriptionStyle = TextStyle(color: representation.color);
 
       if (representation.description != null) {
@@ -38,14 +29,20 @@ class RepresentationView extends StatelessWidget {
       }
     } else {
       List<Widget> recursed = representation.baseRepresentations
-          .map((x) => RepresentationView(x, firstPass: false))
+          .map(RepresentationView.new)
+          .toList();
+      recursed = recursed
+          .intersperse(const Text(' ', style: TextStyle(fontSize: fontSize)))
           .toList();
 
-      final recursedRow = Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: recursed
-              .intersperse(const Text(' ', style: TextStyle(fontSize: 50)))
-              .toList());
+      if (representation.punctuation != null) {
+        recursed.add(Text(representation.punctuation!,
+            style: const TextStyle(fontSize: fontSize)));
+      }
+
+      final recursedRow =
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: recursed);
+
       if (representation.description != null) {
         return IntrinsicWidth(
             child: Column(
