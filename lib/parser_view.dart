@@ -22,7 +22,7 @@ class _ParserViewState extends State<ParserView> {
 
     if (result.isSuccess) {
       value = result.value;
-      text = '$value\n${value!.toRepresentationList()}';
+      text = '$value\n\n${value!.toRepresentationList()}\n';
     } else {
       text = '${result.toPositionString()}, ${result.message}';
     }
