@@ -24,6 +24,7 @@ class _ParserViewState extends State<ParserView> {
       value = result.value;
       text = '$value\n\n${value!.toRepresentationList()}\n';
     } else {
+      value = null;
       text = '${result.toPositionString()}, ${result.message}';
     }
   }
