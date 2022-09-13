@@ -8,6 +8,8 @@ abstract class Representation {
   String? get description;
   Color get color;
 
+  Representation withDescription(String description);
+
   factory Representation(
       {required List<Representation> baseRepresentations,
       String? description}) {
@@ -33,8 +35,6 @@ abstract class Representation {
           baseRepresentations: [baseRepresentation], description: description);
     }
   }
-
-  Representation withDescription(String description);
 }
 
 abstract class Representable {
