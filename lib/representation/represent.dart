@@ -23,7 +23,7 @@ abstract class Representation {
         return rep;
       } else {
         if (punctuation != null) {
-          rep = rep.withPunctuation(punctuation);
+          rep = rep.withPunctuation((rep.punctuation ?? '') + punctuation);
         }
 
         if (description != null) {
