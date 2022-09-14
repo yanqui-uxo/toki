@@ -134,7 +134,10 @@ class TokiGrammar extends GrammarDefinition {
             Or([string('mi'), string('sina')]).skip(
                 before:
                     ref0(subjects).and().where((x) => x.subjects.length == 1),
-                after: char(' ').and() & string(' pi ').not()))
+                after: char(' ').and() &
+                    string(' pi ').not() &
+                    string(' anu ').not() &
+                    string(' en ').not()))
         .map((x) => Subjects([
               ContentPhraseChoice([
                 ContentPhrase([
