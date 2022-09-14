@@ -15,9 +15,10 @@ class Subjects implements Representable {
   Representation toRepresentation() => Representation(
       baseRepresentations: subjects
           .toRepresentationList()
+          .map((x) => Representation.wrap(
+              baseRepresentation: x, description: 'subject'))
           .intersperse(const ParticleRepresentation('en'))
-          .toList(),
-      description: 'subject(s)');
+          .toList());
 
   @override
   String toString() =>

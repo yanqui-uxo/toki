@@ -125,14 +125,16 @@ class TokiGrammar extends GrammarDefinition {
 
   // naively assumes a "mi" or "sina" at the start must be a lone subject
   Parser<Subjects> prePredicate(PredicateType type) {
+    Parser<Subjects> subjects() =>
+        ref0(anuContent).interleavedRepeat(string(' en ')).map(Subjects.new);
+
     // detects unmodified mi/sina
     Parser<Subjects> loneMiSina() => ref1(
             aWord,
             Or([string('mi'), string('sina')]).skip(
-                after: char(' ').and() &
-                    string(' pi ').not() &
-                    string(' en ').not() &
-                    string(' anu ').not()))
+                before:
+                    ref0(subjects).and().where((x) => x.subjects.length == 1),
+                after: char(' ').and() & string(' pi ').not()))
         .map((x) => Subjects([
               ContentPhraseChoice([
                 ContentPhrase([
@@ -140,9 +142,6 @@ class TokiGrammar extends GrammarDefinition {
                 ])
               ]),
             ], true));
-
-    Parser<Subjects> subjects() =>
-        ref0(anuContent).interleavedRepeat(string(' en ')).map(Subjects.new);
 
     Parser<void> miSinaLi() =>
         Or([string('mi'), string('sina')]) & (string(' li '));
