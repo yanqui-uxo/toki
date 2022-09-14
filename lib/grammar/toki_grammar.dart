@@ -136,8 +136,7 @@ class TokiGrammar extends GrammarDefinition {
                     ref0(subjects).and().where((x) => x.subjects.length == 1),
                 after: char(' ').and() &
                     string(' pi ').not() &
-                    string(' anu ').not() &
-                    string(' en ').not()))
+                    string(' anu ').not()))
         .map((x) => Subjects([
               ContentPhraseChoice([
                 ContentPhrase([
