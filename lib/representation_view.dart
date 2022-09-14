@@ -18,14 +18,26 @@ class RepresentationView extends StatelessWidget {
           TextStyle(color: representation.color, fontSize: fontSize);
       final descriptionStyle = TextStyle(color: representation.color);
 
+      Widget ret;
+
       if (representation.description != null) {
-        return IntrinsicWidth(
+        ret = IntrinsicWidth(
             child: Column(children: [
           Text(representation.text, style: textStyle, key: key),
           Text(representation.description!, style: descriptionStyle)
         ]));
       } else {
-        return Text(representation.text, style: textStyle);
+        ret = Text(representation.text, style: textStyle);
+      }
+
+      if (representation.punctuation != null) {
+        return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          ret,
+          Text(representation.punctuation!,
+              style: const TextStyle(fontSize: fontSize))
+        ]);
+      } else {
+        return ret;
       }
     } else {
       List<Widget> recursed = representation.baseRepresentations
