@@ -19,7 +19,7 @@ abstract class Representation {
     if (baseRepresentations.length == 1) {
       Representation rep = baseRepresentations[0];
 
-      if (description == null && punctuation == null) {
+      if (punctuation == null && description == null) {
         return rep;
       } else {
         if (punctuation != null) {
@@ -27,7 +27,8 @@ abstract class Representation {
         }
 
         if (description != null) {
-          rep = rep.withDescription(description);
+          rep = Representation.wrap(
+              baseRepresentation: rep, description: description);
         }
       }
 
