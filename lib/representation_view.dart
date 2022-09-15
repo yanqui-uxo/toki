@@ -21,7 +21,6 @@ class RepresentationView extends StatelessWidget {
 
   const RepresentationView(this.representation, {Key? key}) : super(key: key);
 
-  // TODO: refactor
   @override
   Widget build(BuildContext context) {
     const double fontSize = 50;
