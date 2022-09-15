@@ -1,6 +1,6 @@
 import 'package:intersperse/intersperse.dart';
 
-import '../representation/particle_representation.dart';
+import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
 import 'clause.dart';
 import 'context_phrase.dart';
@@ -22,7 +22,8 @@ class Sentence implements Representable {
         .map((x) => Representation.wrap(
             baseRepresentation: x,
             description: const Description('context phrase')))
-        .intersperseOuter(const ParticleRepresentation('la'))
+        .intersperseOuter(const BasicRepresentation(
+            text: 'la', description: Description('context marker')))
         .toList();
     if (contextRepresentations.isNotEmpty) {
       contextRepresentations.removeAt(0);

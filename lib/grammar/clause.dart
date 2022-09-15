@@ -1,6 +1,6 @@
 import 'package:intersperse/intersperse.dart';
 
-import '../representation/particle_representation.dart';
+import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
 import 'context_phrase.dart';
 import 'predicate.dart';
@@ -26,7 +26,9 @@ class Clause implements ContextPhrase {
   Representation toRepresentation() {
     List<Representation> predicateRepresentations = predicates
         .toRepresentationList()
-        .intersperseOuter(ParticleRepresentation(type.name))
+        .intersperseOuter(BasicRepresentation(
+            text: type.name,
+            description: const Description('predicate marker')))
         .toList();
     predicateRepresentations.removeLast();
 
@@ -35,7 +37,9 @@ class Clause implements ContextPhrase {
     }
 
     return Representation(baseRepresentations: [
-      if (tasoAtStart) const ParticleRepresentation('taso'),
+      if (tasoAtStart)
+        const BasicRepresentation(
+            text: 'taso', description: Description('but')),
       subjects.toRepresentation(),
       ...predicateRepresentations
     ], description: const Description('clause'));

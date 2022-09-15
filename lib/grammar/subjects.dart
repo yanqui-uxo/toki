@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' show Colors;
 import 'package:intersperse/intersperse.dart';
 
-import '../representation/particle_representation.dart';
+import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
 import 'content_phrase_choice.dart';
 
@@ -19,7 +19,8 @@ class Subjects implements Representable {
           .map((x) => Representation.wrap(
               baseRepresentation: x,
               description: const Description('subject', Colors.blue)))
-          .intersperse(const ParticleRepresentation('en'))
+          .intersperse(const BasicRepresentation(
+              text: 'en', description: Description('subject joiner')))
           .toList());
 
   @override

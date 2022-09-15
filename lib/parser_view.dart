@@ -37,9 +37,10 @@ class _ParserViewState extends State<ParserView> {
                 _parse(x.replaceAll(RegExp(r'(?<=\w),(?= )'), ''));
               })),
       if (value != null)
-        FittedBox(
-            child: RepresentationView(Representation(
-                baseRepresentations: value!.toRepresentationList())))
+        Expanded(
+            child: FittedBox(
+                child: RepresentationView(Representation(
+                    baseRepresentations: value!.toRepresentationList()))))
     ]);
   }
 }

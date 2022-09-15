@@ -1,6 +1,5 @@
 import '../representation/basic_representation.dart';
 import '../representation/complex_representation.dart';
-import '../representation/particle_representation.dart';
 import '../representation/represent.dart';
 
 class Word implements Representable {
@@ -29,8 +28,11 @@ class Word implements Representable {
     }
 
     if (aAttached) {
-      return ComplexRepresentation(
-          baseRepresentations: [rep, const ParticleRepresentation('a')]);
+      return ComplexRepresentation(baseRepresentations: [
+        rep,
+        const BasicRepresentation(
+            text: 'a', description: Description('emotion marker'))
+      ]);
     } else {
       return rep;
     }

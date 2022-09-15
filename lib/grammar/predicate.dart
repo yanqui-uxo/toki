@@ -1,6 +1,6 @@
 import 'package:intersperse/intersperse.dart';
 
-import '../representation/particle_representation.dart';
+import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
 import 'content_phrase_choice.dart';
 import 'prep_phrase.dart';
@@ -46,7 +46,8 @@ class Predicate implements Representable {
           .toRepresentationList()
           .map((x) => Representation.wrap(
               baseRepresentation: x, description: const Description('object')))
-          .intersperseOuter(const ParticleRepresentation('e'))
+          .intersperseOuter(const BasicRepresentation(
+              text: 'e', description: Description('subject marker')))
           .toList();
       baseRepresentations.removeLast();
 

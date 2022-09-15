@@ -1,6 +1,6 @@
 import 'package:intersperse/intersperse.dart';
 
-import '../representation/particle_representation.dart';
+import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
 import 'context_phrase.dart';
 import 'word.dart';
@@ -22,7 +22,10 @@ class ContentPhrase implements ContextPhrase {
         .map((x) =>
             Representation(baseRepresentations: x.toRepresentationList()))
         .toList();
-    reps = reps.intersperse(const ParticleRepresentation('pi')).toList();
+    reps = reps
+        .intersperse(const BasicRepresentation(
+            text: 'pi', description: Description('modifier regrouper')))
+        .toList();
 
     return Representation(baseRepresentations: reps);
   }
