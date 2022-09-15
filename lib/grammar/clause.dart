@@ -38,6 +38,6 @@ class Clause implements ContextPhrase {
       if (tasoAtStart) const ParticleRepresentation('taso'),
       subjects.toRepresentation(),
       ...predicateRepresentations
-    ], description: 'clause');
+    ], description: const Description('clause'));
   }
 }

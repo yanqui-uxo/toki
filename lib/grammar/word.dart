@@ -22,7 +22,8 @@ class Word implements Representable {
   Representation toRepresentation() {
     BasicRepresentation rep;
     if (isName) {
-      rep = BasicRepresentation(text: word, description: 'name');
+      rep = BasicRepresentation(
+          text: word, description: const Description('name'));
     } else {
       rep = BasicRepresentation(text: word);
     }

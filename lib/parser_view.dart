@@ -34,9 +34,8 @@ class _ParserViewState extends State<ParserView> {
     return Column(children: [
       TextField(
           onChanged: (x) => setState(() {
-                _parse(x);
+                _parse(x.replaceAll(RegExp(r'(?<=\w),(?= )'), ''));
               })),
-      Text(text),
       if (value != null)
         FittedBox(
             child: RepresentationView(Representation(

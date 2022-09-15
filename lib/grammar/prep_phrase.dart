@@ -20,9 +20,9 @@ class PrepPhrase implements ContextPhrase {
       ComplexRepresentation(baseRepresentations: [
         Representation.wrap(
             baseRepresentation: prep.toRepresentation(),
-            description: 'preposition'),
+            description: const Description('preposition')),
         Representation.wrap(
             baseRepresentation: object.toRepresentation(),
-            description: 'prepositional object')
-      ], description: 'prepositional phrase');
+            description: const Description('prepositional object'))
+      ], description: const Description('prepositional phrase'));
 }

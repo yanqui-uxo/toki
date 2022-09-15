@@ -1,10 +1,7 @@
-import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
 import 'clause.dart';
 import 'context_phrase.dart';
 import 'sentence.dart';
-
-// TODO: separate punctuation from content
 
 class PunctuatedSentence extends Sentence {
   final String? punctuation;

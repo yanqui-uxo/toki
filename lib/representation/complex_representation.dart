@@ -8,15 +8,11 @@ class ComplexRepresentation implements Representation {
   final String? punctuation;
 
   @override
+  final Description? description;
+
+  @override
   Never get text =>
-      throw UnsupportedError('Cannot get text from CombinedRepresentation');
-
-  @override
-  Never get color =>
-      throw UnsupportedError('Cannot get color from CombinedRepresentation');
-
-  @override
-  final String? description;
+      throw UnsupportedError('Cannot get text from ComplexRepresentation');
 
   const ComplexRepresentation(
       {required this.baseRepresentations, this.punctuation, this.description});
@@ -29,11 +25,12 @@ class ComplexRepresentation implements Representation {
           description: description);
 
   @override
-  ComplexRepresentation withDescription(String description) =>
+  ComplexRepresentation withDescription(Description description) =>
       ComplexRepresentation(
-          baseRepresentations: baseRepresentations,
-          punctuation: punctuation,
-          description: description);
+        baseRepresentations: baseRepresentations,
+        punctuation: punctuation,
+        description: description,
+      );
 
   @override
   String toString() =>

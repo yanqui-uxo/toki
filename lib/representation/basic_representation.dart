@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart' show Color, Colors;
 import 'represent.dart';
 
 class BasicRepresentation implements Representation {
@@ -12,41 +11,27 @@ class BasicRepresentation implements Representation {
   final String? punctuation;
 
   @override
-  final String? description;
-
-  @override
-  final Color color;
+  final Description? description;
 
   const BasicRepresentation(
-      {required this.text,
-      this.punctuation,
-      this.description,
-      this.color = Colors.black});
+      {required this.text, this.punctuation, this.description});
 
   BasicRepresentation.fromRep(
-      {required BasicRepresentation rep, String? description, Color? color})
+      {required BasicRepresentation rep, Description? description})
       : text = rep.text,
         punctuation = rep.punctuation,
-        description = description ?? rep.description,
-        color = color ?? rep.color;
+        description = description ?? rep.description;
 
   @override
   BasicRepresentation withPunctuation(String punctuation) =>
       BasicRepresentation(
-          text: text,
-          punctuation: punctuation,
-          description: description,
-          color: color);
+          text: text, punctuation: punctuation, description: description);
 
   @override
-  BasicRepresentation withDescription(String description) =>
+  BasicRepresentation withDescription(Description description) =>
       BasicRepresentation(
-          text: text,
-          punctuation: punctuation,
-          description: description,
-          color: color);
+          text: text, punctuation: punctuation, description: description);
 
   @override
-  String toString() =>
-      '$description(text: $text, punctuation: $punctuation, color: $color)';
+  String toString() => '$description(text: $text, punctuation: $punctuation)';
 }

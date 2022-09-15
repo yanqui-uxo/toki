@@ -32,19 +32,20 @@ class Predicate implements Representable {
     if (preverbs.isNotEmpty) {
       reps.add(Representation(
           baseRepresentations: preverbs.toRepresentationList(),
-          description: 'preverbs'));
+          description: const Description('preverbs')));
     }
 
     if (verb != null) {
       reps.add(Representation.wrap(
-          baseRepresentation: verb!.toRepresentation(), description: 'verb'));
+          baseRepresentation: verb!.toRepresentation(),
+          description: const Description('verb')));
     }
 
     if (objects.isNotEmpty) {
       List<Representation> baseRepresentations = objects
           .toRepresentationList()
-          .map((x) =>
-              Representation.wrap(baseRepresentation: x, description: 'object'))
+          .map((x) => Representation.wrap(
+              baseRepresentation: x, description: const Description('object')))
           .intersperseOuter(const ParticleRepresentation('e'))
           .toList();
       baseRepresentations.removeLast();
@@ -57,6 +58,7 @@ class Predicate implements Representable {
           baseRepresentations: prepPhrases.toRepresentationList()));
     }
 
-    return Representation(baseRepresentations: reps, description: 'predicate');
+    return Representation(
+        baseRepresentations: reps, description: const Description('predicate'));
   }
 }

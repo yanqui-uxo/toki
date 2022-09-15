@@ -20,7 +20,8 @@ class Sentence implements Representable {
     List<Representation> contextRepresentations = contextPhrases
         .toRepresentationList()
         .map((x) => Representation.wrap(
-            baseRepresentation: x, description: 'context phrase'))
+            baseRepresentation: x,
+            description: const Description('context phrase')))
         .intersperseOuter(const ParticleRepresentation('la'))
         .toList();
     if (contextRepresentations.isNotEmpty) {

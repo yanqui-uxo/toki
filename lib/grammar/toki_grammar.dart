@@ -36,7 +36,6 @@ extension CaseCheck on String {
       this[0].isUpper && (length == 1 || substring(1).isLower);
 }
 
-// TODO: support commas
 class TokiGrammar extends GrammarDefinition {
   @override
   Parser start() => ref0(sentences).end();
@@ -178,7 +177,7 @@ class TokiGrammar extends GrammarDefinition {
   // guarantees that prep phrases are not infringed upon
   Parser<void> contentLimit() => Or([
         char(' ') & ref0(prepPhrase),
-        char(' ') & contentWord.not(),
+        char(' ') & contentWord.not() & ref0(name).not(),
         sepPunctuation,
         endOfInput()
       ]);
@@ -202,7 +201,7 @@ class TokiGrammar extends GrammarDefinition {
   Parser<List<Word>> predicatePreverbs() =>
       ref0(preverb).skip(after: char(' ') & contentWord.and()).star();
 
-  Parser<Predicate> predicate(PredicateType type) => Or([
+  Parser<Predicate> predicate() => Or([
         Seq([
           ref0(predicatePreverbs),
           // ignore: prefer_void_to_null
@@ -234,8 +233,7 @@ class TokiGrammar extends GrammarDefinition {
     return Seq([
       string('taso ').optional(),
       ref1(prePredicate, type).skip(after: char(' ')),
-      ref1(predicate, type)
-          .interleavedRepeat(char(' ') & string(marker) & char(' ')),
+      ref0(predicate).interleavedRepeat(char(' ') & string(marker) & char(' ')),
     ]).map((x) => Clause(
         type: type,
         tasoAtStart: x[0] != null,

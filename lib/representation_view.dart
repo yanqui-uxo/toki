@@ -3,6 +3,19 @@ import 'package:intersperse/intersperse.dart';
 
 import 'representation/represent.dart';
 
+class _Highlighter extends StatelessWidget {
+  final Color color;
+
+  const _Highlighter([this.color = Colors.black]);
+
+  @override
+  Widget build(BuildContext build) {
+    final side = BorderSide(color: color, width: 3);
+    final border = Border(left: side, right: side, bottom: side);
+    return Container(height: 10, decoration: BoxDecoration(border: border));
+  }
+}
+
 class RepresentationView extends StatelessWidget {
   final Representation representation;
 
@@ -13,19 +26,26 @@ class RepresentationView extends StatelessWidget {
   Widget build(BuildContext context) {
     const double fontSize = 50;
 
+    final Color color = representation.description?.color ?? Colors.black;
+
     if (representation.baseRepresentations.isEmpty) {
-      final textStyle =
-          TextStyle(color: representation.color, fontSize: fontSize);
-      final descriptionStyle = TextStyle(color: representation.color);
+      final textStyle = TextStyle(color: color, fontSize: fontSize);
+      final descriptionStyle = TextStyle(color: color);
 
       Widget ret;
 
       if (representation.description != null) {
         ret = IntrinsicWidth(
-            child: Column(children: [
-          Text(representation.text, style: textStyle, key: key),
-          Text(representation.description!, style: descriptionStyle)
-        ]));
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+              Center(
+                  child: Text(representation.text, style: textStyle, key: key)),
+              _Highlighter(representation.description!.color),
+              Center(
+                  child: Text(representation.description!.text,
+                      style: descriptionStyle))
+            ]));
       } else {
         ret = Text(representation.text, style: textStyle);
       }
@@ -58,7 +78,12 @@ class RepresentationView extends StatelessWidget {
       if (representation.description != null) {
         return IntrinsicWidth(
             child: Column(
-                children: [recursedRow, Text(representation.description!)]));
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+              Center(child: recursedRow),
+              _Highlighter(color),
+              Center(child: Text(representation.description!.text))
+            ]));
       } else {
         return recursedRow;
       }

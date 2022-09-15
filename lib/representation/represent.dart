@@ -1,21 +1,32 @@
-import 'package:flutter/material.dart' show Color;
+import 'package:flutter/material.dart' show Color, Colors;
 
 import 'complex_representation.dart';
+
+class Description {
+  final String text;
+  final Color color;
+
+  const Description(this.text, [this.color = Colors.black]);
+
+  @override
+  String toString() {
+    return 'Description(text: $text, color: $color)';
+  }
+}
 
 abstract class Representation {
   List<Representation> get baseRepresentations;
   String get text;
   String? get punctuation;
-  String? get description;
-  Color get color;
+  Description? get description;
 
   Representation withPunctuation(String punctuation);
-  Representation withDescription(String description);
+  Representation withDescription(Description description);
 
   factory Representation(
       {required List<Representation> baseRepresentations,
       String? punctuation,
-      String? description}) {
+      Description? description}) {
     if (baseRepresentations.length == 1) {
       Representation rep = baseRepresentations[0];
 
@@ -43,7 +54,7 @@ abstract class Representation {
 
   factory Representation.wrap(
       {required Representation baseRepresentation,
-      required String description}) {
+      required Description description}) {
     if (baseRepresentation.description == null) {
       return baseRepresentation.withDescription(description);
     } else {

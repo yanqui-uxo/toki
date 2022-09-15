@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show Colors;
 import 'package:intersperse/intersperse.dart';
 
 import '../representation/particle_representation.dart';
@@ -16,7 +17,8 @@ class Subjects implements Representable {
       baseRepresentations: subjects
           .toRepresentationList()
           .map((x) => Representation.wrap(
-              baseRepresentation: x, description: 'subject'))
+              baseRepresentation: x,
+              description: const Description('subject', Colors.blue)))
           .intersperse(const ParticleRepresentation('en'))
           .toList());
 

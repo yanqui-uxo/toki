@@ -14,8 +14,8 @@ class ContentPhraseChoice implements ContextPhrase {
     List<Representation> choiceRepresentations = choices.toRepresentationList();
     if (choiceRepresentations.length > 1) {
       choiceRepresentations = choiceRepresentations
-          .map((x) =>
-              Representation.wrap(baseRepresentation: x, description: 'choice'))
+          .map((x) => Representation.wrap(
+              baseRepresentation: x, description: const Description('choice')))
           .intersperse(const ParticleRepresentation('anu'))
           .toList();
     }
