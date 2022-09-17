@@ -10,7 +10,7 @@ class Subjects implements Representable {
 
   final bool isLoneMiSina;
 
-  const Subjects(this.subjects, [this.isLoneMiSina = false]);
+  const Subjects(this.subjects, {this.isLoneMiSina = false});
 
   @override
   Representation toRepresentation() => Representation(

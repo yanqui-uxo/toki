@@ -1,10 +1,10 @@
 import 'package:petitparser/petitparser.dart';
 
+import '../nimi.dart';
 import 'clause.dart';
 import 'content_phrase.dart';
 import 'content_phrase_choice.dart';
 import 'context_phrase.dart';
-import 'nimi.dart';
 import 'predicate.dart';
 import 'prep_phrase.dart';
 import 'punctuated_sentence.dart';
@@ -66,7 +66,9 @@ class TokiGrammar extends GrammarDefinition {
     Parser<String> syllable() => Seq([
           ref0(consonant).optional(),
           ref0(vowel).skip(after: ref0(vowel).not()),
-          char('n').skip(after: pattern('mn').not()).optional()
+          char('n')
+              .skip(before: char('m').not(), after: pattern('mn').not())
+              .optional()
         ]).flatten().where((x) => !forbidden.contains(x.toLowerCase()));
 
     Parser<String> capSyllable() =>
@@ -142,7 +144,7 @@ class TokiGrammar extends GrammarDefinition {
                   [x]
                 ])
               ]),
-            ], true));
+            ], isLoneMiSina: true));
 
     Parser<void> miSinaLi() =>
         Or([string('mi'), string('sina')]) & (string(' li '));
