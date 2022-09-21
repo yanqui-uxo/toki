@@ -66,9 +66,7 @@ class TokiGrammar extends GrammarDefinition {
     Parser<String> syllable() => Seq([
           ref0(consonant).optional(),
           ref0(vowel).skip(after: ref0(vowel).not()),
-          char('n')
-              .skip(before: char('m').not(), after: pattern('mn').not())
-              .optional()
+          char('n').skip(after: pattern('mn').not()).optional()
         ]).flatten().where((x) => !forbidden.contains(x.toLowerCase()));
 
     Parser<String> capSyllable() =>
