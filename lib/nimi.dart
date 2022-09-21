@@ -14,14 +14,19 @@ const Set<String> preverbs = {
   'wile',
 };
 
+// of course you have green comments
+// and pronouns
 const Map<String, Set<Pronoun>> pronouns = {
-  'mi': {Pronoun('I', 'me', 'my')},
-  'sina': {Pronoun('you', 'you', 'your')},
+  'mi': {
+    Pronoun('I', 'me', 'my', Plurality.singular),
+    Pronoun('we', 'us', 'our', Plurality.plural)
+  },
+  'sina': {Pronoun('you', 'you', 'your', Plurality.either)},
   'ona': {
-    Pronoun('it', 'it', 'its'),
-    Pronoun('he', 'him', 'his'),
-    Pronoun('she', 'her', 'her'),
-    Pronoun('they', 'them', 'their')
+    Pronoun('it', 'it', 'its', Plurality.singular),
+    Pronoun('he', 'him', 'his', Plurality.singular),
+    Pronoun('she', 'her', 'her', Plurality.singular),
+    Pronoun('they', 'them', 'their', Plurality.either)
   }
 };
 
