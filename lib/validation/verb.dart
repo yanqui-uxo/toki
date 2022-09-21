@@ -22,8 +22,15 @@ class Verb {
     return Noun('${_clipE(infinitive)}ing');
   }
 
-  const Verb(this.infinitive,
-      {this.endAddition,
-      this.transitivity = Transitivity.either,
-      this.transitiveAttachment});
+  const Verb.transitive(this.infinitive,
+      {this.endAddition, this.transitiveAttachment})
+      : transitivity = Transitivity.transitive;
+
+  const Verb.intransitive(this.infinitive, {this.endAddition})
+      : transitiveAttachment = null,
+        transitivity = Transitivity.intransitive;
+
+  const Verb.either(this.infinitive,
+      {this.endAddition, this.transitiveAttachment})
+      : transitivity = Transitivity.either;
 }
