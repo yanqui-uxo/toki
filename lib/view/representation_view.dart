@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intersperse/intersperse.dart';
 
-import 'representation/represent.dart';
+import '../representation/represent.dart';
 
 class _Highlighter extends StatelessWidget {
   final Color color;

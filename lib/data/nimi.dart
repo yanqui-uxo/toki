@@ -1,10 +1,10 @@
 import 'package:petitparser/petitparser.dart';
 
-import 'validation/adjective.dart';
-import 'validation/noun.dart';
-import 'validation/pronoun.dart';
-import 'validation/verb.dart';
-import 'validation/word_definitions.dart';
+import '../english/adjective.dart';
+import '../english/noun.dart';
+import '../english/pronoun.dart';
+import '../english/verb.dart';
+import '../english/word_definitions.dart';
 
 const Map<String, WordDefinitions> definedWords = {
   'akesi': WordDefinitions(
@@ -601,21 +601,32 @@ const Map<String, Set<Pronoun>> pronouns = {
   }
 };
 
-const Set<String> prepositions = {'kepeken', 'lon', 'sama', 'tan', 'tawa'};
-const Set<String> preverbs = {
-  'alasa',
-  'awen',
-  'kama',
-  'ken',
-  'lukin',
-  'sona',
-  'wile',
+const Map<String, Set<String>> prepositions = {
+  'kepeken': {'using'},
+  'lon': {'in', 'at'},
+  'sama': {'similar to', 'same as'},
+  'tan': {'from', 'because of'},
+  'tawa': {'for', 'to'}
 };
+
+const Map<String, Set<String>> preverbs = {
+  'alasa': {'try'},
+  'awen': {'continue'},
+  'kama': {'start', 'become'},
+  'ken': {'can'},
+  'lukin': {'try'},
+  'sona': {'know how'},
+  'wile': {'want'},
+};
+
+extension KeySet<K> on Map<K, void> {
+  Set<K> keySet() => keys.toSet();
+}
 
 // ala is a funny word and ought to be handled specially
 // TODO: handle ala
 final Set<String> contentWords =
-    definedWords.keys.toSet().union(pronouns.keys.toSet()).union({'ala'});
+    definedWords.keySet().union(pronouns.keySet()).union({'ala'});
 
 Parser<String> _createWordParser() {
   var sorted = List<String>.from(contentWords);

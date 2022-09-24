@@ -1,6 +1,7 @@
 import 'package:petitparser/petitparser.dart';
 
-import '../nimi.dart';
+import '../data/nimi.dart';
+import '../utility/utility.dart';
 import 'clause.dart';
 import 'content_phrase.dart';
 import 'content_phrase_choice.dart';
@@ -25,15 +26,6 @@ extension InterleavedRepeat<T> on Parser<T> {
           [int minRepeats = 0, int maxRepeats = unbounded]) =>
       Seq([listWrap(), skip(before: p).repeat(minRepeats, maxRepeats)])
           .map((x) => x[0] + x[1]);
-}
-
-extension CaseCheck on String {
-  bool get isUpper => this == toUpperCase();
-  bool get isLower => this == toLowerCase();
-
-  // fails on empty strings
-  bool get isCapitalized =>
-      this[0].isUpper && (length == 1 || substring(1).isLower);
 }
 
 class TokiGrammar extends GrammarDefinition {
@@ -164,8 +156,9 @@ class TokiGrammar extends GrammarDefinition {
     }
   }
 
-  Parser<Word> preposition() => ref1(aWord, Or(prepositions.map(string)));
-  Parser<Word> preverb() => ref1(aWord, Or(preverbs.map(string)));
+  Parser<Word> preposition() =>
+      ref1(aWord, Or(prepositions.keySet().map(string)));
+  Parser<Word> preverb() => ref1(aWord, Or(preverbs.keySet().map(string)));
 
   // separates sentences
   static final Parser<String> sepPunctuation = pattern('.:;!?');

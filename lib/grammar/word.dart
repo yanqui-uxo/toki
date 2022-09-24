@@ -10,14 +10,6 @@ class Word implements Representable {
   const Word(this.word, {this.aAttached = false, this.isName = false});
 
   @override
-  String toString() {
-    var ret = word;
-    if (aAttached) ret += '+a';
-    if (isName) ret += ' (name)';
-    return ret;
-  }
-
-  @override
   Representation toRepresentation() {
     BasicRepresentation rep;
     if (isName) {
@@ -36,5 +28,13 @@ class Word implements Representable {
     } else {
       return rep;
     }
+  }
+
+  @override
+  String toString() {
+    var ret = word;
+    if (aAttached) ret += '+a';
+    if (isName) ret += ' (name)';
+    return ret;
   }
 }

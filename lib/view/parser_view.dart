@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petitparser/petitparser.dart';
 
-import 'representation/represent.dart';
+import '../representation/represent.dart';
 import 'representation_view.dart';
 
 class ParserView extends StatefulWidget {
