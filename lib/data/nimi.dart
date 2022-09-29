@@ -6,7 +6,7 @@ import '../english/pronoun.dart';
 import '../english/verb.dart';
 import '../english/word_definitions.dart';
 
-const Map<String, WordDefinitions> definedWords = {
+const Map<String, WordDefinitions> regularContentWords = {
   'akesi': WordDefinitions(
       rootNouns: {Noun('lizard'), Noun('reptile')},
       verbs: {},
@@ -588,17 +588,9 @@ const Map<String, WordDefinitions> definedWords = {
 // of course you have green comments
 // and pronouns
 const Map<String, Set<Pronoun>> pronouns = {
-  'mi': {
-    Pronoun('I', 'me', 'my', Plurality.singular),
-    Pronoun('we', 'us', 'our', Plurality.plural)
-  },
-  'sina': {Pronoun('you', 'you', 'your', Plurality.either)},
-  'ona': {
-    Pronoun('it', 'it', 'its', Plurality.singular),
-    Pronoun('he', 'him', 'his', Plurality.singular),
-    Pronoun('she', 'her', 'her', Plurality.singular),
-    Pronoun('they', 'them', 'their', Plurality.either)
-  }
+  'mi': {Pronoun.i, Pronoun.we},
+  'sina': {Pronoun.you},
+  'ona': {Pronoun.it, Pronoun.he, Pronoun.she, Pronoun.they}
 };
 
 const Map<String, Set<String>> prepositions = {
@@ -626,7 +618,7 @@ extension KeySet<K> on Map<K, void> {
 // ala is a funny word and ought to be handled specially
 // TODO: handle ala
 final Set<String> contentWords =
-    definedWords.keySet().union(pronouns.keySet()).union({'ala'});
+    regularContentWords.keySet().union(pronouns.keySet()).union({'ala'});
 
 Parser<String> _createWordParser() {
   var sorted = List<String>.from(contentWords);
