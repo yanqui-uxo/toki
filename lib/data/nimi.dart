@@ -6,7 +6,7 @@ import '../english/regular_noun.dart';
 import '../english/verb.dart';
 import '../english/word_definitions.dart';
 
-const Map<String, WordDefinitions> regularContentWords = {
+const Map<String, WordDefinitions> contentWords = {
   'akesi': WordDefinitions(
       rootNouns: {RegularNoun.plural('lizard'), RegularNoun.plural('reptile')},
       verbs: {},
@@ -723,14 +723,10 @@ extension KeySet<K> on Map<K, void> {
   Set<K> keySet() => keys.toSet();
 }
 
-final Set<String> contentWords = regularContentWords.keySet();
-
 Parser<String> _createWordParser() {
-  var sorted = List<String>.from(contentWords);
+  var sorted = List<String>.from(contentWords.keySet());
   sorted.sort((a, b) => b.length.compareTo(a.length));
   return sorted.map(string).toChoiceParser();
 }
 
 final Parser<String> contentWord = _createWordParser();
-
-//final Parser<String> contentWord = contentWords.map(string).toChoiceParser();
