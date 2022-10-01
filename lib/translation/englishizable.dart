@@ -1,5 +1,5 @@
-import 'phrase_choices.dart';
+import 'string_choices.dart';
 
 abstract class Englishizable {
-  PhraseChoices englishChoices();
+  StringChoices englishChoices();
 }

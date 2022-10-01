@@ -1,40 +1,50 @@
 import 'package:petitparser/petitparser.dart';
 
 import '../english/adjective.dart';
-import '../english/noun.dart';
 import '../english/pronoun.dart';
+import '../english/regular_noun.dart';
 import '../english/verb.dart';
 import '../english/word_definitions.dart';
 
 const Map<String, WordDefinitions> regularContentWords = {
   'akesi': WordDefinitions(
-      rootNouns: {Noun('lizard'), Noun('reptile')},
+      rootNouns: {RegularNoun.plural('lizard'), RegularNoun.plural('reptile')},
       verbs: {},
       adjectives: {Adjective('lizardlike'), Adjective('reptilian')}),
+  'ala': WordDefinitions(
+      rootNouns: {RegularNoun.nonPlural('nothing')},
+      verbs: {Verb.either('nullify')},
+      adjectives: {Adjective('not')}),
   'alasa': WordDefinitions(rootNouns: {
-    Noun('hunt'),
-    Noun('search')
+    RegularNoun.plural('hunt'),
+    RegularNoun.plural('search')
   }, verbs: {
     Verb.either('hunt'),
     Verb.either('search'),
     Verb.either('forage')
   }, adjectives: {}),
   'ale': WordDefinitions(
-      rootNouns: {Noun('everything')},
+      rootNouns: {RegularNoun.plural('everything')},
       verbs: {},
       adjectives: {Adjective('complete'), Adjective('all')}),
-  'anpa': WordDefinitions(
-      rootNouns: {Noun('defeat'), Noun('underneath')},
-      verbs: {Verb.either('defeat'), Verb.either('lower')},
-      adjectives: {Adjective('low'), Adjective('defeated')}),
+  'anpa': WordDefinitions(rootNouns: {
+    RegularNoun.plural('defeat'),
+    RegularNoun.plural('underneath')
+  }, verbs: {
+    Verb.either('defeat'),
+    Verb.either('lower')
+  }, adjectives: {
+    Adjective('low'),
+    Adjective('defeated')
+  }),
   'ante': WordDefinitions(
-      rootNouns: {Noun('difference')},
+      rootNouns: {RegularNoun.plural('difference')},
       verbs: {Verb.either('differentiate')},
       adjectives: {Adjective('different')}),
   'awen': WordDefinitions(rootNouns: {
-    Noun('protection'),
-    Noun('maintenance'),
-    Noun('security')
+    RegularNoun.plural('protection'),
+    RegularNoun.plural('maintenance'),
+    RegularNoun.plural('security')
   }, verbs: {
     Verb.either('protect'),
     Verb.either('secure'),
@@ -44,20 +54,24 @@ const Map<String, WordDefinitions> regularContentWords = {
     Adjective('secured'),
     Adjective('maintained')
   }),
-  'esun': WordDefinitions(
-      rootNouns: {Noun('exchange'), Noun('purchase')},
-      verbs: {Verb.either('buy'), Verb.either('sell'), Verb.either('exchange')},
-      adjectives: {}),
+  'esun': WordDefinitions(rootNouns: {
+    RegularNoun.plural('exchange'),
+    RegularNoun.plural('purchase')
+  }, verbs: {
+    Verb.either('buy'),
+    Verb.either('sell'),
+    Verb.either('exchange')
+  }, adjectives: {}),
   'ijo': WordDefinitions(rootNouns: {
-    Noun('something', hasPlural: false),
-    Noun('thing', hasPlural: false),
-    Noun('object')
+    RegularNoun.nonPlural('something'),
+    RegularNoun.nonPlural('thing'),
+    RegularNoun.plural('object')
   }, verbs: {}, adjectives: {}),
   'ike': WordDefinitions(rootNouns: {
-    Noun('evil'),
-    Noun('evilness'),
-    Noun('badness'),
-    Noun('complexity')
+    RegularNoun.plural('evil'),
+    RegularNoun.plural('evilness'),
+    RegularNoun.plural('badness'),
+    RegularNoun.plural('complexity')
   }, verbs: {
     Verb.either('worsen'),
     Verb.either('complicate')
@@ -66,20 +80,21 @@ const Map<String, WordDefinitions> regularContentWords = {
     Adjective('evil'),
     Adjective('complex')
   }),
-  'ilo': WordDefinitions(rootNouns: {Noun('tool')}, verbs: {}, adjectives: {}),
+  'ilo': WordDefinitions(
+      rootNouns: {RegularNoun.plural('tool')}, verbs: {}, adjectives: {}),
   'insa': WordDefinitions(rootNouns: {
-    Noun('inside'),
-    Noun('internal organ'),
-    Noun('innards', hasPlural: false)
+    RegularNoun.plural('inside'),
+    RegularNoun.plural('internal organ'),
+    RegularNoun.nonPlural('innards')
   }, verbs: {}, adjectives: {
     Adjective('inner')
   }),
   'jaki': WordDefinitions(rootNouns: {
-    Noun('dirt'),
-    Noun('poop'),
-    Noun('disease'),
-    Noun('dirtiness'),
-    Noun('grossness')
+    RegularNoun.plural('dirt'),
+    RegularNoun.plural('poop'),
+    RegularNoun.plural('disease'),
+    RegularNoun.plural('dirtiness'),
+    RegularNoun.plural('grossness')
   }, verbs: {
     Verb.either('dirty')
   }, adjectives: {
@@ -87,12 +102,14 @@ const Map<String, WordDefinitions> regularContentWords = {
     Adjective('gross'),
     Adjective('diseased')
   }),
-  'jan': WordDefinitions(
-      rootNouns: {Noun('person'), Noun('sentient being')},
-      verbs: {},
-      adjectives: {Adjective('sapient')}),
+  'jan': WordDefinitions(rootNouns: {
+    RegularNoun.plural('person'),
+    RegularNoun.plural('sentient being')
+  }, verbs: {}, adjectives: {
+    Adjective('sapient')
+  }),
   'jelo': WordDefinitions(
-      rootNouns: {Noun('yellow')},
+      rootNouns: {RegularNoun.plural('yellow')},
       verbs: {},
       adjectives: {Adjective('yellow')}),
   'jo': WordDefinitions(rootNouns: {}, verbs: {
@@ -100,13 +117,15 @@ const Map<String, WordDefinitions> regularContentWords = {
     Verb.either('contain'),
     Verb.either('hold')
   }, adjectives: {}),
-  'kala': WordDefinitions(
-      rootNouns: {Noun('fish'), Noun('aquatic animal')},
-      verbs: {},
-      adjectives: {Adjective('aquatic')}),
+  'kala': WordDefinitions(rootNouns: {
+    RegularNoun.plural('fish'),
+    RegularNoun.plural('aquatic animal')
+  }, verbs: {}, adjectives: {
+    Adjective('aquatic')
+  }),
   'kalama': WordDefinitions(rootNouns: {
-    Noun('noise'),
-    Noun('sound')
+    RegularNoun.plural('noise'),
+    RegularNoun.plural('sound')
   }, verbs: {
     Verb.intransitive('make', endAddition: 'noise'),
     Verb.either('yell'),
@@ -117,35 +136,42 @@ const Map<String, WordDefinitions> regularContentWords = {
       rootNouns: {},
       verbs: {Verb.either('come'), Verb.either('arrive')},
       adjectives: {Adjective('future')}),
-  'kasi':
-      WordDefinitions(rootNouns: {Noun('plant')}, verbs: {}, adjectives: {}),
-  'ken': WordDefinitions(
-      rootNouns: {Noun('ability'), Noun('possibility')},
-      verbs: {},
-      adjectives: {Adjective('possible')}),
-  'kepeken':
-      WordDefinitions(rootNouns: {Noun('usage')}, verbs: {}, adjectives: {}),
+  'kasi': WordDefinitions(
+      rootNouns: {RegularNoun.plural('plant')}, verbs: {}, adjectives: {}),
+  'ken': WordDefinitions(rootNouns: {
+    RegularNoun.plural('ability'),
+    RegularNoun.plural('possibility')
+  }, verbs: {}, adjectives: {
+    Adjective('possible')
+  }),
+  'kepeken': WordDefinitions(
+      rootNouns: {RegularNoun.plural('usage')}, verbs: {}, adjectives: {}),
   'kili': WordDefinitions(
-      rootNouns: {Noun('fruit'), Noun('vegetable')},
+      rootNouns: {RegularNoun.plural('fruit'), RegularNoun.plural('vegetable')},
       verbs: {},
       adjectives: {Adjective('fruity')}),
-  'kiwen': WordDefinitions(
-      rootNouns: {Noun('rock'), Noun('hard object')},
-      verbs: {},
-      adjectives: {Adjective('hard'), Adjective('stiff')}),
-  'ko': WordDefinitions(
-      rootNouns: {Noun('clay'), Noun('dough'), Noun('paste'), Noun('powder')},
-      verbs: {},
-      adjectives: {}),
+  'kiwen': WordDefinitions(rootNouns: {
+    RegularNoun.plural('rock'),
+    RegularNoun.plural('hard object')
+  }, verbs: {}, adjectives: {
+    Adjective('hard'),
+    Adjective('stiff')
+  }),
+  'ko': WordDefinitions(rootNouns: {
+    RegularNoun.plural('clay'),
+    RegularNoun.plural('dough'),
+    RegularNoun.plural('paste'),
+    RegularNoun.plural('powder')
+  }, verbs: {}, adjectives: {}),
   'kon': WordDefinitions(rootNouns: {
-    Noun('air', hasPlural: false),
-    Noun('unseen agent'),
-    Noun('hidden reality'),
-    Noun('spirit'),
-    Noun('soul')
+    RegularNoun.nonPlural('air'),
+    RegularNoun.plural('unseen agent'),
+    RegularNoun.plural('hidden reality'),
+    RegularNoun.plural('spirit'),
+    RegularNoun.plural('soul')
   }, verbs: {}, adjectives: {}),
   'kule': WordDefinitions(rootNouns: {
-    Noun('color')
+    RegularNoun.plural('color')
   }, verbs: {
     Verb.either('color')
   }, adjectives: {
@@ -153,44 +179,47 @@ const Map<String, WordDefinitions> regularContentWords = {
     Adjective('gay'),
     Adjective('LGBTQ')
   }),
-  'kulupu': WordDefinitions(
-      rootNouns: {Noun('group'), Noun('community'), Noun('tribe')},
-      verbs: {},
-      adjectives: {Adjective('communal')}),
+  'kulupu': WordDefinitions(rootNouns: {
+    RegularNoun.plural('group'),
+    RegularNoun.plural('community'),
+    RegularNoun.plural('tribe')
+  }, verbs: {}, adjectives: {
+    Adjective('communal')
+  }),
   'kute': WordDefinitions(
-      rootNouns: {Noun('ear')},
+      rootNouns: {RegularNoun.plural('ear')},
       verbs: {Verb.either('hear'), Verb.either('listen'), Verb.either('obey')},
       adjectives: {}),
   'lape': WordDefinitions(
-      rootNouns: {Noun('rest'), Noun('sleep')},
+      rootNouns: {RegularNoun.plural('rest'), RegularNoun.plural('sleep')},
       verbs: {Verb.intransitive('rest'), Verb.intransitive('sleep')},
       adjectives: {}),
   'laso': WordDefinitions(
-      rootNouns: {Noun('blue'), Noun('green')},
+      rootNouns: {RegularNoun.plural('blue'), RegularNoun.plural('green')},
       verbs: {},
       adjectives: {Adjective('blue'), Adjective('green')}),
   'lawa': WordDefinitions(rootNouns: {
-    Noun('mind'),
-    Noun('brain'),
-    Noun('ruler'),
-    Noun('leader'),
-    Noun('government'),
-    Noun('authority')
+    RegularNoun.plural('mind'),
+    RegularNoun.plural('brain'),
+    RegularNoun.plural('ruler'),
+    RegularNoun.plural('leader'),
+    RegularNoun.plural('government'),
+    RegularNoun.plural('authority')
   }, verbs: {
     Verb.either('control'),
     Verb.either('rule')
   }, adjectives: {}),
   'len': WordDefinitions(rootNouns: {
-    Noun('clothing', hasPlural: false),
-    Noun('fabric', hasPlural: false),
-    Noun('privacy layer')
+    RegularNoun.nonPlural('clothing'),
+    RegularNoun.nonPlural('fabric'),
+    RegularNoun.plural('privacy layer')
   }, verbs: {
     Verb.either('cover'),
     Verb.either('clothe'),
     Verb.either('hide')
   }, adjectives: {}),
   'lete': WordDefinitions(
-      rootNouns: {Noun('cold')},
+      rootNouns: {RegularNoun.plural('cold')},
       verbs: {Verb.either('cool')},
       adjectives: {Adjective('cold'), Adjective('raw')}),
   'lili': WordDefinitions(rootNouns: {}, verbs: {
@@ -201,52 +230,56 @@ const Map<String, WordDefinitions> regularContentWords = {
     Adjective('little')
   }),
   'linja': WordDefinitions(
-      rootNouns: {Noun('line'), Noun('string')},
+      rootNouns: {RegularNoun.plural('line'), RegularNoun.plural('string')},
       verbs: {},
       adjectives: {Adjective('stringy'), Adjective('thin')}),
   'lipu': WordDefinitions(rootNouns: {
-    Noun('document'),
-    Noun('paper'),
-    Noun('flat bendable object')
+    RegularNoun.plural('document'),
+    RegularNoun.plural('paper'),
+    RegularNoun.plural('flat bendable object')
   }, verbs: {
     Verb.either('flatten')
   }, adjectives: {
     Adjective('flat')
   }),
   'loje': WordDefinitions(
-      rootNouns: {Noun('red')},
+      rootNouns: {RegularNoun.plural('red')},
       verbs: {Verb.either('redden')},
       adjectives: {Adjective('red')}),
   'lon': WordDefinitions(
-      rootNouns: {Noun('truth'), Noun('existence')},
+      rootNouns: {RegularNoun.plural('truth'), RegularNoun.plural('existence')},
       verbs: {Verb.either('summon')},
       adjectives: {Adjective('true'), Adjective('existent')}),
-  'luka': WordDefinitions(
-      rootNouns: {Noun('arm'), Noun('hand'), Noun('finger')},
-      verbs: {},
-      adjectives: {}),
+  'luka': WordDefinitions(rootNouns: {
+    RegularNoun.plural('arm'),
+    RegularNoun.plural('hand'),
+    RegularNoun.plural('finger')
+  }, verbs: {}, adjectives: {}),
   'lukin': WordDefinitions(rootNouns: {
-    Noun('eye')
+    RegularNoun.plural('eye')
   }, verbs: {
     Verb.either('look'),
     Verb.either('see'),
     Verb.either('view'),
     Verb.either('read')
   }, adjectives: {}),
-  'lupa': WordDefinitions(
-      rootNouns: {Noun('hole'), Noun('window'), Noun('door')},
-      verbs: {},
-      adjectives: {}),
-  'ma': WordDefinitions(
-      rootNouns: {Noun('land'), Noun('soil'), Noun('country'), Noun('place')},
-      verbs: {},
-      adjectives: {}),
+  'lupa': WordDefinitions(rootNouns: {
+    RegularNoun.plural('hole'),
+    RegularNoun.plural('window'),
+    RegularNoun.plural('door')
+  }, verbs: {}, adjectives: {}),
+  'ma': WordDefinitions(rootNouns: {
+    RegularNoun.plural('land'),
+    RegularNoun.plural('soil'),
+    RegularNoun.plural('country'),
+    RegularNoun.plural('place')
+  }, verbs: {}, adjectives: {}),
   'mama': WordDefinitions(rootNouns: {
-    Noun('parent'),
-    Noun('mother'),
-    Noun('father'),
-    Noun('creator'),
-    Noun('originator')
+    RegularNoun.plural('parent'),
+    RegularNoun.plural('mother'),
+    RegularNoun.plural('father'),
+    RegularNoun.plural('creator'),
+    RegularNoun.plural('originator')
   }, verbs: {
     Verb.either('create'),
     Verb.either('caretake'),
@@ -254,37 +287,52 @@ const Map<String, WordDefinitions> regularContentWords = {
     Verb.either('originate')
   }, adjectives: {}),
   'mani': WordDefinitions(rootNouns: {
-    Noun('money', hasPlural: false),
-    Noun('currency', hasPlural: false),
-    Noun('livestock', hasPlural: false)
+    RegularNoun.nonPlural('money'),
+    RegularNoun.nonPlural('currency'),
+    RegularNoun.nonPlural('livestock')
   }, verbs: {}, adjectives: {}),
-  'meli': WordDefinitions(
-      rootNouns: {Noun('woman'), Noun('female'), Noun('femininity')},
+  'meli': WordDefinitions(rootNouns: {
+    RegularNoun.plural('woman'),
+    RegularNoun.plural('female'),
+    RegularNoun.plural('femininity')
+  }, verbs: {}, adjectives: {
+    Adjective('female'),
+    Adjective('feminine')
+  }),
+  'mi': WordDefinitions(
+      rootNouns: {Pronoun('I', 'me', 'we', 'us')},
       verbs: {},
-      adjectives: {Adjective('female'), Adjective('feminine')}),
-  'mije': WordDefinitions(
-      rootNouns: {Noun('man'), Noun('male'), Noun('masculinity')},
-      verbs: {},
-      adjectives: {Adjective('male'), Adjective('masculine')}),
+      adjectives: {Adjective('my'), Adjective('our')}),
+  'mije': WordDefinitions(rootNouns: {
+    RegularNoun.plural('man'),
+    RegularNoun.plural('male'),
+    RegularNoun.plural('masculinity')
+  }, verbs: {}, adjectives: {
+    Adjective('male'),
+    Adjective('masculine')
+  }),
   'moku': WordDefinitions(
-      rootNouns: {Noun('food'), Noun('consumable')},
+      rootNouns: {RegularNoun.plural('food'), RegularNoun.plural('consumable')},
       verbs: {Verb.either('eat'), Verb.either('consume')},
       adjectives: {Adjective('consumable')}),
   'moli': WordDefinitions(
-      rootNouns: {Noun('death'), Noun('killing')},
+      rootNouns: {RegularNoun.plural('death'), RegularNoun.plural('killing')},
       verbs: {Verb.intransitive('die'), Verb.either('kill')},
       adjectives: {Adjective('dead')}),
-  'monsi': WordDefinitions(
-      rootNouns: {Noun('back'), Noun('behind'), Noun('butt')},
-      verbs: {},
-      adjectives: {Adjective('back')}),
+  'monsi': WordDefinitions(rootNouns: {
+    RegularNoun.plural('back'),
+    RegularNoun.plural('behind'),
+    RegularNoun.plural('butt')
+  }, verbs: {}, adjectives: {
+    Adjective('back')
+  }),
   'mu': WordDefinitions(rootNouns: {
-    Noun('moo'),
-    Noun('cheep'),
-    Noun('caw'),
-    Noun('chirp'),
-    Noun('tweet'),
-    Noun('woof'),
+    RegularNoun.plural('moo'),
+    RegularNoun.plural('cheep'),
+    RegularNoun.plural('caw'),
+    RegularNoun.plural('chirp'),
+    RegularNoun.plural('tweet'),
+    RegularNoun.plural('woof'),
   }, verbs: {
     Verb.either('moo'),
     Verb.either('cheep'),
@@ -294,66 +342,85 @@ const Map<String, WordDefinitions> regularContentWords = {
     Verb.either('woof')
   }, adjectives: {}),
   'mun': WordDefinitions(rootNouns: {
-    Noun('moon'),
-    Noun('planet'),
-    Noun('comet'),
-    Noun('star'),
-    Noun('celestial object')
+    RegularNoun.plural('moon'),
+    RegularNoun.plural('planet'),
+    RegularNoun.plural('comet'),
+    RegularNoun.plural('star'),
+    RegularNoun.plural('celestial object')
   }, verbs: {}, adjectives: {
     Adjective('celestial'),
     Adjective('cosmic'),
     Adjective('lunar')
   }),
   'musi': WordDefinitions(
-      rootNouns: {Noun('game'), Noun('amusement')},
+      rootNouns: {RegularNoun.plural('game'), RegularNoun.plural('amusement')},
       verbs: {Verb.either('amuse')},
       adjectives: {Adjective('amusing')}),
   'mute': WordDefinitions(
-      rootNouns: {Noun('amount')},
+      rootNouns: {RegularNoun.plural('amount')},
       verbs: {Verb.either('multiply')},
       adjectives: {Adjective('much', irregularPluralForm: 'many')}),
-  'nanpa':
-      WordDefinitions(rootNouns: {Noun('number')}, verbs: {}, adjectives: {}),
-  'nasa': WordDefinitions(
-      rootNouns: {Noun('strangeness'), Noun('intoxication')},
-      verbs: {},
-      adjectives: {Adjective('strange'), Adjective('intoxicated')}),
-  'nasin': WordDefinitions(
-      rootNouns: {Noun('path'), Noun('way'), Noun('method'), Noun('doctrine')},
-      verbs: {},
-      adjectives: {}),
-  'nena': WordDefinitions(
-      rootNouns: {Noun('bump'), Noun('hill'), Noun('mountain')},
-      verbs: {},
-      adjectives: {}),
-  'ni': WordDefinitions(rootNouns: {
-    Noun('this', irregularPluralForm: 'these'),
-    Noun('that', irregularPluralForm: 'those')
+  'nanpa': WordDefinitions(
+      rootNouns: {RegularNoun.plural('number')}, verbs: {}, adjectives: {}),
+  'nasa': WordDefinitions(rootNouns: {
+    RegularNoun.plural('strangeness'),
+    RegularNoun.plural('intoxication')
   }, verbs: {}, adjectives: {
-    Adjective('this', irregularPluralForm: 'these', demonstrative: true),
-    Adjective('that', irregularPluralForm: 'those', demonstrative: true)
+    Adjective('strange'),
+    Adjective('intoxicated')
+  }),
+  'nasin': WordDefinitions(rootNouns: {
+    RegularNoun.plural('path'),
+    RegularNoun.plural('way'),
+    RegularNoun.plural('method'),
+    RegularNoun.plural('doctrine')
+  }, verbs: {}, adjectives: {}),
+  'nena': WordDefinitions(rootNouns: {
+    RegularNoun.plural('bump'),
+    RegularNoun.plural('hill'),
+    RegularNoun.plural('mountain')
+  }, verbs: {}, adjectives: {}),
+  'ni': WordDefinitions(rootNouns: {
+    RegularNoun.plural('this', irregularPluralForm: 'these'),
+    RegularNoun.plural('that', irregularPluralForm: 'those')
+  }, verbs: {}, adjectives: {
+    Adjective('this', irregularPluralForm: 'these'),
+    Adjective('that', irregularPluralForm: 'those')
   }),
   'nimi': WordDefinitions(
-      rootNouns: {Noun('word'), Noun('name')},
+      rootNouns: {RegularNoun.plural('word'), RegularNoun.plural('name')},
       verbs: {Verb.either('name')},
       adjectives: {}),
-  'noka': WordDefinitions(
-      rootNouns: {Noun('leg'), Noun('foot'), Noun('toe')},
-      verbs: {},
-      adjectives: {}),
+  'noka': WordDefinitions(rootNouns: {
+    RegularNoun.plural('leg'),
+    RegularNoun.plural('foot'),
+    RegularNoun.plural('toe')
+  }, verbs: {}, adjectives: {}),
   'olin': WordDefinitions(
-      rootNouns: {Noun('love'), Noun('romance')},
+      rootNouns: {RegularNoun.plural('love'), RegularNoun.plural('romance')},
       verbs: {Verb.either('love')},
       adjectives: {Adjective('loving')}),
-  'open': WordDefinitions(
-      rootNouns: {Noun('beginning'), Noun('opening')},
-      verbs: {Verb.either('begin'), Verb.either('open')},
-      adjectives: {}),
+  'ona': WordDefinitions(rootNouns: {
+    Pronoun('he', 'him', 'they', 'them'),
+    Pronoun('she', 'her', 'they', 'them'),
+    Pronoun('it', 'it', 'they', 'them')
+  }, verbs: {}, adjectives: {
+    Adjective('his'),
+    Adjective('her'),
+    Adjective('its')
+  }),
+  'open': WordDefinitions(rootNouns: {
+    RegularNoun.plural('beginning'),
+    RegularNoun.plural('opening')
+  }, verbs: {
+    Verb.either('begin'),
+    Verb.either('open')
+  }, adjectives: {}),
   'pakala': WordDefinitions(rootNouns: {
-    Noun('destruction'),
-    Noun('breakage'),
-    Noun('harm'),
-    Noun('damage')
+    RegularNoun.plural('destruction'),
+    RegularNoun.plural('breakage'),
+    RegularNoun.plural('harm'),
+    RegularNoun.plural('damage')
   }, verbs: {
     Verb.either('break'),
     Verb.either('shatter'),
@@ -368,31 +435,36 @@ const Map<String, WordDefinitions> regularContentWords = {
     Adjective('damaged')
   }),
   'pali': WordDefinitions(
-      rootNouns: {Noun('work'), Noun('job')},
+      rootNouns: {RegularNoun.plural('work'), RegularNoun.plural('job')},
       verbs: {Verb.either('work'), Verb.either('make')},
       adjectives: {}),
-  'palisa': WordDefinitions(
-      rootNouns: {Noun('stick'), Noun('twig'), Noun('branch')},
-      verbs: {},
-      adjectives: {}),
-  'pan': WordDefinitions(
-      rootNouns: {Noun('bread'), Noun('grain'), Noun('rice')},
-      verbs: {},
-      adjectives: {}),
+  'palisa': WordDefinitions(rootNouns: {
+    RegularNoun.plural('stick'),
+    RegularNoun.plural('twig'),
+    RegularNoun.plural('branch')
+  }, verbs: {}, adjectives: {}),
+  'pan': WordDefinitions(rootNouns: {
+    RegularNoun.plural('bread'),
+    RegularNoun.plural('grain'),
+    RegularNoun.plural('rice')
+  }, verbs: {}, adjectives: {}),
   'pana': WordDefinitions(
       rootNouns: {},
       verbs: {Verb.either('give'), Verb.either('emit'), Verb.either('release')},
       adjectives: {}),
   'pilin': WordDefinitions(
-      rootNouns: {Noun('feeling')},
+      rootNouns: {RegularNoun.plural('feeling')},
       verbs: {Verb.either('feel'), Verb.either('touch')},
       adjectives: {}),
-  'pimeja': WordDefinitions(
-      rootNouns: {Noun('black'), Noun('darkness', hasPlural: false)},
-      verbs: {},
-      adjectives: {Adjective('black'), Adjective('dark')}),
+  'pimeja': WordDefinitions(rootNouns: {
+    RegularNoun.plural('black'),
+    RegularNoun.nonPlural('darkness')
+  }, verbs: {}, adjectives: {
+    Adjective('black'),
+    Adjective('dark')
+  }),
   'pini': WordDefinitions(rootNouns: {
-    Noun('ending')
+    RegularNoun.plural('ending')
   }, verbs: {
     Verb.either('end'),
     Verb.either('stop')
@@ -401,22 +473,24 @@ const Map<String, WordDefinitions> regularContentWords = {
     Adjective('past'),
     Adjective('finished')
   }),
-  'pipi': WordDefinitions(
-      rootNouns: {Noun('bug'), Noun('insect'), Noun('arachnid')},
-      verbs: {},
-      adjectives: {}),
+  'pipi': WordDefinitions(rootNouns: {
+    RegularNoun.plural('bug'),
+    RegularNoun.plural('insect'),
+    RegularNoun.plural('arachnid')
+  }, verbs: {}, adjectives: {}),
   'poka': WordDefinitions(
-      rootNouns: {Noun('side'), Noun('vicinity')},
+      rootNouns: {RegularNoun.plural('side'), RegularNoun.plural('vicinity')},
       verbs: {},
       adjectives: {Adjective('nearby')}),
-  'poki': WordDefinitions(
-      rootNouns: {Noun('container'), Noun('bowl'), Noun('cup')},
-      verbs: {},
-      adjectives: {}),
+  'poki': WordDefinitions(rootNouns: {
+    RegularNoun.plural('container'),
+    RegularNoun.plural('bowl'),
+    RegularNoun.plural('cup')
+  }, verbs: {}, adjectives: {}),
   'pona': WordDefinitions(rootNouns: {
-    Noun('good'),
-    Noun('goodness'),
-    Noun('simplicity')
+    RegularNoun.plural('good'),
+    RegularNoun.plural('goodness'),
+    RegularNoun.plural('simplicity')
   }, verbs: {
     Verb.either('improve'),
     Verb.either('help'),
@@ -430,30 +504,31 @@ const Map<String, WordDefinitions> regularContentWords = {
         endAddition: 'with "Toki Pona: The Language of Good" by Sonja Lang')
   }, adjectives: {}),
   'sama': WordDefinitions(
-      rootNouns: {Noun('similarity')},
+      rootNouns: {RegularNoun.plural('similarity')},
       verbs: {},
       adjectives: {Adjective('similar')}),
   'seli': WordDefinitions(
-      rootNouns: {Noun('heat'), Noun('warmth')},
+      rootNouns: {RegularNoun.plural('heat'), RegularNoun.plural('warmth')},
       verbs: {Verb.either('heat'), Verb.either('warm'), Verb.either('cook')},
       adjectives: {Adjective('hot'), Adjective('warm')}),
-  'selo': WordDefinitions(
-      rootNouns: {Noun('edge'), Noun('skin'), Noun('exterior')},
-      verbs: {},
-      adjectives: {}),
+  'selo': WordDefinitions(rootNouns: {
+    RegularNoun.plural('edge'),
+    RegularNoun.plural('skin'),
+    RegularNoun.plural('exterior')
+  }, verbs: {}, adjectives: {}),
   'seme': WordDefinitions(rootNouns: {
-    Noun('what', hasPlural: false)
+    RegularNoun.nonPlural('what')
   }, verbs: {
     Verb.either('do', endAddition: 'what', transitiveAttachment: 'to')
   }, adjectives: {
-    Adjective('what', demonstrative: true)
+    Adjective('what')
   }),
   'sewi': WordDefinitions(rootNouns: {
-    Noun('sky'),
-    Noun('upper area'),
-    Noun('god'),
-    Noun('divinity'),
-    Noun('divine being')
+    RegularNoun.plural('sky'),
+    RegularNoun.plural('upper area'),
+    RegularNoun.plural('god'),
+    RegularNoun.plural('divinity'),
+    RegularNoun.plural('divine being')
   }, verbs: {
     Verb.either('raise')
   }, adjectives: {
@@ -462,118 +537,159 @@ const Map<String, WordDefinitions> regularContentWords = {
     Adjective('godly')
   }),
   'sijelo': WordDefinitions(
-      rootNouns: {Noun('body')}, verbs: {}, adjectives: {Adjective('bodily')}),
+      rootNouns: {RegularNoun.plural('body')},
+      verbs: {},
+      adjectives: {Adjective('bodily')}),
   'sike': WordDefinitions(
-      rootNouns: {Noun('circle'), Noun('cycle')},
+      rootNouns: {RegularNoun.plural('circle'), RegularNoun.plural('cycle')},
       verbs: {},
       adjectives: {Adjective('circular'), Adjective('cyclical')}),
   'sin': WordDefinitions(
-      rootNouns: {Noun('newness')}, verbs: {}, adjectives: {Adjective('new')}),
-  'sinpin': WordDefinitions(
-      rootNouns: {Noun('front'), Noun('wall'), Noun('vertical surface')},
+      rootNouns: {RegularNoun.plural('newness')},
       verbs: {},
-      adjectives: {Adjective('front')}),
-  'sitelen': WordDefinitions(
-      rootNouns: {Noun('picture'), Noun('writing'), Noun('image')},
-      verbs: {Verb.either('write'), Verb.either('draw')},
-      adjectives: {}),
+      adjectives: {Adjective('new')}),
+  'sina': WordDefinitions(
+      rootNouns: {Pronoun('you', 'you', 'you', 'you')},
+      verbs: {},
+      adjectives: {Adjective('your')}),
+  'sinpin': WordDefinitions(rootNouns: {
+    RegularNoun.plural('front'),
+    RegularNoun.plural('wall'),
+    RegularNoun.plural('vertical surface')
+  }, verbs: {}, adjectives: {
+    Adjective('front')
+  }),
+  'sitelen': WordDefinitions(rootNouns: {
+    RegularNoun.plural('picture'),
+    RegularNoun.plural('writing'),
+    RegularNoun.plural('image')
+  }, verbs: {
+    Verb.either('write'),
+    Verb.either('draw')
+  }, adjectives: {}),
   'sona': WordDefinitions(
-      rootNouns: {Noun('knowledge')},
+      rootNouns: {RegularNoun.plural('knowledge')},
       verbs: {Verb.either('know')},
       adjectives: {Adjective('knowledgable')}),
-  'soweli': WordDefinitions(
-      rootNouns: {Noun('animal'), Noun('land mammal')},
-      verbs: {},
-      adjectives: {Adjective('animal-like')}),
-  'suli': WordDefinitions(
-      rootNouns: {Noun('largeness'), Noun('importance')},
-      verbs: {Verb.either('enlarge')},
-      adjectives: {Adjective('large'), Adjective('important')}),
+  'soweli': WordDefinitions(rootNouns: {
+    RegularNoun.plural('animal'),
+    RegularNoun.plural('land mammal')
+  }, verbs: {}, adjectives: {
+    Adjective('animal-like')
+  }),
+  'suli': WordDefinitions(rootNouns: {
+    RegularNoun.plural('largeness'),
+    RegularNoun.plural('importance')
+  }, verbs: {
+    Verb.either('enlarge')
+  }, adjectives: {
+    Adjective('large'),
+    Adjective('important')
+  }),
   'suno': WordDefinitions(
-      rootNouns: {Noun('light'), Noun('sun')},
+      rootNouns: {RegularNoun.plural('light'), RegularNoun.plural('sun')},
       verbs: {Verb.either('shine')},
       adjectives: {Adjective('bright')}),
   'supa': WordDefinitions(rootNouns: {
-    Noun('furniture', hasPlural: false),
-    Noun('table'),
-    Noun('floor'),
-    Noun('horizontal surface')
+    RegularNoun.nonPlural('furniture'),
+    RegularNoun.plural('table'),
+    RegularNoun.plural('floor'),
+    RegularNoun.plural('horizontal surface')
   }, verbs: {}, adjectives: {}),
-  'suwi': WordDefinitions(
-      rootNouns: {Noun('sweetness'), Noun('cuteness')},
-      verbs: {},
-      adjectives: {Adjective('sweet'), Adjective('cute')}),
+  'suwi': WordDefinitions(rootNouns: {
+    RegularNoun.plural('sweetness'),
+    RegularNoun.plural('cuteness')
+  }, verbs: {}, adjectives: {
+    Adjective('sweet'),
+    Adjective('cute')
+  }),
   'tan': WordDefinitions(
-      rootNouns: {Noun('origin'), Noun('cause')}, verbs: {}, adjectives: {}),
+      rootNouns: {RegularNoun.plural('origin'), RegularNoun.plural('cause')},
+      verbs: {},
+      adjectives: {}),
   'taso': WordDefinitions(
       rootNouns: {}, verbs: {}, adjectives: {Adjective('only')}),
   'tawa': WordDefinitions(
-      rootNouns: {Noun('movement')},
+      rootNouns: {RegularNoun.plural('movement')},
       verbs: {Verb.either('move')},
       adjectives: {Adjective('moving')}),
   'telo': WordDefinitions(
-      rootNouns: {Noun('water'), Noun('liquid')},
+      rootNouns: {RegularNoun.plural('water'), RegularNoun.plural('liquid')},
       verbs: {Verb.either('water')},
       adjectives: {Adjective('liquid')}),
   'tenpo': WordDefinitions(
-      rootNouns: {Noun('time', hasPlural: false), Noun('moment')},
+      rootNouns: {RegularNoun.nonPlural('time'), RegularNoun.plural('moment')},
       verbs: {},
       adjectives: {}),
-  'toki': WordDefinitions(
-      rootNouns: {Noun('speech'), Noun('communicate')},
-      verbs: {Verb.either('speak'), Verb.either('communicate')},
-      adjectives: {}),
-  'tomo': WordDefinitions(
-      rootNouns: {Noun('house'), Noun('room'), Noun('indoor space')},
-      verbs: {},
-      adjectives: {}),
+  'toki': WordDefinitions(rootNouns: {
+    RegularNoun.plural('speech'),
+    RegularNoun.plural('communicate')
+  }, verbs: {
+    Verb.either('speak'),
+    Verb.either('communicate')
+  }, adjectives: {}),
+  'tomo': WordDefinitions(rootNouns: {
+    RegularNoun.plural('house'),
+    RegularNoun.plural('room'),
+    RegularNoun.plural('indoor space')
+  }, verbs: {}, adjectives: {}),
   'tonsi': WordDefinitions(rootNouns: {
-    Noun('transgender person', irregularPluralForm: 'transgender people'),
-    Noun('non-binary person', irregularPluralForm: 'non-binary people')
+    RegularNoun.plural('transgender person',
+        irregularPluralForm: 'transgender people'),
+    RegularNoun.plural('non-binary person',
+        irregularPluralForm: 'non-binary people')
   }, verbs: {}, adjectives: {
     Adjective('transgender'),
     Adjective('non-binary')
   }),
   'tu': WordDefinitions(
-      rootNouns: {Noun('two')},
+      rootNouns: {RegularNoun.plural('two')},
       verbs: {Verb.either('divide')},
       adjectives: {Adjective('two')}),
   'unpa': WordDefinitions(rootNouns: {
-    Noun('sex')
+    RegularNoun.plural('sex')
   }, verbs: {
     Verb.either('have', endAddition: 'sex', transitiveAttachment: 'with')
   }, adjectives: {
     Adjective('sexual')
   }),
-  'uta': WordDefinitions(rootNouns: {Noun('mouth')}, verbs: {}, adjectives: {}),
-  'utala': WordDefinitions(
-      rootNouns: {Noun('battle'), Noun('fight'), Noun('war')},
-      verbs: {Verb.either('fight'), Verb.either('war')},
-      adjectives: {Adjective('fighting'), Adjective('warlike')}),
+  'uta': WordDefinitions(
+      rootNouns: {RegularNoun.plural('mouth')}, verbs: {}, adjectives: {}),
+  'utala': WordDefinitions(rootNouns: {
+    RegularNoun.plural('battle'),
+    RegularNoun.plural('fight'),
+    RegularNoun.plural('war')
+  }, verbs: {
+    Verb.either('fight'),
+    Verb.either('war')
+  }, adjectives: {
+    Adjective('fighting'),
+    Adjective('warlike')
+  }),
   'walo': WordDefinitions(
-      rootNouns: {Noun('white')},
+      rootNouns: {RegularNoun.plural('white')},
       verbs: {},
       adjectives: {Adjective('white'), Adjective('light')}),
   'wan': WordDefinitions(
-      rootNouns: {Noun('one'), Noun('unity')},
+      rootNouns: {RegularNoun.plural('one'), RegularNoun.plural('unity')},
       verbs: {Verb.either('unite')},
       adjectives: {Adjective('one'), Adjective('unified')}),
   'waso': WordDefinitions(
-      rootNouns: {Noun('bird')},
+      rootNouns: {RegularNoun.plural('bird')},
       verbs: {},
       adjectives: {Adjective('birdlike')}),
   'wawa': WordDefinitions(
-      rootNouns: {Noun('power')},
+      rootNouns: {RegularNoun.plural('power')},
       verbs: {Verb.either('empower')},
       adjectives: {Adjective('powerful')}),
   'weka': WordDefinitions(
-      rootNouns: {Noun('distance')},
+      rootNouns: {RegularNoun.plural('distance')},
       verbs: {Verb.transitive('get', endAddition: 'rid of')},
       adjectives: {Adjective('far away'), Adjective('gone')}),
   'wile': WordDefinitions(rootNouns: {
-    Noun('want'),
-    Noun('desire'),
-    Noun('need')
+    RegularNoun.plural('want'),
+    RegularNoun.plural('desire'),
+    RegularNoun.plural('need')
   }, verbs: {
     Verb.either('want'),
     Verb.either('desire'),
@@ -583,14 +699,6 @@ const Map<String, WordDefinitions> regularContentWords = {
     Adjective('desired'),
     Adjective('needed')
   })
-};
-
-// of course you have green comments
-// and pronouns
-const Map<String, Set<Pronoun>> pronouns = {
-  'mi': {Pronoun.i, Pronoun.we},
-  'sina': {Pronoun.you},
-  'ona': {Pronoun.it, Pronoun.he, Pronoun.she, Pronoun.they}
 };
 
 const Map<String, Set<String>> prepositions = {
@@ -615,10 +723,7 @@ extension KeySet<K> on Map<K, void> {
   Set<K> keySet() => keys.toSet();
 }
 
-// ala is a funny word and ought to be handled specially
-// TODO: handle ala
-final Set<String> contentWords =
-    regularContentWords.keySet().union(pronouns.keySet()).union({'ala'});
+final Set<String> contentWords = regularContentWords.keySet();
 
 Parser<String> _createWordParser() {
   var sorted = List<String>.from(contentWords);

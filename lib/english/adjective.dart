@@ -1,13 +1,14 @@
-class Adjective {
-  final String word;
+import 'regular_english_word.dart';
+
+class Adjective implements RegularEnglishWord {
+  @override
+  final String rootWord;
+
   final String? irregularPluralForm;
-  final bool demonstrative;
 
   final String? irregularAdverb;
-  String get adverb => irregularAdverb ?? '${word}ly';
+  String get adverb => irregularAdverb ?? '${rootWord}ly';
 
-  const Adjective(this.word,
-      {this.irregularPluralForm,
-      this.irregularAdverb,
-      this.demonstrative = false});
+  const Adjective(this.rootWord,
+      {this.irregularPluralForm, this.irregularAdverb});
 }

@@ -1,10 +1,15 @@
-import 'noun.dart';
+import 'regular_english_word.dart';
+import 'regular_noun.dart';
 
 enum Transitivity { transitive, intransitive, either }
 
 // TODO: implement verb forms
-class Verb {
+class Verb implements RegularEnglishWord {
   final String infinitive;
+
+  @override
+  String get rootWord => infinitive;
+
   final String? endAddition;
   final String? transitiveAttachment;
   final Transitivity transitivity;
@@ -18,8 +23,8 @@ class Verb {
     return ret;
   }
 
-  Noun get gerund {
-    return Noun('${_clipE(infinitive)}ing');
+  RegularNoun get gerund {
+    return RegularNoun.plural('${_clipE(infinitive)}ing');
   }
 
   const Verb.transitive(this.infinitive,

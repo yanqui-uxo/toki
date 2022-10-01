@@ -1,21 +1,7 @@
-class Noun {
-  final String word;
-  final bool hasPlural;
+abstract class Noun {
+  bool get hasPluralForm;
 
-  final String? irregularPluralForm;
-  String get plural {
-    if (irregularPluralForm != null) {
-      return irregularPluralForm!;
-    }
+  String nominativeForm(bool plural);
 
-    var ret = word;
-
-    if (!word.endsWith('e')) {
-      ret += 'e';
-    }
-
-    return '${ret}s';
-  }
-
-  const Noun(this.word, {this.hasPlural = true, this.irregularPluralForm});
+  String accusativeForm(bool plural);
 }

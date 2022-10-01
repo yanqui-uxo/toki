@@ -19,10 +19,6 @@ class Clause implements ContextPhrase {
       required this.predicates});
 
   @override
-  String toString() => 'Clause(type: ${type.name}, subjects: $subjects, '
-      'predicates: $predicates)';
-
-  @override
   Representation toRepresentation() {
     List<Representation> predicateRepresentations = predicates
         .toRepresentationList()
@@ -44,4 +40,8 @@ class Clause implements ContextPhrase {
       ...predicateRepresentations
     ], description: const Description('clause'));
   }
+
+  @override
+  String toString() => 'Clause(type: ${type.name}, subjects: $subjects, '
+      'predicates: $predicates)';
 }

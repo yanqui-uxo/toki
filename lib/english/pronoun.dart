@@ -1,19 +1,22 @@
-enum Plurality { singular, plural, either }
+import 'noun.dart';
 
-enum Pronoun {
-  i('I', 'me', 'my', Plurality.singular),
-  we('we', 'us', 'our', Plurality.plural),
-  you('you', 'you', 'your', Plurality.either),
-  he('he', 'him', 'his', Plurality.singular),
-  she('she', 'her', 'her', Plurality.singular),
-  it('it', 'it', 'its', Plurality.singular),
-  they('they', 'them', 'their', Plurality.either);
+class Pronoun implements Noun {
+  @override
+  final bool hasPluralForm = true;
 
-  final String nominative;
-  final String accusative;
-  final String possessive;
-  final Plurality plurality;
+  final String singularNominativeForm;
+  final String singularAccusativeForm;
+  final String pluralNominativeForm;
+  final String pluralAccusativeForm;
 
-  const Pronoun(
-      this.nominative, this.accusative, this.possessive, this.plurality);
+  @override
+  String nominativeForm(bool plural) =>
+      plural ? pluralNominativeForm : singularNominativeForm;
+
+  @override
+  String accusativeForm(bool plural) =>
+      plural ? pluralAccusativeForm : singularAccusativeForm;
+
+  const Pronoun(this.singularNominativeForm, this.singularAccusativeForm,
+      this.pluralNominativeForm, this.pluralAccusativeForm);
 }
