@@ -5,16 +5,13 @@ import '../representation/represent.dart';
 import 'context_phrase.dart';
 import 'word.dart';
 
-typedef ContentList = List<List<Word>>;
-
 class ContentPhrase implements ContextPhrase {
   final List<List<Word>> contentGroups;
 
   const ContentPhrase(this.contentGroups);
 
   @override
-  String toString() =>
-      'ContentPhrase(contentGroups: ${contentGroups.toString()})';
+  String toString() => 'ContentPhrase(contentGroups: $contentGroups)';
 
   @override
   Representation toRepresentation() {

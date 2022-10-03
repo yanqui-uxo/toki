@@ -10,9 +10,9 @@ class RegularNoun implements Noun, RegularEnglishWord {
 
   final String? irregularPluralForm;
 
-  String? get _pluralForm {
+  String get _pluralForm {
     if (!hasPluralForm) {
-      return null;
+      throw UnsupportedError('No plural form');
     }
 
     if (irregularPluralForm != null) {
@@ -29,7 +29,7 @@ class RegularNoun implements Noun, RegularEnglishWord {
   }
 
   @override
-  String nominativeForm(bool plural) => plural ? _pluralForm! : rootWord;
+  String nominativeForm(bool plural) => plural ? _pluralForm : rootWord;
 
   @override
   String accusativeForm(bool plural) => nominativeForm(plural);

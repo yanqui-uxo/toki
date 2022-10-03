@@ -1,6 +1,9 @@
+import '../data/nimi.dart';
+import '../english/word_definitions.dart';
 import '../representation/basic_representation.dart';
 import '../representation/complex_representation.dart';
 import '../representation/represent.dart';
+import '../translation/string_choices.dart';
 
 class Word implements Representable {
   final String word;
@@ -8,6 +11,8 @@ class Word implements Representable {
   final bool isName;
 
   const Word(this.word, {this.aAttached = false, this.isName = false});
+
+  // TODO: implement choices methods
 
   @override
   Representation toRepresentation() {

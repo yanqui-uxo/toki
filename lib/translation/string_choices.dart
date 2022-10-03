@@ -1,8 +1,4 @@
-import 'dart:math';
-
-class EmptyChoicesException implements Exception {
-  const EmptyChoicesException();
-}
+import '../utility/utility.dart';
 
 abstract class StringChoices {
   String generate();
@@ -18,21 +14,17 @@ class SingleStringChoice implements StringChoices {
 }
 
 class MultipleStringChoices implements StringChoices {
-  static final Random _rand = Random();
-
   final List<String> choices;
 
   MultipleStringChoices(Iterable<String> choices)
       : choices = List.unmodifiable(choices) {
     if (choices.isEmpty) {
-      throw const EmptyChoicesException();
+      throw ArgumentError('Choice list cannot be null');
     }
   }
 
   @override
-  String generate() {
-    return choices[_rand.nextInt(choices.length)];
-  }
+  String generate() => choices.randomChoice();
 }
 
 class CombinedStringChoices implements StringChoices {
