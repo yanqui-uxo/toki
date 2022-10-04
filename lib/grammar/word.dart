@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import '../data/nimi.dart';
 import '../english/word_definitions.dart';
 import '../representation/basic_representation.dart';
 import '../representation/complex_representation.dart';
 import '../representation/represent.dart';
-import '../translation/string_choices.dart';
+import '../translation/utility.dart';
+import '../utility/utility.dart';
 
 class Word implements Representable {
   final String word;
@@ -12,7 +15,43 @@ class Word implements Representable {
 
   const Word(this.word, {this.aAttached = false, this.isName = false});
 
-  // TODO: implement choices methods
+  WordDefinitions get _definitions => contentWords[word]!;
+
+  PluralString randomNoun(NounType type) {
+    final noun = _definitions.nouns.randomChoice();
+
+    final bool plural;
+
+    if (noun.hasPluralForm) {
+      plural = Random().nextBool();
+    } else {
+      plural = false;
+    }
+
+    final String word;
+
+    switch (type) {
+      case NounType.subject:
+        word = noun.nominativeForm(plural);
+        break;
+      case NounType.object:
+        word = noun.accusativeForm(plural);
+    }
+
+    return PluralString(word, plural);
+  }
+
+  String randomAdjective(bool plural) {
+    final adjective = _definitions.adjectives.randomChoice();
+
+    if (plural) {
+      return adjective.irregularPluralForm ?? adjective.rootWord;
+    } else {
+      return adjective.rootWord;
+    }
+  }
+
+  String randomAdverb() => _definitions.adverbs.randomChoice();
 
   @override
   Representation toRepresentation() {
