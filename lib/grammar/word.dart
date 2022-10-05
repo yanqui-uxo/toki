@@ -5,8 +5,16 @@ import '../english/word_definitions.dart';
 import '../representation/basic_representation.dart';
 import '../representation/complex_representation.dart';
 import '../representation/represent.dart';
-import '../translation/utility.dart';
 import '../utility/utility.dart';
+
+class PluralString {
+  final String string;
+  final bool isPlural;
+
+  const PluralString(this.string, this.isPlural);
+}
+
+enum NounType { subject, object }
 
 class Word implements Representable {
   final String word;
