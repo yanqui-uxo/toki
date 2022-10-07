@@ -1,7 +1,7 @@
 import 'package:petitparser/petitparser.dart';
 
 import '../data/nimi.dart';
-import '../utility/utility.dart';
+import '../utility/extensions.dart';
 import 'clause.dart';
 import 'content_phrase.dart';
 import 'content_phrase_choice.dart';
@@ -71,11 +71,11 @@ class TokiGrammar extends GrammarDefinition {
 
   Parser<Word> modifier() => Or([ref0(aContentWord), ref0(name)]);
 
-  Parser<List<Word>> singleWordGroup() => ref0(aContentWord).listWrap();
+  Parser<ContentGroup> singleWordGroup() => ref0(aContentWord).listWrap();
 
   // checks limit between first and further words
   // does not check limit before string
-  Parser<List<Word>> multiWordGroup([Parser<void>? limit]) {
+  Parser<ContentGroup> multiWordGroup([Parser<void>? limit]) {
     var tmp = ref0(modifier).skip(before: char(' '));
     var modifiers = limit != null ? tmp.plusLazy(limit) : tmp.plus();
 
@@ -85,10 +85,10 @@ class TokiGrammar extends GrammarDefinition {
     ]).map((x) => x[0] + x[1]);
   }
 
-  Parser<List<Word>> multiOrSingleGroup([Parser<void>? limit]) =>
+  Parser<ContentGroup> multiOrSingleGroup([Parser<void>? limit]) =>
       Or([ref1(multiWordGroup, limit), ref0(singleWordGroup)]);
 
-  Parser<List<List<Word>>> piString([Parser<void>? limit]) => Seq([
+  Parser<List<ContentGroup>> piString([Parser<void>? limit]) => Seq([
         ref1(multiOrSingleGroup, limit).skip(after: string(' pi ')).listWrap(),
         Or([
           ref1(piString, limit),
@@ -186,12 +186,12 @@ class TokiGrammar extends GrammarDefinition {
         Seq([ref0(singleWordGroup), char(' ').seq(ref0(prepPhrase)).and()])
             .pick(0)
             .listWrap()
-            .map((x) =>
-                ContentPhraseChoice([ContentPhrase(List<List<Word>>.from(x))])),
+            .map((x) => ContentPhraseChoice(
+                [ContentPhrase(List<ContentGroup>.from(x))])),
         ref1(anuContent, ref0(contentLimit))
       ]);
 
-  Parser<List<Word>> predicatePreverbs() =>
+  Parser<ContentGroup> predicatePreverbs() =>
       ref0(preverb).skip(after: char(' ') & contentWord.and()).star();
 
   Parser<Predicate> predicate() => Or([
@@ -215,7 +215,7 @@ class TokiGrammar extends GrammarDefinition {
           ref0(prepPhrase).skip(before: char(' ')).star()
         ])
       ]).map((x) => Predicate(
-          preverbs: List<Word>.from(x[0] as List),
+          preverbs: ContentGroup.from(x[0] as List),
           verb: x[1] as ContentPhraseChoice?,
           objects: List<ContentPhraseChoice>.from(x[2] as List),
           prepPhrases: List<PrepPhrase>.from(x[3] as List)));

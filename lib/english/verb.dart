@@ -3,7 +3,8 @@ import 'regular_noun.dart';
 
 enum Transitivity { transitive, intransitive, either }
 
-// TODO: implement verb forms
+enum VerbSubject { firstPerson, singular, plural }
+
 class Verb implements RegularEnglishWord {
   final String infinitive;
 
@@ -21,6 +22,14 @@ class Verb implements RegularEnglishWord {
     }
 
     return ret;
+  }
+
+  String randomForm(VerbSubject subject) {
+    // TODO: add more forms
+    final infForm =
+        subject == VerbSubject.singular ? '${infinitive}es' : infinitive;
+
+    return infForm;
   }
 
   RegularNoun get gerund {

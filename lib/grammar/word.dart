@@ -1,22 +1,15 @@
 import 'dart:math';
 
 import '../data/nimi.dart';
+import '../english/verb.dart';
 import '../english/word_definitions.dart';
 import '../representation/basic_representation.dart';
 import '../representation/complex_representation.dart';
 import '../representation/represent.dart';
-import '../utility/utility.dart';
+import '../translation/english_categorizable.dart';
+import '../utility/extensions.dart';
 
-class PluralString {
-  final String string;
-  final bool isPlural;
-
-  const PluralString(this.string, this.isPlural);
-}
-
-enum NounType { subject, object }
-
-class Word implements Representable {
+class Word implements EnglishCategorizable, Representable {
   final String word;
   final bool aAttached;
   final bool isName;
@@ -25,6 +18,7 @@ class Word implements Representable {
 
   WordDefinitions get _definitions => contentWords[word]!;
 
+  @override
   PluralString randomNoun(NounType type) {
     final noun = _definitions.nouns.randomChoice();
 
@@ -49,6 +43,7 @@ class Word implements Representable {
     return PluralString(word, plural);
   }
 
+  @override
   String randomAdjective(bool plural) {
     final adjective = _definitions.adjectives.randomChoice();
 
@@ -58,6 +53,10 @@ class Word implements Representable {
       return adjective.rootWord;
     }
   }
+
+  @override
+  String randomVerb(VerbSubject subject) =>
+      _definitions.verbs.randomChoice().randomForm(subject);
 
   String randomAdverb() => _definitions.adverbs.randomChoice();
 
