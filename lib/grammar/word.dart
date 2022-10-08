@@ -7,6 +7,7 @@ import '../representation/basic_representation.dart';
 import '../representation/complex_representation.dart';
 import '../representation/represent.dart';
 import '../translation/english_categorizable.dart';
+import '../translation/grammar_category_exception.dart';
 import '../utility/extensions.dart';
 
 class Word implements EnglishCategorizable, Representable {
@@ -19,8 +20,10 @@ class Word implements EnglishCategorizable, Representable {
   WordDefinitions get _definitions => contentWords[word]!;
 
   @override
-  PluralString randomNoun(NounType type) {
+  PluralString randomNounString(NounType type) {
     final noun = _definitions.nouns.randomChoice();
+
+    if (noun == null) throw GrammarCategoryException();
 
     final bool plural;
 
@@ -44,8 +47,10 @@ class Word implements EnglishCategorizable, Representable {
   }
 
   @override
-  String randomAdjective(bool plural) {
+  String randomAdjectiveString(bool plural) {
     final adjective = _definitions.adjectives.randomChoice();
+
+    if (adjective == null) throw GrammarCategoryException();
 
     if (plural) {
       return adjective.irregularPluralForm ?? adjective.rootWord;
@@ -55,10 +60,15 @@ class Word implements EnglishCategorizable, Representable {
   }
 
   @override
-  String randomVerb(VerbSubject subject) =>
-      _definitions.verbs.randomChoice().randomForm(subject);
+  String randomVerbString(VerbSubject subject) {
+    final verb = _definitions.verbs.randomChoice();
 
-  String randomAdverb() => _definitions.adverbs.randomChoice();
+    if (verb == null) throw GrammarCategoryException();
+
+    return verb.randomForm(subject);
+  }
+
+  String? randomAdverb() => _definitions.adverbs.randomChoice();
 
   @override
   Representation toRepresentation() {

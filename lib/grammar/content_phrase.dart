@@ -21,12 +21,12 @@ class ContentPhrase implements ContextPhrase, EnglishCategorizable {
 
   static PluralString _contentGroupRandomNoun(
       ContentGroup group, NounType type) {
-    final noun = group[0].randomNoun(type);
+    final noun = group[0].randomNounString(type);
 
     String adjectives = group
         .sublist(1)
         .reversed
-        .map((x) => x.randomAdjective(noun.isPlural))
+        .map((x) => x.randomAdjectiveString(noun.isPlural))
         .join(' ');
 
     return PluralString('$adjectives ${noun.string}', noun.isPlural);
@@ -38,39 +38,35 @@ class ContentPhrase implements ContextPhrase, EnglishCategorizable {
       .map((x) => _contentGroupRandomNoun(x, NounType.object))
       .join(' ');
 
-  String _addPiGroups(String s) => '${_piGroups()} s';
+  String _addPiGroups(String s) => '${_piGroups()} $s';
 
   @override
-  PluralString randomNoun(NounType type) {
+  PluralString randomNounString(NounType type) {
     final noun = _contentGroupRandomNoun(contentGroups[0], type);
 
     return PluralString(_addPiGroups(noun.string), noun.isPlural);
   }
 
   @override
-  String randomAdjective(bool plural) {
-    final adjective = contentGroups[0][0].randomAdjective(plural);
+  String randomAdjectiveString(bool plural) {
+    final adjective = contentGroups[0][0].randomAdjectiveString(plural);
+    final adverbs =
+        contentGroups[0].sublist(1).reversed.map((x) => x.randomAdverb());
 
-    String adverbs = contentGroups[0]
-        .sublist(1)
-        .reversed
-        .map((x) => x.randomAdverb())
-        .join(' ');
+    final adverbsStr = adverbs.join(' ');
 
-    return _addPiGroups('$adverbs $adjective');
+    return _addPiGroups('$adverbsStr $adjective');
   }
 
   @override
-  String randomVerb(VerbSubject subject) {
-    final verb = contentGroups[0][0].randomVerb(subject);
+  String randomVerbString(VerbSubject subject) {
+    final verb = contentGroups[0][0].randomVerbString(subject);
+    final adverbs =
+        contentGroups[0].sublist(1).reversed.map((x) => x.randomAdverb());
 
-    String adverbs = contentGroups[0]
-        .sublist(1)
-        .reversed
-        .map((x) => x.randomAdverb())
-        .join(' ');
+    final adverbsStr = adverbs.join(' ');
 
-    return _addPiGroups('$verb $adverbs');
+    return _addPiGroups('$verb $adverbsStr');
   }
 
   @override

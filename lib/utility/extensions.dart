@@ -10,7 +10,9 @@ extension Case on String {
 }
 
 extension RandomChoice<T> on Iterable<T> {
-  T randomChoice() {
+  T? randomChoice() {
+    if (isEmpty) return null;
+
     final l = toList();
     return l[Random().nextInt(l.length)];
   }

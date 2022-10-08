@@ -10,7 +10,7 @@ class PluralString {
 enum NounType { subject, object }
 
 abstract class EnglishCategorizable {
-  PluralString randomNoun(NounType type);
-  String randomAdjective(bool plural);
-  String randomVerb(VerbSubject subject);
+  PluralString randomNounString(NounType type);
+  String randomAdjectiveString(bool plural);
+  String randomVerbString(VerbSubject subject);
 }
