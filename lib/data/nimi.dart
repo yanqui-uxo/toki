@@ -719,6 +719,8 @@ const Map<String, Set<String>> preverbs = {
   'wile': {'want'},
 };
 
+const Map<String, int> numbers = {'wan': 1, 'tu': 2};
+
 extension KeySet<K> on Map<K, void> {
   Set<K> keySet() => keys.toSet();
 }

@@ -6,12 +6,15 @@ import 'clause.dart';
 import 'content_phrase.dart';
 import 'content_phrase_choice.dart';
 import 'context_phrase.dart';
+import 'grammar_word.dart';
+import 'ordinal.dart';
 import 'predicate.dart';
 import 'prep_phrase.dart';
 import 'punctuated_sentence.dart';
+import 'regular_word.dart';
 import 'sentence.dart';
 import 'subjects.dart';
-import 'word.dart';
+import 'wordinal.dart';
 
 typedef Seq<T> = SequenceParser<T>;
 typedef Or<T> = ChoiceParser<T>;
@@ -28,21 +31,48 @@ extension InterleavedRepeat<T> on Parser<T> {
           .map((x) => x[0] + x[1]);
 }
 
-// TODO: implement nanpa
+class AObject<T> {
+  final T object;
+  final bool aAttached;
+
+  AObject(this.object, this.aAttached);
+}
+
+class AlaObject<T> {
+  final T object;
+  final RegularWord? ala;
+  bool get alaAttached => ala != null;
+
+  AlaObject(this.object, this.ala);
+}
+
 class TokiGrammar extends GrammarDefinition {
   @override
-  Parser start() => ref0(sentences).end();
+  Parser start() => ref0(sentences);
 
   Parser<void> spaceOrEnd() =>
       Or([char(' '), sepPunctuation, endPunctuation, endOfInput()]);
 
-  Parser<Word> aWord(Parser<String> x, [isName = false]) =>
+  Parser<AObject<T>> aCheck<T>(Parser<T> x) =>
       Seq([x, string(' a').skip(after: ref0(spaceOrEnd).and()).optional()])
-          .map((x) => Word(x[0]!, aAttached: x[1] != null, isName: isName));
+          .map((x) => AObject<T>(x[0] as T, x[1] != null));
 
-  Parser<Word> aContentWord() => ref1(aWord, contentWord);
+  Parser<RegularWord> aWord(Parser<String> x, [isName = false]) =>
+      ref1(aCheck, x).map((x) =>
+          RegularWord(x.object!, aAttached: x.aAttached, isName: isName));
 
-  Parser<Word> name() {
+  Parser<List<String>> numberStrings() => Or(numbers.keys.map(string))
+      .interleavedRepeat(char(' '))
+      .skip(before: string('nanpa '));
+
+  Parser<Ordinal> aNanpa() => ref1(aCheck, ref0(numberStrings))
+      .map((x) => Ordinal(x.object, x.aAttached));
+
+  Parser<RegularWord> aContentWord() => ref1(aWord, contentWord);
+
+  Parser<Wordinal> aWordinal() => Or([ref0(aNanpa), ref0(aContentWord)]);
+
+  Parser<RegularWord> name() {
     Parser<String> consonant() => patternIgnoreCase('jklmnpstw');
     Parser<String> vowel() => patternIgnoreCase('aeiou');
 
@@ -70,9 +100,9 @@ class TokiGrammar extends GrammarDefinition {
         Seq([ref0(capSyllable), ref0(lowerSyllable).star()]).flatten(), true);
   }
 
-  Parser<Word> modifier() => Or([ref0(aContentWord), ref0(name)]);
+  Parser<Wordinal> modifier() => Or([ref0(aWordinal), ref0(name)]);
 
-  Parser<ContentGroup> singleWordGroup() => ref0(aContentWord).listWrap();
+  Parser<ContentGroup> singleWordGroup() => ref0(aWordinal).listWrap();
 
   // checks limit between first and further words
   // does not check limit before string
@@ -157,9 +187,27 @@ class TokiGrammar extends GrammarDefinition {
     }
   }
 
-  Parser<Word> preposition() =>
-      ref1(aWord, Or(prepositions.keySet().map(string)));
-  Parser<Word> preverb() => ref1(aWord, Or(preverbs.keySet().map(string)));
+  static GrammarWord _listToGrammarWord(
+      List<RegularWord?> l, GrammarWordType type) {
+    final alaAttached = l[1] != null;
+
+    if (alaAttached) {
+      return GrammarWord.ala(l[0]!.word, type,
+          aAttached: l[0]!.aAttached, aAttachedToAla: l[1]!.aAttached);
+    } else {
+      return GrammarWord.noAla(l[0]!.word, type, aAttached: l[0]!.aAttached);
+    }
+  }
+
+  Parser<GrammarWord> grammarWord(Parser<String> p, GrammarWordType type) =>
+      Seq([aWord(p), aWord(string('ala')).skip(before: char(' ')).optional()])
+          .map((x) => _listToGrammarWord(x, type));
+
+  Parser<GrammarWord> preposition() => ref2(grammarWord,
+      Or(prepositions.keySet().map(string)), GrammarWordType.preposition);
+
+  Parser<GrammarWord> preverb() => ref2(
+      grammarWord, Or(preverbs.keySet().map(string)), GrammarWordType.preverb);
 
   // separates sentences
   static final Parser<String> sepPunctuation = pattern('.:;!?');
@@ -180,7 +228,8 @@ class TokiGrammar extends GrammarDefinition {
   Parser<PrepPhrase> prepPhrase([bool yield = true]) => Seq([
         ref0(preposition).skip(after: char(' ')),
         ref1(anuContent, yield ? ref0(contentLimit) : null)
-      ]).map((x) => PrepPhrase(x[0] as Word, x[1] as ContentPhraseChoice));
+      ]).map(
+          (x) => PrepPhrase(x[0] as GrammarWord, x[1] as ContentPhraseChoice));
 
   // like content(), but yields to prep phrases
   Parser<ContentPhraseChoice> prePrepContent() => Or([
@@ -192,7 +241,7 @@ class TokiGrammar extends GrammarDefinition {
         ref1(anuContent, ref0(contentLimit))
       ]);
 
-  Parser<ContentGroup> predicatePreverbs() =>
+  Parser<List<GrammarWord>> predicatePreverbs() =>
       ref0(preverb).skip(after: char(' ') & contentWord.and()).star();
 
   Parser<Predicate> predicate() => Or([
@@ -216,7 +265,7 @@ class TokiGrammar extends GrammarDefinition {
           ref0(prepPhrase).skip(before: char(' ')).star()
         ])
       ]).map((x) => Predicate(
-          preverbs: ContentGroup.from(x[0] as List),
+          preverbs: List<GrammarWord>.from(x[0] as List),
           verb: x[1] as ContentPhraseChoice?,
           objects: List<ContentPhraseChoice>.from(x[2] as List),
           prepPhrases: List<PrepPhrase>.from(x[3] as List)));

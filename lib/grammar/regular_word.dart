@@ -9,13 +9,17 @@ import '../representation/represent.dart';
 import '../translation/english_categorizable.dart';
 import '../translation/grammar_category_exception.dart';
 import '../utility/extensions.dart';
+import 'wordinal.dart';
 
-class Word implements EnglishCategorizable, Representable {
+class RegularWord implements Wordinal {
   final String word;
+
+  @override
   final bool aAttached;
+
   final bool isName;
 
-  const Word(this.word, {this.aAttached = false, this.isName = false});
+  const RegularWord(this.word, {this.aAttached = false, this.isName = false});
 
   WordDefinitions get _definitions => contentWords[word]!;
 
@@ -48,6 +52,8 @@ class Word implements EnglishCategorizable, Representable {
 
   @override
   String randomAdjectiveString(bool plural) {
+    if (isName) return word;
+
     final adjective = _definitions.adjectives.randomChoice();
 
     if (adjective == null) throw GrammarCategoryException();
@@ -68,7 +74,14 @@ class Word implements EnglishCategorizable, Representable {
     return verb.randomForm(subject);
   }
 
-  String? randomAdverb() => _definitions.adverbs.randomChoice();
+  @override
+  String randomAdverbString() {
+    final adverb = _definitions.adverbs.randomChoice();
+
+    if (adverb == null) throw GrammarCategoryException();
+
+    return adverb;
+  }
 
   @override
   Representation toRepresentation() {
@@ -81,11 +94,7 @@ class Word implements EnglishCategorizable, Representable {
     }
 
     if (aAttached) {
-      return ComplexRepresentation(baseRepresentations: [
-        rep,
-        const BasicRepresentation(
-            text: 'a', description: Description('emotion marker'))
-      ]);
+      return ComplexRepresentation(baseRepresentations: [rep, aRepresentation]);
     } else {
       return rep;
     }

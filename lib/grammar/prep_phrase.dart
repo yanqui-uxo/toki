@@ -2,10 +2,10 @@ import '../representation/complex_representation.dart';
 import '../representation/represent.dart';
 import 'content_phrase_choice.dart';
 import 'context_phrase.dart';
-import 'word.dart';
+import 'grammar_word.dart';
 
 class PrepPhrase implements ContextPhrase {
-  final Word prep;
+  final GrammarWord prep;
   final ContentPhraseChoice object;
 
   const PrepPhrase(this.prep, this.object);
@@ -18,9 +18,7 @@ class PrepPhrase implements ContextPhrase {
   @override
   ComplexRepresentation toRepresentation() =>
       ComplexRepresentation(baseRepresentations: [
-        Representation.wrap(
-            baseRepresentation: prep.toRepresentation(),
-            description: const Description('preposition')),
+        prep.toRepresentation(),
         Representation.wrap(
             baseRepresentation: object.toRepresentation(),
             description: const Description('prepositional object'))

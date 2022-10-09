@@ -36,7 +36,7 @@ class Clause implements ContextPhrase {
       if (tasoAtStart)
         const BasicRepresentation(
             text: 'taso', description: Description('but')),
-      subjects.toRepresentation(),
+      if (subjects.subjects.isNotEmpty) subjects.toRepresentation(),
       ...predicateRepresentations
     ], description: const Description('clause'));
   }

@@ -14,8 +14,12 @@ class ComplexRepresentation implements Representation {
   Never get text =>
       throw UnsupportedError('Cannot get text from ComplexRepresentation');
 
-  const ComplexRepresentation(
-      {required this.baseRepresentations, this.punctuation, this.description});
+  ComplexRepresentation(
+      {required this.baseRepresentations, this.punctuation, this.description}) {
+    if (baseRepresentations.isEmpty) {
+      throw ArgumentError('baseRepresentations cannot be empty');
+    }
+  }
 
   @override
   ComplexRepresentation withPunctuation(String punctuation) =>

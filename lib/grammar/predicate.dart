@@ -3,13 +3,13 @@ import 'package:intersperse/intersperse.dart';
 import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
 import 'content_phrase_choice.dart';
+import 'grammar_word.dart';
 import 'prep_phrase.dart';
-import 'word.dart';
 
 enum PredicateType { li, o }
 
 class Predicate implements Representable {
-  final List<Word> preverbs;
+  final List<GrammarWord> preverbs;
   final ContentPhraseChoice? verb;
   final List<ContentPhraseChoice> objects;
   final List<PrepPhrase> prepPhrases;
@@ -30,9 +30,8 @@ class Predicate implements Representable {
     List<Representation> reps = [];
 
     if (preverbs.isNotEmpty) {
-      reps.add(Representation(
-          baseRepresentations: preverbs.toRepresentationList(),
-          description: const Description('preverbs')));
+      reps.add(
+          Representation(baseRepresentations: preverbs.toRepresentationList()));
     }
 
     if (verb != null) {

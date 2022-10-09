@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' show Color, Colors;
 
+import 'basic_representation.dart';
 import 'complex_representation.dart';
 
 class Description {
@@ -44,6 +45,8 @@ abstract class Representation {
       }
 
       return rep;
+    } else if (baseRepresentations.isEmpty) {
+      throw ArgumentError('baseRepresentations cannot be empty');
     } else {
       return ComplexRepresentation(
           baseRepresentations: baseRepresentations,
@@ -74,3 +77,6 @@ extension ToRepresentationList on List<Representable> {
   List<Representation> toRepresentationList() =>
       map((x) => x.toRepresentation()).toList();
 }
+
+BasicRepresentation aRepresentation = const BasicRepresentation(
+    text: 'a', description: Description('emotion marker'));

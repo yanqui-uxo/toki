@@ -4,10 +4,11 @@ import '../english/verb.dart';
 import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
 import '../translation/english_categorizable.dart';
+import '../translation/grammar_category_exception.dart';
 import 'context_phrase.dart';
-import 'word.dart';
+import 'wordinal.dart';
 
-typedef ContentGroup = List<Word>;
+typedef ContentGroup = List<Wordinal>;
 
 class ContentPhrase implements ContextPhrase, EnglishCategorizable {
   final List<ContentGroup> contentGroups;
@@ -51,7 +52,7 @@ class ContentPhrase implements ContextPhrase, EnglishCategorizable {
   String randomAdjectiveString(bool plural) {
     final adjective = contentGroups[0][0].randomAdjectiveString(plural);
     final adverbs =
-        contentGroups[0].sublist(1).reversed.map((x) => x.randomAdverb());
+        contentGroups[0].sublist(1).reversed.map((x) => x.randomAdverbString());
 
     final adverbsStr = adverbs.join(' ');
 
@@ -62,12 +63,15 @@ class ContentPhrase implements ContextPhrase, EnglishCategorizable {
   String randomVerbString(VerbSubject subject) {
     final verb = contentGroups[0][0].randomVerbString(subject);
     final adverbs =
-        contentGroups[0].sublist(1).reversed.map((x) => x.randomAdverb());
+        contentGroups[0].sublist(1).reversed.map((x) => x.randomAdverbString());
 
     final adverbsStr = adverbs.join(' ');
 
     return _addPiGroups('$verb $adverbsStr');
   }
+
+  @override
+  String randomAdverbString() => throw GrammarCategoryException();
 
   @override
   String toString() => 'ContentPhrase(contentGroups: $contentGroups)';
