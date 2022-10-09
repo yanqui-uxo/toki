@@ -12,10 +12,12 @@ class Ordinal implements Wordinal {
   final bool aAttached;
 
   final List<String> numberStrings;
-  String get numberString => numberStrings.join(' ');
+  String get numberStringsJoined => numberStrings.join(' ');
 
   int get number =>
       numberStrings.map((x) => numbers[x]!).reduce((x, y) => x + y);
+
+  String get numberString => '#$number';
 
   Ordinal(this.numberStrings, [this.aAttached = false]);
 
@@ -24,22 +26,25 @@ class Ordinal implements Wordinal {
       throw GrammarCategoryException();
 
   @override
-  String randomAdjectiveString(bool plural) => '#{number}';
+  String randomAdjectiveString(bool plural) => numberString;
 
   @override
-  String randomVerbString(VerbSubject subject) =>
-      throw GrammarCategoryException();
+  String randomVerbString(VerbSubject subject) => numberString;
 
   @override
-  String randomAdverbString() => throw GrammarCategoryException();
+  String randomAdverbString() => numberString;
 
   @override
   Representation toRepresentation() {
     final rep = BasicRepresentation(
-        text: 'nanpa $numberString', description: const Description('ordinal'));
+        text: 'nanpa $numberStringsJoined',
+        description: const Description('ordinal'));
 
     return aAttached
         ? ComplexRepresentation(baseRepresentations: [rep, aRepresentation])
         : rep;
   }
+
+  @override
+  String toString() => numberString;
 }
