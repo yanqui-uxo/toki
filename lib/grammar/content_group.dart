@@ -19,7 +19,7 @@ class ContentGroup implements EnglishPhraseable, Representable {
 
   Iterable<Wordinal> get _modifiers {
     if (words.length == 1) {
-      return [];
+      return const Iterable.empty();
     } else {
       return words.sublist(1).reversed;
     }
