@@ -6,8 +6,8 @@ import '../english/word_definitions.dart';
 import '../representation/basic_representation.dart';
 import '../representation/complex_representation.dart';
 import '../representation/represent.dart';
-import '../translation/english_categorizable.dart';
 import '../translation/grammar_category_exception.dart';
+import '../translation/utility.dart';
 import '../utility/extensions.dart';
 import 'wordinal.dart';
 

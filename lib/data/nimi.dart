@@ -356,10 +356,13 @@ const Map<String, WordDefinitions> contentWords = {
       rootNouns: {RegularNoun.plural('game'), RegularNoun.plural('amusement')},
       verbs: {Verb.either('amuse')},
       adjectives: {Adjective('amusing')}),
-  'mute': WordDefinitions(
-      rootNouns: {RegularNoun.plural('amount')},
-      verbs: {Verb.either('multiply')},
-      adjectives: {Adjective('much', irregularPluralForm: 'many')}),
+  'mute': WordDefinitions(rootNouns: {
+    RegularNoun.plural('amount')
+  }, verbs: {
+    Verb.either('multiply')
+  }, adjectives: {
+    Adjective('much', irregularPluralForm: 'many', irregularAdverb: 'very')
+  }),
   'nanpa': WordDefinitions(
       rootNouns: {RegularNoun.plural('number')}, verbs: {}, adjectives: {}),
   'nasa': WordDefinitions(rootNouns: {

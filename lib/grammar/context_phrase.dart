@@ -1,3 +1,3 @@
 import '../representation/represent.dart';
 
-abstract class ContextPhrase extends Representable {}
+abstract class ContextPhrase implements Representable {}

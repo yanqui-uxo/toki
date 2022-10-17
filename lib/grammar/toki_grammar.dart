@@ -3,6 +3,7 @@ import 'package:petitparser/petitparser.dart';
 import '../data/nimi.dart';
 import '../utility/extensions.dart';
 import 'clause.dart';
+import 'content_group.dart';
 import 'content_phrase.dart';
 import 'content_phrase_choice.dart';
 import 'context_phrase.dart';
@@ -46,6 +47,7 @@ class AlaObject<T> {
   AlaObject(this.object, this.ala);
 }
 
+// TODO: implement X ala X construct
 class TokiGrammar extends GrammarDefinition {
   @override
   Parser start() => ref0(sentences);
@@ -102,13 +104,15 @@ class TokiGrammar extends GrammarDefinition {
 
   Parser<Wordinal> modifier() => Or([ref0(aWordinal), ref0(name)]);
 
-  Parser<ContentGroup> singleWordGroup() => ref0(aWordinal).listWrap();
+  Parser<ContentGroup> singleWordGroup() =>
+      ref0(aWordinal).listWrap().map(ContentGroup.new);
 
   // checks limit between first and further words
   // does not check limit before string
   Parser<ContentGroup> multiWordGroup([Parser<void>? limit]) {
     var tmp = ref0(modifier).skip(before: char(' '));
-    var modifiers = limit != null ? tmp.plusLazy(limit) : tmp.plus();
+    var modifiers = (limit != null ? tmp.plusLazy(limit) : tmp.plus())
+        .map(ContentGroup.new);
 
     return Seq([
       ref0(singleWordGroup).skip(after: (limit ?? failure()).not()),
@@ -162,7 +166,7 @@ class TokiGrammar extends GrammarDefinition {
         .map((x) => Subjects([
               ContentPhraseChoice([
                 ContentPhrase([
-                  [x]
+                  ContentGroup([x])
                 ])
               ]),
             ], isLoneMiSina: true));
