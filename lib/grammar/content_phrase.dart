@@ -6,7 +6,8 @@ import '../translation/english_phraseable.dart';
 import 'content_group.dart';
 import 'context_phrase.dart';
 
-class ContentPhrase implements ContextPhrase, BasicEnglishPhraseable {
+//class ContentPhrase implements ContextPhrase, BasicEnglishPhraseable {
+class ContentPhrase implements ContextPhrase {
   final List<ContentGroup> contentGroups;
 
   ContentPhrase(this.contentGroups) {

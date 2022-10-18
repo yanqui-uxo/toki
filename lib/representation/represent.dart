@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' show Color, Colors;
+import 'package:flutter/material.dart';
 
 import 'basic_representation.dart';
 import 'complex_representation.dart';
@@ -15,9 +15,7 @@ class Description {
   }
 }
 
-abstract class Representation {
-  List<Representation> get baseRepresentations;
-  String get text;
+abstract class Representation implements Widget {
   String? get punctuation;
   Description? get description;
 
@@ -80,3 +78,19 @@ extension ToRepresentationList on List<Representable> {
 
 BasicRepresentation aRepresentation = const BasicRepresentation(
     text: 'a', description: Description('emotion marker'));
+
+class Highlighter extends StatelessWidget {
+  final Color color;
+
+  const Highlighter({this.color = Colors.black, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final side = BorderSide(color: color, width: 3);
+    final border = Border(left: side, right: side, bottom: side);
+    return Container(height: 10, decoration: BoxDecoration(border: border));
+  }
+}
+
+const Color defaultColor = Colors.black;
+const double fontSize = 50;

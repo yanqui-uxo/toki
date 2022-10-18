@@ -1,10 +1,7 @@
+import 'package:flutter/material.dart';
 import 'represent.dart';
 
-class BasicRepresentation implements Representation {
-  @override
-  final List<Representation> baseRepresentations = const [];
-
-  @override
+class BasicRepresentation extends StatelessWidget implements Representation {
   final String text;
 
   @override
@@ -14,13 +11,7 @@ class BasicRepresentation implements Representation {
   final Description? description;
 
   const BasicRepresentation(
-      {required this.text, this.punctuation, this.description});
-
-  BasicRepresentation.fromRep(
-      {required BasicRepresentation rep, Description? description})
-      : text = rep.text,
-        punctuation = rep.punctuation,
-        description = description ?? rep.description;
+      {required this.text, this.punctuation, this.description, super.key});
 
   @override
   BasicRepresentation withPunctuation(String punctuation) =>
@@ -33,5 +24,32 @@ class BasicRepresentation implements Representation {
           text: text, punctuation: punctuation, description: description);
 
   @override
-  String toString() => '$description(text: $text, punctuation: $punctuation)';
+  Widget build(BuildContext context) {
+    final color = description?.color ?? defaultColor;
+    final textStyle = TextStyle(color: color, fontSize: fontSize);
+    final descriptionStyle = TextStyle(color: color);
+
+    Widget ret;
+
+    if (description != null) {
+      ret = IntrinsicWidth(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Center(child: Text(text, style: textStyle, key: key)),
+        Highlighter(color: description!.color),
+        Center(child: Text(description!.text, style: descriptionStyle))
+      ]));
+    } else {
+      ret = Text(text, style: textStyle);
+    }
+
+    if (punctuation != null) {
+      return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        ret,
+        Text(punctuation!, style: const TextStyle(fontSize: fontSize))
+      ]);
+    } else {
+      return ret;
+    }
+  }
 }

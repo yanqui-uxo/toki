@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../representation/represent.dart';
-import 'representation_view.dart';
 
 class ParserView extends StatefulWidget {
   final Parser parser;
 
-  const ParserView(this.parser, {Key? key}) : super(key: key);
+  const ParserView(this.parser, {super.key});
 
   @override
   State<ParserView> createState() => _ParserViewState();
@@ -39,8 +38,8 @@ class _ParserViewState extends State<ParserView> {
       if (value != null && value!.isNotEmpty)
         Expanded(
             child: FittedBox(
-                child: RepresentationView(Representation(
-                    baseRepresentations: value!.toRepresentationList()))))
+                child: Representation(
+                    baseRepresentations: value!.toRepresentationList())))
     ]);
   }
 }

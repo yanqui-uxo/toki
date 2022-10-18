@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:intersperse/intersperse.dart';
 import 'represent.dart';
 
-class ComplexRepresentation implements Representation {
-  @override
+class ComplexRepresentation extends StatelessWidget implements Representation {
   final List<Representation> baseRepresentations;
 
   @override
@@ -10,12 +11,12 @@ class ComplexRepresentation implements Representation {
   @override
   final Description? description;
 
-  @override
-  Never get text =>
-      throw UnsupportedError('Cannot get text from ComplexRepresentation');
-
   ComplexRepresentation(
-      {required this.baseRepresentations, this.punctuation, this.description}) {
+      {required this.baseRepresentations,
+      this.punctuation,
+      this.description,
+      Key? key})
+      : super(key: key) {
     if (baseRepresentations.isEmpty) {
       throw ArgumentError('baseRepresentations cannot be empty');
     }
@@ -37,6 +38,31 @@ class ComplexRepresentation implements Representation {
       );
 
   @override
-  String toString() =>
-      '$description(baseReps: $baseRepresentations, punctuation: $punctuation)';
+  Widget build(BuildContext context) {
+    final color = description?.color ?? defaultColor;
+
+    List<Widget> recursed = List<Widget>.of(baseRepresentations)
+        .intersperse(const Text(' ', style: TextStyle(fontSize: fontSize)))
+        .toList();
+
+    if (punctuation != null) {
+      recursed
+          .add(Text(punctuation!, style: const TextStyle(fontSize: fontSize)));
+    }
+
+    final recursedRow =
+        Row(crossAxisAlignment: CrossAxisAlignment.start, children: recursed);
+
+    if (description != null) {
+      return IntrinsicWidth(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Center(child: recursedRow),
+        Highlighter(color: color),
+        Center(child: Text(description!.text))
+      ]));
+    } else {
+      return recursedRow;
+    }
+  }
 }

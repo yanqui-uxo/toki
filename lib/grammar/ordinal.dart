@@ -40,9 +40,11 @@ class Ordinal implements Wordinal {
         text: 'nanpa $numberStringsJoined',
         description: const Description('ordinal'));
 
-    return aAttached
-        ? ComplexRepresentation(baseRepresentations: [rep, aRepresentation])
-        : rep;
+    if (aAttached) {
+      return ComplexRepresentation(baseRepresentations: [rep, aRepresentation]);
+    } else {
+      return rep;
+    }
   }
 
   @override
