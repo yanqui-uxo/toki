@@ -15,7 +15,7 @@ class Description {
   }
 }
 
-abstract class Representation implements Widget {
+abstract class Representation implements StatelessWidget {
   String? get punctuation;
   Description? get description;
 
