@@ -40,7 +40,6 @@ class Ordinal implements Wordinal {
         text: 'nanpa $numberStringsJoined',
         description: const Description('ordinal'));
 
-    // TODO: change this to ternary somehow... why doesn't it work???
     if (aAttached) {
       return ComplexRepresentation(baseRepresentations: [rep, aRepresentation]);
     } else {
