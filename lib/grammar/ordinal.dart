@@ -48,5 +48,5 @@ class Ordinal implements Wordinal {
   }
 
   @override
-  String toString() => numberString;
+  String toString() => ['nanpa', ...numberStrings].join(' ');
 }

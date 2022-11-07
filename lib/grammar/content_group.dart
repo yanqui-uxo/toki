@@ -49,4 +49,7 @@ class ContentGroup implements EnglishPhraseable, Representable {
 
   ContentGroup operator +(ContentGroup other) =>
       ContentGroup(words + other.words);
+
+  @override
+  String toString() => words.map((x) => x.toString()).join(' ');
 }

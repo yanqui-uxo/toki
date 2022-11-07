@@ -2,11 +2,10 @@ import 'package:intersperse/intersperse.dart';
 
 import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
-import '../translation/english_phraseable.dart';
 import 'content_group.dart';
 import 'context_phrase.dart';
 
-//class ContentPhrase implements ContextPhrase, BasicEnglishPhraseable {
+// TODO: implement BasicEnglishPhraseable
 class ContentPhrase implements ContextPhrase {
   final List<ContentGroup> contentGroups;
 
@@ -15,9 +14,6 @@ class ContentPhrase implements ContextPhrase {
       throw ArgumentError('contentGroups cannot be empty');
     }
   }
-
-  @override
-  String toString() => 'ContentPhrase(contentGroups: $contentGroups)';
 
   @override
   Representation toRepresentation() {
@@ -29,4 +25,7 @@ class ContentPhrase implements ContextPhrase {
 
     return Representation(baseRepresentations: reps);
   }
+
+  @override
+  String toString() => contentGroups.map((x) => x.toString()).join(' pi ');
 }

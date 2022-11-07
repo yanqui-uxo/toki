@@ -15,6 +15,7 @@ import 'punctuated_sentence.dart';
 import 'regular_word.dart';
 import 'sentence.dart';
 import 'subjects.dart';
+import 'verb_choice.dart';
 import 'wordinal.dart';
 
 typedef Seq<T> = SequenceParser<T>;
@@ -39,15 +40,15 @@ class AObject<T> {
   AObject(this.object, this.aAttached);
 }
 
-class AlaObject<T> {
+class XAlaXObject<T> {
   final T object;
-  final RegularWord? ala;
-  bool get alaAttached => ala != null;
+  final bool questioned;
 
-  AlaObject(this.object, this.ala);
+  XAlaXObject(this.object, this.questioned);
 }
 
-// TODO: implement X ala X construct
+final RegExp xAlaXPattern = RegExp(r'(\w+) ala \1');
+
 class TokiGrammar extends GrammarDefinition {
   @override
   Parser start() => ref0(sentences);
@@ -107,16 +108,18 @@ class TokiGrammar extends GrammarDefinition {
   Parser<ContentGroup> singleWordGroup() =>
       ref0(aWordinal).listWrap().map(ContentGroup.new);
 
+  Parser<ContentGroup> modifiers([Parser<void>? limit]) {
+    var tmp = ref0(modifier).skip(before: char(' '));
+    return (limit != null ? tmp.plusLazy(limit) : tmp.plus())
+        .map(ContentGroup.new);
+  }
+
   // checks limit between first and further words
   // does not check limit before string
   Parser<ContentGroup> multiWordGroup([Parser<void>? limit]) {
-    var tmp = ref0(modifier).skip(before: char(' '));
-    var modifiers = (limit != null ? tmp.plusLazy(limit) : tmp.plus())
-        .map(ContentGroup.new);
-
     return Seq([
       ref0(singleWordGroup).skip(after: (limit ?? failure()).not()),
-      modifiers
+      ref1(modifiers, limit)
     ]).map((x) => x[0] + x[1]);
   }
 
@@ -191,21 +194,40 @@ class TokiGrammar extends GrammarDefinition {
     }
   }
 
-  static GrammarWord _listToGrammarWord(
-      List<RegularWord?> l, GrammarWordType type) {
+  static GrammarWord _listToGrammarWord(List<Object?> l, GrammarWordType type) {
     final alaAttached = l[1] != null;
 
+    final regularWordCheck = l[0] as XAlaXObject<RegularWord>;
+    final regularWord = regularWordCheck.object;
+    final word = regularWord.word;
+    final aAttached = regularWord.aAttached;
+    final questioned = regularWordCheck.questioned;
+
     if (alaAttached) {
-      return GrammarWord.ala(l[0]!.word, type,
-          aAttached: l[0]!.aAttached, aAttachedToAla: l[1]!.aAttached);
+      return GrammarWord.ala(word, type,
+          aAttached: aAttached,
+          aAttachedToAla: (l[1]! as RegularWord).aAttached,
+          questioned: questioned);
     } else {
-      return GrammarWord.noAla(l[0]!.word, type, aAttached: l[0]!.aAttached);
+      return GrammarWord.noAla(word, type,
+          aAttached: aAttached, questioned: questioned);
     }
   }
 
+  Parser<XAlaXObject> xAlaXCheck<T>(Parser<T> p) => Or([
+        Seq([p, string(' ala '), p])
+            .skip(
+                before: PatternParser(xAlaXPattern, 'Could not match X ala X')
+                    .and())
+            .map((x) => XAlaXObject<T>(x[2] as T, true)),
+        p.map((x) => XAlaXObject<T>(x, false))
+      ]);
+
   Parser<GrammarWord> grammarWord(Parser<String> p, GrammarWordType type) =>
-      Seq([aWord(p), aWord(string('ala')).skip(before: char(' ')).optional()])
-          .map((x) => _listToGrammarWord(x, type));
+      Seq([
+        xAlaXCheck<RegularWord>(aWord(p)),
+        aWord(string('ala')).skip(before: char(' ')).optional()
+      ]).map((x) => _listToGrammarWord(x, type));
 
   Parser<GrammarWord> preposition() => ref2(grammarWord,
       Or(prepositions.keySet().map(string)), GrammarWordType.preposition);
@@ -258,19 +280,19 @@ class TokiGrammar extends GrammarDefinition {
         ]),
         Seq([
           ref0(predicatePreverbs),
-          ref0(anuContent),
+          ref0(anuContent).map(VerbChoice.new),
           ref0(prePrepContent).skip(before: string(' e ')).plus(),
           ref0(prepPhrase).skip(before: char(' ')).star()
         ]),
         Seq([
           ref0(predicatePreverbs),
-          ref0(prePrepContent),
+          ref0(prePrepContent).map(VerbChoice.new),
           epsilon().map((x) => []),
           ref0(prepPhrase).skip(before: char(' ')).star()
         ])
       ]).map((x) => Predicate(
           preverbs: List<GrammarWord>.from(x[0] as List),
-          verb: x[1] as ContentPhraseChoice?,
+          verbChoice: x[1] as VerbChoice?,
           objects: List<ContentPhraseChoice>.from(x[2] as List),
           prepPhrases: List<PrepPhrase>.from(x[3] as List)));
 

@@ -14,16 +14,32 @@ class GrammarWord implements SentenceRoot {
   final bool alaAttached;
   final bool aAttachedToAla;
 
+  final bool questioned;
+
   GrammarWord.ala(this.word, this.type,
-      {this.aAttached = false, this.aAttachedToAla = false})
+      {this.aAttached = false,
+      this.aAttachedToAla = false,
+      this.questioned = false})
       : alaAttached = true;
 
-  GrammarWord.noAla(this.word, this.type, {this.aAttached = false})
+  GrammarWord.noAla(this.word, this.type,
+      {this.aAttached = false, this.questioned = false})
       : alaAttached = false,
         aAttachedToAla = false;
 
   @override
   Representation toRepresentation() {
+    final Representation wordRep;
+
+    if (questioned) {
+      wordRep = BasicRepresentation(
+          text: '$word ala $word',
+          description: Description('${type.name}, questioning $word'));
+    } else {
+      wordRep =
+          BasicRepresentation(text: word, description: Description(type.name));
+    }
+
     List<Representation> after = [];
 
     if (aAttached) {
@@ -39,7 +55,7 @@ class GrammarWord implements SentenceRoot {
     }
 
     return Representation(baseRepresentations: [
-      BasicRepresentation(text: word, description: Description(type.name)),
+      wordRep,
       if (after.isNotEmpty) Representation(baseRepresentations: after)
     ]);
   }

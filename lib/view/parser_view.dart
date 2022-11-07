@@ -37,9 +37,11 @@ class _ParserViewState extends State<ParserView> {
               })),
       if (value != null && value!.isNotEmpty)
         Expanded(
-            child: FittedBox(
-                child: Representation(
-                    baseRepresentations: value!.toRepresentationList())))
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: FittedBox(
+                    child: Representation(
+                        baseRepresentations: value!.toRepresentationList()))))
     ]);
   }
 }

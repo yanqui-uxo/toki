@@ -103,8 +103,7 @@ class RegularWord implements Wordinal {
   @override
   String toString() {
     var ret = word;
-    if (aAttached) ret += '+a';
-    if (isName) ret += ' (name)';
+    if (aAttached) ret += ' a';
     return ret;
   }
 }
