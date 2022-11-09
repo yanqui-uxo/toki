@@ -15,6 +15,6 @@ class VerbChoice implements Representable {
   Representation toRepresentation() => ComplexRepresentation(
       baseRepresentations: choices
           .toRepresentationList()
-          .intersperse(const BasicRepresentation(text: 'pi'))
+          .intersperse(const BasicRepresentation(text: 'anu'))
           .toList());
 }
