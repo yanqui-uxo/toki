@@ -15,7 +15,7 @@ class Verb implements Representable {
   @override
   Representation toRepresentation() {
     final Representation initial;
-    ContentPhrase? newPhrase;
+    Representation? post;
 
     final List<ContentGroup> restOfGroups;
     if (phrase.contentGroups.length > 1) {
@@ -25,9 +25,12 @@ class Verb implements Representable {
     }
 
     if (restOfGroups.isNotEmpty) {
-      newPhrase = ContentPhrase(restOfGroups);
+      post = Representation(baseRepresentations: [
+        piRepresentation,
+        ContentPhrase(restOfGroups).toRepresentation()
+      ]);
     } else {
-      newPhrase = null;
+      post = null;
     }
 
     if (questionedWord != null) {
@@ -37,16 +40,16 @@ class Verb implements Representable {
           description: Description('questioning $questionedWord'));
 
       if (groups[0].words.length > 3) {
-        newPhrase = ContentPhrase(
-            [ContentGroup(groups[0].words.sublist(3)), ...restOfGroups]);
+        post = ContentPhrase(
+                [ContentGroup(groups[0].words.sublist(3)), ...restOfGroups])
+            .toRepresentation();
       }
     } else {
       initial = phrase.contentGroups[0].toRepresentation();
     }
 
-    return Representation(baseRepresentations: [
-      initial,
-      if (newPhrase != null) ...[piRepresentation, newPhrase.toRepresentation()]
-    ], description: const Description('verb'));
+    return Representation(
+        baseRepresentations: [initial, if (post != null) post],
+        description: const Description('verb'));
   }
 }
