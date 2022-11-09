@@ -146,6 +146,10 @@ const Map<String, WordDefinitions> contentWords = {
   }),
   'kepeken': WordDefinitions(
       rootNouns: {RegularNoun.plural('usage')}, verbs: {}, adjectives: {}),
+  'kijetesantakalu': WordDefinitions(
+      rootNouns: {RegularNoun.plural('raccoon'), RegularNoun.plural('ferret')},
+      verbs: {},
+      adjectives: {}),
   'kili': WordDefinitions(
       rootNouns: {RegularNoun.plural('fruit'), RegularNoun.plural('vegetable')},
       verbs: {},

@@ -1,6 +1,5 @@
 import 'package:intersperse/intersperse.dart';
 
-import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
 import 'content_group.dart';
 import 'context_phrase.dart';
@@ -18,10 +17,7 @@ class ContentPhrase implements ContextPhrase {
   @override
   Representation toRepresentation() {
     List<Representation> reps = contentGroups.toRepresentationList();
-    reps = reps
-        .intersperse(const BasicRepresentation(
-            text: 'pi', description: Description('modifier regrouper')))
-        .toList();
+    reps = reps.intersperse(piRepresentation).toList();
 
     return Representation(baseRepresentations: reps);
   }

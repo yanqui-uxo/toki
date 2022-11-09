@@ -45,7 +45,7 @@ class Predicate implements Representable {
           .map((x) => Representation.wrap(
               baseRepresentation: x, description: const Description('object')))
           .intersperseOuter(const BasicRepresentation(
-              text: 'e', description: Description('subject marker')))
+              text: 'e', description: Description('object marker')))
           .toList();
       baseRepresentations.removeLast();
 

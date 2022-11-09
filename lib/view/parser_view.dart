@@ -17,7 +17,7 @@ class _ParserViewState extends State<ParserView> {
   String text = '';
 
   void _parse(String x) {
-    var result = widget.parser.parse(x);
+    var result = widget.parser.end().parse(x);
 
     if (result.isSuccess) {
       value = result.value;
@@ -42,6 +42,8 @@ class _ParserViewState extends State<ParserView> {
                 child: FittedBox(
                     child: Representation(
                         baseRepresentations: value!.toRepresentationList()))))
+      else
+        const Text('parse failed')
     ]);
   }
 }

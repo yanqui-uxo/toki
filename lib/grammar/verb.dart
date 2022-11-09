@@ -34,21 +34,19 @@ class Verb implements Representable {
       final groups = phrase.contentGroups;
       initial = BasicRepresentation(
           text: '$questionedWord ala $questionedWord',
-          description: Description('verb, questioning $questionedWord'));
+          description: Description('questioning $questionedWord'));
 
       if (groups[0].words.length > 3) {
         newPhrase = ContentPhrase(
             [ContentGroup(groups[0].words.sublist(3)), ...restOfGroups]);
       }
     } else {
-      initial = Representation.wrap(
-          baseRepresentation: phrase.contentGroups[0].toRepresentation(),
-          description: const Description('verb'));
+      initial = phrase.contentGroups[0].toRepresentation();
     }
 
     return Representation(baseRepresentations: [
       initial,
-      if (newPhrase != null) newPhrase.toRepresentation()
-    ]);
+      if (newPhrase != null) ...[piRepresentation, newPhrase.toRepresentation()]
+    ], description: const Description('verb'));
   }
 }
