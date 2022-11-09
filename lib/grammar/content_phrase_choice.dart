@@ -1,5 +1,4 @@
 import 'package:intersperse/intersperse.dart';
-import '../representation/basic_representation.dart';
 import '../representation/represent.dart';
 import 'content_phrase.dart';
 import 'context_phrase.dart';
@@ -15,9 +14,8 @@ class ContentPhraseChoice implements ContextPhrase {
     if (choiceRepresentations.length > 1) {
       choiceRepresentations = choiceRepresentations
           .map((x) => Representation.wrap(
-              baseRepresentation: x, description: const Description('choice')))
-          .intersperse(const BasicRepresentation(
-              text: 'anu', description: Description('choice marker ("or")')))
+              baseRepresentation: x, description: choiceDescription))
+          .intersperse(anuRepresentation)
           .toList();
     }
 

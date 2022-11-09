@@ -1,10 +1,10 @@
 import 'package:intersperse/intersperse.dart';
-import '../representation/basic_representation.dart';
 import '../representation/complex_representation.dart';
 import '../representation/represent.dart';
 import 'content_phrase_choice.dart';
 import 'verb.dart';
 
+// TODO: combine ContentPhraseChoice and VerbChoice into one abstraction
 class VerbChoice implements Representable {
   final List<Verb> choices;
 
@@ -15,6 +15,8 @@ class VerbChoice implements Representable {
   Representation toRepresentation() => ComplexRepresentation(
       baseRepresentations: choices
           .toRepresentationList()
-          .intersperse(const BasicRepresentation(text: 'anu'))
+          .map((x) => Representation.wrap(
+              baseRepresentation: x, description: choiceDescription))
+          .intersperse(anuRepresentation)
           .toList());
 }

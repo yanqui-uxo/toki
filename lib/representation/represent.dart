@@ -79,8 +79,13 @@ extension ToRepresentationList on List<Representable> {
 BasicRepresentation aRepresentation = const BasicRepresentation(
     text: 'a', description: Description('emotion marker'));
 
+BasicRepresentation anuRepresentation = const BasicRepresentation(
+    text: 'anu', description: Description('choice marker ("or")'));
+
 BasicRepresentation piRepresentation = const BasicRepresentation(
     text: 'pi', description: Description('modifier regrouper'));
+
+Description choiceDescription = const Description('choice');
 
 class Highlighter extends StatelessWidget {
   final Color color;
